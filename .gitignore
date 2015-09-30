@@ -1,32 +1,30 @@
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
+ByteSize-1.0.gir
+ByteSize-1.0.typelib
+Makefile
+Makefile.in
+aclocal.m4
+ar-lib
+compile
+py-compile
+config.guess
+config.log
+config.status
+config.sub
+configure
+depcomp
+install-sh
+libtool
+ltmain.sh
+m4/
+autom4te.cache/
+missing
+src/lib/.deps/
+src/lib/blockdev.c
+src/lib/blockdev.pc
+**/*.deps
+**/*.libs
+**/*.la
+**/*.lo
+**/Makefile
+**/Makefile.in
+**/*.stamp
