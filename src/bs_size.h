@@ -86,6 +86,49 @@ guint64 bs_size_get_bytes (BSSize *size, GError **error);
  */
 gchar* bs_size_get_bytes_str (BSSize *size, GError **error);
 
+/**
+ * bs_size_add:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is a sum of @size1 and @size2
+ */
+BSSize* bs_size_add (BSSize *size1, BSSize *size2);
+
+/**
+ * bs_size_add_bytes:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is a sum of @size and @bytes
+ */
+BSSize* bs_size_add_bytes (BSSize *size, guint64 bytes);
+
+/**
+ * bs_size_sub:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is equals to @size1 - @size2
+ */
+BSSize* bs_size_sub (BSSize *size1, BSSize *size2);
+
+/**
+ * bs_size_sub_bytes:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is equals to @size - @bytes
+ */
+BSSize* bs_size_sub_bytes (BSSize *size, guint64 bytes);
+
+/**
+ * bs_size_mul:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is equals to @size * @times
+ */
+BSSize* bs_size_mul (BSSize *size, guint64 times);
+
+/**
+ * bs_size_int_div:
+ *
+ * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
+ *          (IOW, @size1 / @size2 using integer division)
+ */
+guint64 bs_size_int_div (BSSize *size1, BSSize *size2, GError **error);
+
 G_END_DECLS
 
 #endif  /* _BS_SIZE_H */

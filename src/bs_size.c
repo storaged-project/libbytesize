@@ -277,3 +277,61 @@ gchar* bs_size_get_bytes_str (BSSize *size, GError **error __attribute__((unused
 /***************
  * ARITHMETIC *
  ***************/
+BSSize* bs_size_add (BSSize *size1, BSSize *size2) {
+    BSSize *ret = bs_size_new ();
+    mpz_add (ret->priv->bytes, size1->priv->bytes, size2->priv->bytes);
+
+    return ret;
+}
+
+BSSize* bs_size_add_bytes (BSSize *size, guint64 bytes) {
+    BSSize *ret = bs_size_new ();
+    mpz_add_ui (ret->priv->bytes, size->priv->bytes, bytes);
+
+    return ret;
+}
+
+BSSize* bs_size_sub (BSSize *size1, BSSize *size2) {
+    BSSize *ret = bs_size_new ();
+    mpz_sub (ret->priv->bytes, size1->priv->bytes, size2->priv->bytes);
+
+    return ret;
+}
+
+BSSize* bs_size_sub_bytes (BSSize *size, guint64 bytes) {
+    BSSize *ret = bs_size_new ();
+    mpz_sub_ui (ret->priv->bytes, size->priv->bytes, bytes);
+
+    return ret;
+}
+
+BSSize* bs_size_mul (BSSize *size, guint64 times) {
+    BSSize *ret = bs_size_new ();
+    mpz_mul_ui (ret->priv->bytes, size->priv->bytes, times);
+
+    return ret;
+}
+
+guint64 bs_size_int_div (BSSize *size1, BSSize *size2, GError **error) {
+    mpf_t op1, op2;
+    guint64 ret = 0;
+
+    mpf_init2 (op1, 64);
+    mpf_init2 (op2, 64);
+
+    mpf_set_z (op1, size1->priv->bytes);
+    mpf_set_z (op2, size2->priv->bytes);
+
+    mpf_div (op1, op1, op2);
+
+    if (mpf_cmp_ui (op1, G_MAXUINT64) > 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_OVER,
+                     "The size is too big, cannot be returned as a 64bit number of bytes");
+        mpf_clears (op1, op2, NULL);
+        return 0;
+    }
+    ret = (guint64) mpf_get_ui (op1);
+
+    mpf_clears (op1, op2, NULL);
+    return ret;
+}
