@@ -31,6 +31,20 @@
 /*     mp_set_memory_functions (g_try_malloc, realloc_old_new, free_old); */
 /* } */
 
+
+/***************
+ * STATIC DATA *
+ ***************/
+static gchar const * const b_units[BS_BUNIT_UNDEF] = {N_("B"), N_("KiB"), N_("MiB"), N_("GiB"), N_("TiB"),
+                                                      N_("PiB"), N_("EiB"), N_("ZiB"), N_("YiB")};
+
+static gchar const * const d_units[BS_DUNIT_UNDEF] = {N_("B"), N_("KB"), N_("MB"), N_("GB"), N_("TB"),
+                                                      N_("PB"), N_("EB"), N_("ZB"), N_("YB")};
+
+
+/****************************
+ * CLASS/OBJECT DEFINITIONS *
+ ****************************/
 /**
  * BSSize:
  *
@@ -59,12 +73,6 @@ struct _BSSizeClass {
 struct _BSSizePrivate {
     mpz_t bytes;
 };
-
-static gchar const * const b_units[BS_BUNIT_UNDEF] = {N_("B"), N_("KiB"), N_("MiB"), N_("GiB"), N_("TiB"),
-                                                      N_("PiB"), N_("EiB"), N_("ZiB"), N_("YiB")};
-
-static gchar const * const d_units[BS_DUNIT_UNDEF] = {N_("B"), N_("KB"), N_("MB"), N_("GB"), N_("TB"),
-                                                      N_("PB"), N_("EB"), N_("ZB"), N_("YB")};
 
 GQuark bs_size_error_quark (void)
 {
@@ -98,6 +106,10 @@ static void bs_size_dispose (GObject *object) {
     G_OBJECT_CLASS(bs_size_parent_class)->dispose (object);
 }
 
+
+/****************
+ * CONSTRUCTORS *
+ ****************/
 BSSize* bs_size_new (void) {
     return BS_SIZE (g_object_new (BS_TYPE_SIZE, NULL));
 }
@@ -235,6 +247,19 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
     return ret;
 }
 
+BSSize* bs_size_new_from_size (BSSize *size, GError **error __attribute__((unused))) {
+    BSSize *ret = NULL;
+
+    ret = bs_size_new ();
+    mpz_set (ret->priv->bytes, size->priv->bytes);
+
+    return ret;
+}
+
+
+/*****************
+ * QUERY METHODS *
+ *****************/
 guint64 bs_size_get_bytes (BSSize *size, GError **error) {
     if (mpz_cmp_ui (size->priv->bytes, G_MAXUINT64) > 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_OVER,
@@ -247,3 +272,8 @@ guint64 bs_size_get_bytes (BSSize *size, GError **error) {
 gchar* bs_size_get_bytes_str (BSSize *size, GError **error __attribute__((unused))) {
     return mpz_get_str (NULL, 10, size->priv->bytes);
 }
+
+
+/***************
+ * ARITHMETIC *
+ ***************/

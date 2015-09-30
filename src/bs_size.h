@@ -58,6 +58,13 @@ BSSize* bs_size_new_from_bytes (guint64 bytes, GError **error);
 BSSize* bs_size_new_from_str (const gchar *size_str, GError **error);
 
 /**
+ * bs_size_new_from_size: (constructor)
+ *
+ * Returns: a new #BSSize instance which is copy of @size.
+ */
+BSSize* bs_size_new_from_size (BSSize *size, GError **error);
+
+/**
  * bs_size_new: (constructor)
  * Creates a new #BSSize instance.
  *
