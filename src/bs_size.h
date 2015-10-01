@@ -127,7 +127,7 @@ BSSize* bs_size_mul (BSSize *size, guint64 times);
  * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
  *          (IOW, @size1 / @size2 using integer division)
  */
-guint64 bs_size_int_div (BSSize *size1, BSSize *size2, GError **error);
+guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error);
 
 G_END_DECLS
 

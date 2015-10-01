@@ -312,12 +312,12 @@ BSSize* bs_size_mul (BSSize *size, guint64 times) {
     return ret;
 }
 
-guint64 bs_size_int_div (BSSize *size1, BSSize *size2, GError **error) {
+guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error) {
     mpf_t op1, op2;
     guint64 ret = 0;
 
-    mpf_init2 (op1, 64);
-    mpf_init2 (op2, 64);
+    mpf_init2 (op1, BS_FLOAT_PREC_BITS);
+    mpf_init2 (op2, BS_FLOAT_PREC_BITS);
 
     mpf_set_z (op1, size1->priv->bytes);
     mpf_set_z (op2, size2->priv->bytes);
