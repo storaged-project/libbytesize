@@ -40,102 +40,23 @@ typedef struct _BSSizePrivate BSSizePrivate;
 
 GType bs_size_get_type (void);
 
-/**
- * bs_size_new_from_bytes: (constructor)
- *
- * Creates a new #BSSize instance.
- *
- * Returns: a new #BSSize
- */
+/* Constructors */
 BSSize* bs_size_new_from_bytes (guint64 bytes, GError **error);
-
-/**
- * bs_size_new_from_str: (constructor)
- *
- * Creates a new #BSSize instance.
- *
- * Returns: a new #BSSize
- */
 BSSize* bs_size_new_from_str (const gchar *size_str, GError **error);
-
-/**
- * bs_size_new_from_size: (constructor)
- *
- * Returns: a new #BSSize instance which is copy of @size.
- */
 BSSize* bs_size_new_from_size (BSSize *size, GError **error);
-
-/**
- * bs_size_new: (constructor)
- * Creates a new #BSSize instance.
- *
- * Returns: a new #BSSize
- */
 BSSize* bs_size_new (void);
 
-/**
- * bs_size_get_bytes:
- *
- * Returns: the @size in a number of bytes.
- */
+/* Query functions */
 guint64 bs_size_get_bytes (BSSize *size, GError **error);
-
-/**
- * bs_size_get_bytes_str:
- *
- * Returns: (transfer full): the string representing the @size as a number of bytes.
- */
 gchar* bs_size_get_bytes_str (BSSize *size, GError **error);
 
-/**
- * bs_size_add:
- *
- * Returns: (transfer full): a new instance of #BSSize which is a sum of @size1 and @size2
- */
+/* Arithmetic */
 BSSize* bs_size_add (BSSize *size1, BSSize *size2);
-
-/**
- * bs_size_add_bytes:
- *
- * Returns: (transfer full): a new instance of #BSSize which is a sum of @size and @bytes
- */
 BSSize* bs_size_add_bytes (BSSize *size, guint64 bytes);
-
-/**
- * bs_size_sub:
- *
- * Returns: (transfer full): a new instance of #BSSize which is equals to @size1 - @size2
- */
 BSSize* bs_size_sub (BSSize *size1, BSSize *size2);
-
-/**
- * bs_size_sub_bytes:
- *
- * Returns: (transfer full): a new instance of #BSSize which is equals to @size - @bytes
- */
 BSSize* bs_size_sub_bytes (BSSize *size, guint64 bytes);
-
-/**
- * bs_size_mul:
- *
- * Returns: (transfer full): a new instance of #BSSize which is equals to @size * @times
- */
 BSSize* bs_size_mul (BSSize *size, guint64 times);
-
-/**
- * bs_size_div:
- *
- * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
- *          (IOW, @size1 / @size2 using integer division)
- */
 guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error);
-
-/**
- * bs_size_div_int:
- *
- * Returns: (transfer full): a #BSSize instance x so that x * @divisor = @size,
- *                           rounded to a number of bytes
- */
 BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error);
 
 G_END_DECLS

@@ -110,10 +110,23 @@ static void bs_size_dispose (GObject *object) {
 /****************
  * CONSTRUCTORS *
  ****************/
+/**
+ * bs_size_new: (constructor)
+ * Creates a new #BSSize instance.
+ *
+ * Returns: a new #BSSize
+ */
 BSSize* bs_size_new (void) {
     return BS_SIZE (g_object_new (BS_TYPE_SIZE, NULL));
 }
 
+/**
+ * bs_size_new_from_bytes: (constructor)
+ *
+ * Creates a new #BSSize instance.
+ *
+ * Returns: a new #BSSize
+ */
 BSSize* bs_size_new_from_bytes (guint64 bytes, GError **error __attribute__((unused))) {
     BSSize *ret = bs_size_new ();
     mpz_set_ui (ret->priv->bytes, bytes);
@@ -163,6 +176,14 @@ static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
     return FALSE;
 }
 
+
+/**
+ * bs_size_new_from_str: (constructor)
+ *
+ * Creates a new #BSSize instance.
+ *
+ * Returns: a new #BSSize
+ */
 BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
     gchar const * const pattern = "(?P<numeric>  # the numeric part consists of three parts, below \n" \
                                   " (-|\\+)?     # optional sign character \n" \
@@ -247,6 +268,11 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
     return ret;
 }
 
+/**
+ * bs_size_new_from_size: (constructor)
+ *
+ * Returns: (transfer full): a new #BSSize instance which is copy of @size.
+ */
 BSSize* bs_size_new_from_size (BSSize *size, GError **error __attribute__((unused))) {
     BSSize *ret = NULL;
 
@@ -260,6 +286,11 @@ BSSize* bs_size_new_from_size (BSSize *size, GError **error __attribute__((unuse
 /*****************
  * QUERY METHODS *
  *****************/
+/**
+ * bs_size_get_bytes:
+ *
+ * Returns: the @size in a number of bytes.
+ */
 guint64 bs_size_get_bytes (BSSize *size, GError **error) {
     if (mpz_cmp_ui (size->priv->bytes, G_MAXUINT64) > 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_OVER,
@@ -269,6 +300,11 @@ guint64 bs_size_get_bytes (BSSize *size, GError **error) {
     return (guint64) mpz_get_ui (size->priv->bytes);
 }
 
+/**
+ * bs_size_get_bytes_str:
+ *
+ * Returns: (transfer full): the string representing the @size as a number of bytes.
+ */
 gchar* bs_size_get_bytes_str (BSSize *size, GError **error __attribute__((unused))) {
     return mpz_get_str (NULL, 10, size->priv->bytes);
 }
@@ -277,6 +313,11 @@ gchar* bs_size_get_bytes_str (BSSize *size, GError **error __attribute__((unused
 /***************
  * ARITHMETIC *
  ***************/
+/**
+ * bs_size_add:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is a sum of @size1 and @size2
+ */
 BSSize* bs_size_add (BSSize *size1, BSSize *size2) {
     BSSize *ret = bs_size_new ();
     mpz_add (ret->priv->bytes, size1->priv->bytes, size2->priv->bytes);
@@ -284,6 +325,11 @@ BSSize* bs_size_add (BSSize *size1, BSSize *size2) {
     return ret;
 }
 
+/**
+ * bs_size_add_bytes:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is a sum of @size and @bytes
+ */
 BSSize* bs_size_add_bytes (BSSize *size, guint64 bytes) {
     BSSize *ret = bs_size_new ();
     mpz_add_ui (ret->priv->bytes, size->priv->bytes, bytes);
@@ -291,6 +337,11 @@ BSSize* bs_size_add_bytes (BSSize *size, guint64 bytes) {
     return ret;
 }
 
+/**
+ * bs_size_sub:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is equals to @size1 - @size2
+ */
 BSSize* bs_size_sub (BSSize *size1, BSSize *size2) {
     BSSize *ret = bs_size_new ();
     mpz_sub (ret->priv->bytes, size1->priv->bytes, size2->priv->bytes);
@@ -298,6 +349,11 @@ BSSize* bs_size_sub (BSSize *size1, BSSize *size2) {
     return ret;
 }
 
+/**
+ * bs_size_sub_bytes:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is equals to @size - @bytes
+ */
 BSSize* bs_size_sub_bytes (BSSize *size, guint64 bytes) {
     BSSize *ret = bs_size_new ();
     mpz_sub_ui (ret->priv->bytes, size->priv->bytes, bytes);
@@ -305,6 +361,11 @@ BSSize* bs_size_sub_bytes (BSSize *size, guint64 bytes) {
     return ret;
 }
 
+/**
+ * bs_size_mul:
+ *
+ * Returns: (transfer full): a new instance of #BSSize which is equals to @size * @times
+ */
 BSSize* bs_size_mul (BSSize *size, guint64 times) {
     BSSize *ret = bs_size_new ();
     mpz_mul_ui (ret->priv->bytes, size->priv->bytes, times);
@@ -312,6 +373,12 @@ BSSize* bs_size_mul (BSSize *size, guint64 times) {
     return ret;
 }
 
+/**
+ * bs_size_div:
+ *
+ * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
+ *          (IOW, @size1 / @size2 using integer division)
+ */
 guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error) {
     mpf_t op1, op2;
     guint64 ret = 0;
@@ -342,6 +409,12 @@ guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error) {
     return ret;
 }
 
+/**
+ * bs_size_div_int:
+ *
+ * Returns: (transfer full): a #BSSize instance x so that x * @divisor = @size,
+ *                           rounded to a number of bytes
+ */
 BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error) {
     mpf_t dividend;
     BSSize *ret = NULL;

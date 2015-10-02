@@ -8,11 +8,12 @@ libbytesize_la_SOURCES = bs_size.c bs_size.h
 
 if HAVE_INTROSPECTION
 GIHEADERS = ${srcdir}/bs_size.h
+GISOURCES = ${srcdir}/bs_size.c
 endif
 
 ByteSize-1.0.gir: libbytesize.la
 
-ByteSize_1_0_gir_FILES = $(GIHEADERS)
+ByteSize_1_0_gir_FILES = $(GIHEADERS) $(GISOURCES)
 ByteSize_1_0_gir_LIBS = libbytesize.la
 ByteSize_1_0_gir_INCLUDES = GObject-2.0
 ByteSize_1_0_gir_LDFLAGS = -lgmp
