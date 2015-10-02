@@ -17,6 +17,7 @@ G_BEGIN_DECLS
 typedef enum {
     BS_SIZE_ERROR_INVALID_SPEC,
     BS_SIZE_ERROR_OVER,
+    BS_SIZE_ERROR_ZERO_DIV,
 } BSSizeError;
 
 typedef enum {
@@ -122,7 +123,7 @@ BSSize* bs_size_sub_bytes (BSSize *size, guint64 bytes);
 BSSize* bs_size_mul (BSSize *size, guint64 times);
 
 /**
- * bs_size_int_div:
+ * bs_size_div:
  *
  * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
  *          (IOW, @size1 / @size2 using integer division)

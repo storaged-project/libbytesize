@@ -316,6 +316,12 @@ guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error) {
     mpf_t op1, op2;
     guint64 ret = 0;
 
+    if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
+                     "Division by zero");
+        return 0;
+    }
+
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
     mpf_init2 (op2, BS_FLOAT_PREC_BITS);
 
