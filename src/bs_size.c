@@ -374,6 +374,43 @@ BSSize* bs_size_mul_int (BSSize *size, guint64 times) {
 }
 
 /**
+ * bs_size_mul_float_str:
+ *
+ * Returns: (transfer full): a new #BSSize instance which equals to @size *
+ * @times_str
+ *
+ * The reason why this function takes a float as a string instead of a float
+ * directly is because a string "0.3" can be translated into 0.3 with
+ * appropriate precision while 0.3 as float is probably something like
+ * 0.294343... with unknown precision.
+ */
+BSSize* bs_size_mul_float_str (BSSize *size, gchar *float_str, GError **error) {
+    mpf_t op1, op2;
+    gint status = 0;
+    BSSize *ret = NULL;
+
+    mpf_init2 (op1, BS_FLOAT_PREC_BITS);
+    mpf_init2 (op2, BS_FLOAT_PREC_BITS);
+
+    mpf_set_z (op1, size->priv->bytes);
+    status = mpf_set_str (op2, float_str, 10);
+    if (status != 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
+                     "'%s' is not a valid floating point number string", float_str);
+        mpf_clears (op1, op2, NULL);
+        return NULL;
+    }
+
+    mpf_mul (op1, op1, op2);
+
+    ret = bs_size_new ();
+    mpz_set_f (ret->priv->bytes, op1);
+    mpf_clears (op1, op2, NULL);
+
+    return ret;
+}
+
+/**
  * bs_size_div:
  *
  * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
