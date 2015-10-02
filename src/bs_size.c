@@ -417,7 +417,7 @@ BSSize* bs_size_mul_float_str (BSSize *size, gchar *float_str, GError **error) {
  *          (IOW, @size1 / @size2 using integer division)
  */
 guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error) {
-    mpf_t op1, op2;
+    mpz_t result;
     guint64 ret = 0;
 
     if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
@@ -426,23 +426,18 @@ guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error) {
         return 0;
     }
 
-    mpf_init2 (op1, BS_FLOAT_PREC_BITS);
-    mpf_init2 (op2, BS_FLOAT_PREC_BITS);
+    mpz_init (result);
+    mpz_fdiv_q (result, size1->priv->bytes, size2->priv->bytes);
 
-    mpf_set_z (op1, size1->priv->bytes);
-    mpf_set_z (op2, size2->priv->bytes);
-
-    mpf_div (op1, op1, op2);
-
-    if (mpf_cmp_ui (op1, G_MAXUINT64) > 0) {
+    if (mpz_cmp_ui (result, G_MAXUINT64) > 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_OVER,
                      "The size is too big, cannot be returned as a 64bit number of bytes");
-        mpf_clears (op1, op2, NULL);
+        mpz_clear (result);
         return 0;
     }
-    ret = (guint64) mpf_get_ui (op1);
+    ret = (guint64) mpz_get_ui (result);
 
-    mpf_clears (op1, op2, NULL);
+    mpz_clear (result);
     return ret;
 }
 
@@ -453,7 +448,6 @@ guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error) {
  *                           rounded to a number of bytes
  */
 BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error) {
-    mpf_t dividend;
     BSSize *ret = NULL;
 
     if (divisor == 0) {
@@ -462,15 +456,8 @@ BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error) {
         return NULL;
     }
 
-    mpf_init2 (dividend, BS_FLOAT_PREC_BITS);
-    mpf_set_z (dividend, size->priv->bytes);
-
-    mpf_div_ui (dividend, dividend, divisor);
-
     ret = bs_size_new ();
-
-    mpz_set_f (ret->priv->bytes, dividend);
-    mpf_clear (dividend);
+    mpz_fdiv_q_ui (ret->priv->bytes, size->priv->bytes, divisor);
 
     return ret;
 }
@@ -482,7 +469,6 @@ BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error) {
  *                           @size1 / @size2 using integer division
  */
 BSSize* bs_size_mod (BSSize *size1, BSSize *size2, GError **error) {
-    mpz_t result;
     BSSize *ret = NULL;
     if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
@@ -490,13 +476,9 @@ BSSize* bs_size_mod (BSSize *size1, BSSize *size2, GError **error) {
         return 0;
     }
 
-    mpz_init (result);
-    mpz_mod (result, size1->priv->bytes, size2->priv->bytes);
 
     ret = bs_size_new ();
-    mpz_set (ret->priv->bytes, result);
-
-    mpz_clear (result);
+    mpz_mod (ret->priv->bytes, size1->priv->bytes, size2->priv->bytes);
 
     return ret;
 }
