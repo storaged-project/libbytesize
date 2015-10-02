@@ -474,3 +474,29 @@ BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error) {
 
     return ret;
 }
+
+/**
+ * bs_size_mod:
+ *
+ * Returns: (transfer full): a #BSSize instance that is a remainder of
+ *                           @size1 / @size2 using integer division
+ */
+BSSize* bs_size_mod (BSSize *size1, BSSize *size2, GError **error) {
+    mpz_t result;
+    BSSize *ret = NULL;
+    if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
+                     "Division by zero");
+        return 0;
+    }
+
+    mpz_init (result);
+    mpz_mod (result, size1->priv->bytes, size2->priv->bytes);
+
+    ret = bs_size_new ();
+    mpz_set (ret->priv->bytes, result);
+
+    mpz_clear (result);
+
+    return ret;
+}
