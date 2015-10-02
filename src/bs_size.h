@@ -55,7 +55,7 @@ BSSize* bs_size_add (BSSize *size1, BSSize *size2);
 BSSize* bs_size_add_bytes (BSSize *size, guint64 bytes);
 BSSize* bs_size_sub (BSSize *size1, BSSize *size2);
 BSSize* bs_size_sub_bytes (BSSize *size, guint64 bytes);
-BSSize* bs_size_mul (BSSize *size, guint64 times);
+BSSize* bs_size_mul_int (BSSize *size, guint64 times);
 guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error);
 BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error);
 

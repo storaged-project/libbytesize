@@ -362,11 +362,11 @@ BSSize* bs_size_sub_bytes (BSSize *size, guint64 bytes) {
 }
 
 /**
- * bs_size_mul:
+ * bs_size_mul_int:
  *
  * Returns: (transfer full): a new instance of #BSSize which is equals to @size * @times
  */
-BSSize* bs_size_mul (BSSize *size, guint64 times) {
+BSSize* bs_size_mul_int (BSSize *size, guint64 times) {
     BSSize *ret = bs_size_new ();
     mpz_mul_ui (ret->priv->bytes, size->priv->bytes, times);
 
