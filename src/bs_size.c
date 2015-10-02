@@ -341,3 +341,26 @@ guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error) {
     mpf_clears (op1, op2, NULL);
     return ret;
 }
+
+BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error) {
+    mpf_t dividend;
+    BSSize *ret = NULL;
+
+    if (divisor == 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
+                     "Division by zero");
+        return NULL;
+    }
+
+    mpf_init2 (dividend, BS_FLOAT_PREC_BITS);
+    mpf_set_z (dividend, size->priv->bytes);
+
+    mpf_div_ui (dividend, dividend, divisor);
+
+    ret = bs_size_new ();
+
+    mpz_set_f (ret->priv->bytes, dividend);
+    mpf_clear (dividend);
+
+    return ret;
+}

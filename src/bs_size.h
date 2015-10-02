@@ -130,6 +130,14 @@ BSSize* bs_size_mul (BSSize *size, guint64 times);
  */
 guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error);
 
+/**
+ * bs_size_div_int:
+ *
+ * Returns: (transfer full): a #BSSize instance x so that x * @divisor = @size,
+ *                           rounded to a number of bytes
+ */
+BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error);
+
 G_END_DECLS
 
 #endif  /* _BS_SIZE_H */
