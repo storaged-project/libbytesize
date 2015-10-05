@@ -462,6 +462,57 @@ BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error) {
     return ret;
 }
 
+gchar *create_real_float_str (gchar *no_radix_str, mp_exp_t exp) {
+    gchar *p = no_radix_str;
+    gchar *radix = NULL;
+    gchar tmp;
+    mp_exp_t i = 0;
+
+    tmp = p[exp];
+    radix = nl_langinfo (RADIXCHAR);
+    p[exp] = *radix;
+    for (i=exp+1; p[i]; i++) {
+        p[i] = tmp;
+        tmp = p[i+1];
+    }
+
+    return no_radix_str;
+}
+
+/**
+ * bs_size_true_div:
+ *
+ * Returns: (transfer full): a string representing the floating-point number
+ *                           that equals to @size1 / @size2
+ */
+gchar* bs_size_true_div (BSSize *size1, BSSize *size2, GError **error) {
+    mpf_t op1;
+    mpf_t op2;
+    gchar *ret = g_new0 (gchar, (BS_FLOAT_PREC_BITS/3) + 2);
+    mp_exp_t exp = 0;
+
+    if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
+                     "Division by zero");
+        return 0;
+    }
+
+    mpf_init2 (op1, BS_FLOAT_PREC_BITS);
+    mpf_init2 (op2, BS_FLOAT_PREC_BITS);
+    mpf_set_z (op1, size1->priv->bytes);
+    mpf_set_z (op2, size2->priv->bytes);
+
+    mpf_div (op1, op1, op2);
+
+    mpf_get_str (ret, &exp, 10, (BS_FLOAT_PREC_BITS/3), op1);
+
+    mpf_clears (op1, op2, NULL);
+
+    create_real_float_str (ret, exp);
+
+    return ret;
+}
+
 /**
  * bs_size_mod:
  *
