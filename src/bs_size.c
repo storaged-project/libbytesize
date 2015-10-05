@@ -150,7 +150,7 @@ static gchar *replace_char (gchar *str, gchar orig, gchar new) {
 }
 
 static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
-    BSBUnit bunit = BS_BUNIT_UNDEF;
+    BSBunit bunit = BS_BUNIT_UNDEF;
     BSDunit dunit = BS_DUNIT_UNDEF;
     guint64 pwr = 0;
     mpf_t dec_mul;
@@ -309,6 +309,55 @@ gchar* bs_size_get_bytes_str (BSSize *size, GError **error __attribute__((unused
     return mpz_get_str (NULL, 10, size->priv->bytes);
 }
 
+/**
+ * bs_size_convert_to:
+ *
+ * Returns: (transfer full): a string representing the floating-point number
+ *                           that equals to @size converted to @unit
+ */
+gchar* bs_size_convert_to (BSSize *size, BSUnit unit, GError **error) {
+    BSBunit b_unit = BS_BUNIT_B;
+    BSDunit d_unit = BS_DUNIT_B;
+    mpf_t divisor;
+    mpf_t result;
+    gboolean found_match = FALSE;
+    gchar *ret = NULL;
+
+    mpf_init2 (divisor, BS_FLOAT_PREC_BITS);
+    for (b_unit = BS_BUNIT_B; !found_match && b_unit != BS_BUNIT_UNDEF; b_unit++) {
+        if (unit.bunit == b_unit) {
+            found_match = TRUE;
+            mpf_set_ui (divisor, 1);
+            mpf_mul_2exp (divisor, divisor, 10 * (b_unit - BS_BUNIT_B));
+        }
+    }
+
+    for (d_unit = BS_DUNIT_B; !found_match && d_unit != BS_DUNIT_UNDEF; d_unit++) {
+        if (unit.dunit == d_unit) {
+            found_match = TRUE;
+            mpf_set_ui (divisor, 1000);
+            mpf_pow_ui (divisor, divisor, (d_unit - BS_DUNIT_B));
+        }
+    }
+
+    if (!found_match) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
+                     "Invalid unit spec given");
+        mpf_clear (divisor);
+        return NULL;
+    }
+
+    mpf_init2 (result, BS_FLOAT_PREC_BITS);
+    mpf_set_z (result, size->priv->bytes);
+
+    mpf_div (result, result, divisor);
+
+    gmp_asprintf (&ret, "%.*Fg", BS_FLOAT_PREC_BITS/3, result);
+    mpf_clears (divisor, result, NULL);
+
+    return ret;
+}
+
 
 /***************
  * ARITHMETIC *
@@ -462,23 +511,6 @@ BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error) {
     return ret;
 }
 
-gchar *create_real_float_str (gchar *no_radix_str, mp_exp_t exp) {
-    gchar *p = no_radix_str;
-    gchar *radix = NULL;
-    gchar tmp;
-    mp_exp_t i = 0;
-
-    tmp = p[exp];
-    radix = nl_langinfo (RADIXCHAR);
-    p[exp] = *radix;
-    for (i=exp+1; p[i]; i++) {
-        p[i] = tmp;
-        tmp = p[i+1];
-    }
-
-    return no_radix_str;
-}
-
 /**
  * bs_size_true_div:
  *
@@ -488,8 +520,7 @@ gchar *create_real_float_str (gchar *no_radix_str, mp_exp_t exp) {
 gchar* bs_size_true_div (BSSize *size1, BSSize *size2, GError **error) {
     mpf_t op1;
     mpf_t op2;
-    gchar *ret = g_new0 (gchar, (BS_FLOAT_PREC_BITS/3) + 2);
-    mp_exp_t exp = 0;
+    gchar *ret = NULL;
 
     if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
@@ -504,11 +535,9 @@ gchar* bs_size_true_div (BSSize *size1, BSSize *size2, GError **error) {
 
     mpf_div (op1, op1, op2);
 
-    mpf_get_str (ret, &exp, 10, (BS_FLOAT_PREC_BITS/3), op1);
+    gmp_asprintf (&ret, "%.*Fg", BS_FLOAT_PREC_BITS/3, op1);
 
     mpf_clears (op1, op2, NULL);
-
-    create_real_float_str (ret, exp);
 
     return ret;
 }

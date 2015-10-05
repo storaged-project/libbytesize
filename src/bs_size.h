@@ -23,12 +23,17 @@ typedef enum {
 typedef enum {
     BS_BUNIT_B = 0, BS_BUNIT_KiB, BS_BUNIT_MiB, BS_BUNIT_GiB, BS_BUNIT_TiB,
     BS_BUNIT_PiB, BS_BUNIT_EiB, BS_BUNIT_ZiB, BS_BUNIT_YiB, BS_BUNIT_UNDEF,
-} BSBUnit;
+} BSBunit;
 
 typedef enum {
     BS_DUNIT_B = 20, BS_DUNIT_KB, BS_DUNIT_MB, BS_DUNIT_GB, BS_DUNIT_TB,
     BS_DUNIT_PB, BS_DUNIT_EB, BS_DUNIT_ZB, BS_DUNIT_YB, BS_DUNIT_UNDEF,
 } BSDunit;
+
+typedef union {
+    BSBunit bunit;
+    BSDunit dunit;
+} BSUnit;
 
 /* use 256 bits of precision for floating point numbets, that should be more
    than enough */
@@ -49,6 +54,7 @@ BSSize* bs_size_new (void);
 /* Query functions */
 guint64 bs_size_get_bytes (BSSize *size, GError **error);
 gchar* bs_size_get_bytes_str (BSSize *size, GError **error);
+gchar* bs_size_convert_to (BSSize *size, BSUnit unit, GError **error);
 
 /* Arithmetic */
 BSSize* bs_size_add (BSSize *size1, BSSize *size2);
