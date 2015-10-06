@@ -156,9 +156,12 @@ static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
     BSDunit dunit = BS_DUNIT_UNDEF;
     guint64 pwr = 0;
     mpf_t dec_mul;
+    gsize unit_str_len = 0;
+
+    unit_str_len = strlen (unit_str);
 
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
-        if (g_strcmp0 (unit_str, b_units[bunit-BS_BUNIT_B]) == 0) {
+        if (g_ascii_strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
             pwr = (guint64) bunit - BS_BUNIT_B;
             mpf_mul_2exp (size, size, 10 * pwr);
             return TRUE;
@@ -167,7 +170,27 @@ static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
     mpf_init2 (dec_mul, BS_FLOAT_PREC_BITS);
     mpf_set_ui (dec_mul, 1000);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
-        if (g_strcmp0 (unit_str, d_units[dunit-BS_DUNIT_B]) == 0) {
+        if (g_ascii_strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
+            pwr = (guint64) (dunit - BS_DUNIT_B);
+            mpf_pow_ui (dec_mul, dec_mul, pwr);
+            mpf_mul (size, size, dec_mul);
+            mpf_clear (dec_mul);
+            return TRUE;
+        }
+
+    /* not found among the binary and decimal units, let's try their translated
+       verions */
+    for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
+        if (g_ascii_strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
+            pwr = (guint64) bunit - BS_BUNIT_B;
+            mpf_mul_2exp (size, size, 10 * pwr);
+            return TRUE;
+        }
+
+    mpf_init2 (dec_mul, BS_FLOAT_PREC_BITS);
+    mpf_set_ui (dec_mul, 1000);
+    for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
+        if (g_ascii_strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
             pwr = (guint64) (dunit - BS_DUNIT_B);
             mpf_pow_ui (dec_mul, dec_mul, pwr);
             mpf_mul (size, size, dec_mul);
