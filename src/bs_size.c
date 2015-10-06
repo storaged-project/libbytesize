@@ -290,16 +290,27 @@ BSSize* bs_size_new_from_size (BSSize *size, GError **error __attribute__((unuse
  *****************/
 /**
  * bs_size_get_bytes:
+ * @sgn: (out): sign of the @size
  *
- * Returns: the @size in a number of bytes.
+ * Returns: the @size in a number of bytes
  */
-guint64 bs_size_get_bytes (BSSize *size, GError **error) {
+guint64 bs_size_get_bytes (BSSize *size, gint *sgn, GError **error) {
     if (mpz_cmp_ui (size->priv->bytes, G_MAXUINT64) > 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_OVER,
                      "The size is too big, cannot be returned as a 64bit number of bytes");
         return 0;
     }
+    *sgn = mpz_sgn (size->priv->bytes);
     return (guint64) mpz_get_ui (size->priv->bytes);
+}
+
+/**
+ * bs_size_sgn:
+ *
+ * Returns: -1, 0 or 1 if @size is negative, zero or positive, respectively
+ */
+gint bs_size_sgn (BSSize *size) {
+    return mpz_sgn (size->priv->bytes);
 }
 
 /**

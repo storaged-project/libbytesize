@@ -57,7 +57,8 @@ BSSize* bs_size_new_from_size (BSSize *size, GError **error);
 BSSize* bs_size_new (void);
 
 /* Query functions */
-guint64 bs_size_get_bytes (BSSize *size, GError **error);
+guint64 bs_size_get_bytes (BSSize *size, gint *sgn, GError **error);
+gint bs_size_sgn (BSSize *size);
 gchar* bs_size_get_bytes_str (BSSize *size, GError **error);
 gchar* bs_size_convert_to (BSSize *size, BSUnit unit, GError **error);
 gchar* bs_size_human_readable (BSSize *size, BSBunit min_unit, gint max_places, gboolean xlate);
