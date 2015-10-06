@@ -30,6 +30,11 @@ typedef enum {
     BS_DUNIT_PB, BS_DUNIT_EB, BS_DUNIT_ZB, BS_DUNIT_YB, BS_DUNIT_UNDEF,
 } BSDunit;
 
+typedef enum {
+    BS_ROUND_DIR_UP,
+    BS_ROUND_DIR_DOWN,
+} BSRoundDir;
+
 typedef union {
     BSBunit bunit;
     BSDunit dunit;
@@ -68,6 +73,7 @@ guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error);
 BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error);
 gchar* bs_size_true_div (BSSize *size1, BSSize *size2, GError **error);
 BSSize* bs_size_mod (BSSize *size1, BSSize *size2, GError **error);
+BSSize* bs_size_round_to_nearest (BSSize *size, BSSize *round_to, BSRoundDir dir, GError **error);
 
 G_END_DECLS
 

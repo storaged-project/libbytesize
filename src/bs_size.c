@@ -606,3 +606,34 @@ BSSize* bs_size_mod (BSSize *size1, BSSize *size2, GError **error) {
 
     return ret;
 }
+
+/**
+ * bs_size_round_to_nearest:
+ *
+ * Returns: (transfer full): a new instance of #BSSize that is @size rounded to
+ *                           a multiple of @round_to according to @dir
+ */
+BSSize* bs_size_round_to_nearest (BSSize *size, BSSize *round_to, BSRoundDir dir, GError **error) {
+    BSSize *ret = NULL;
+    mpz_t q;
+
+    if (mpz_cmp_ui (round_to->priv->bytes, 0) == 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
+                     "Division by zero");
+        return NULL;
+    }
+
+    mpz_init (q);
+
+    if (dir == BS_ROUND_DIR_UP)
+        mpz_cdiv_q (q, size->priv->bytes, round_to->priv->bytes);
+    else
+        mpz_fdiv_q (q, size->priv->bytes, round_to->priv->bytes);
+
+    ret = bs_size_new ();
+    mpz_mul (ret->priv->bytes, q, round_to->priv->bytes);
+
+    mpz_clear (q);
+
+    return ret;
+}
