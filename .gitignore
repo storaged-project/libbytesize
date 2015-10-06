@@ -18,9 +18,8 @@ ltmain.sh
 m4/
 autom4te.cache/
 missing
-src/lib/.deps/
-src/lib/blockdev.c
-src/lib/blockdev.pc
+po/POTFILES
+po/stamp-po
 **/*.deps
 **/*.libs
 **/*.la
