@@ -358,6 +358,50 @@ gchar* bs_size_convert_to (BSSize *size, BSUnit unit, GError **error) {
     return ret;
 }
 
+/**
+ * bs_size_human_readable:
+ *
+ * Returns: (transfer full): a string which is human-readable representation of
+ *                           @size according to the restrictions given by the
+ *                           other parameters
+ */
+gchar* bs_size_human_readable (BSSize *size, BSBunit min_unit, gint max_places, gboolean xlate __attribute__ ((unused))) {
+    mpf_t cur_val;
+    gchar *num_str = NULL;
+    gchar *ret = NULL;
+    gint len = 0;
+    gchar *zero = NULL;
+    gchar *radix_char = NULL;
+
+    mpf_init2 (cur_val, BS_FLOAT_PREC_BITS);
+    mpf_set_z (cur_val, size->priv->bytes);
+
+    if (min_unit == BS_BUNIT_UNDEF)
+        min_unit = BS_BUNIT_B;
+
+    mpf_div_2exp (cur_val, cur_val, 10 * (min_unit - BS_BUNIT_B));
+    while ((mpf_cmpabs_ui (cur_val, 1024) > 0) && min_unit != BS_BUNIT_YiB) {
+        mpf_div_2exp (cur_val, cur_val, 10);
+        min_unit++;
+    }
+
+    len = gmp_asprintf (&num_str, "%.*Ff", max_places >= 0 ? max_places : BS_FLOAT_PREC_BITS,
+                        cur_val);
+    mpf_clear (cur_val);
+
+    /* remove trailing zeros and the radix char */
+    radix_char = nl_langinfo (RADIXCHAR);
+    zero = num_str + (len - 1);
+    while ((zero != num_str) && ((*zero == '0') || (*zero == *radix_char)))
+        zero--;
+    zero[1] = '\0';
+
+    ret = g_strdup_printf ("%s %s", num_str, b_units[min_unit - BS_BUNIT_B]);
+    g_free (num_str);
+
+    return ret;
+}
+
 
 /***************
  * ARITHMETIC *
