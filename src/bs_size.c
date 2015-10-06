@@ -637,3 +637,33 @@ BSSize* bs_size_round_to_nearest (BSSize *size, BSSize *round_to, BSRoundDir dir
 
     return ret;
 }
+
+
+/***************
+ * COMPARISONS *
+ ***************/
+/**
+ * bs_size_cmp:
+ *
+ * Returns: -1, 0, or 1 if @size1 is smaller, equal to or bigger than
+ *          @size2 respectively comparing absolute values if @abs is %TRUE
+ */
+gint bs_size_cmp (BSSize *size1, BSSize size2, gboolean abs) {
+    if (abs)
+        return mpz_cmpabs (size1->priv->bytes, size2->priv->bytes);
+    else
+        return mpz_cmp (size1->priv->bytes, size2->priv->bytes);
+}
+
+/**
+ * bs_size_cmp_bytes:
+ *
+ * Returns: -1, 0, or 1 if @size1 is smaller, equal to or bigger than
+ *          @bytes respectively comparing absolute values if @abs is %TRUE
+ */
+gint bs_size_cmp_bytes (BSSize *size1, guint64 bytes, gboolean abs) {
+    if (abs)
+        return mpz_cmpabs_ui (size1->priv->bytes, bytes);
+    else
+        return mpz_cmp_ui (size1->priv->bytes, bytes);
+}
