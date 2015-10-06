@@ -372,6 +372,7 @@ gchar* bs_size_human_readable (BSSize *size, BSBunit min_unit, gint max_places, 
     gint len = 0;
     gchar *zero = NULL;
     gchar *radix_char = NULL;
+    gint sign = 0;
 
     mpf_init2 (cur_val, BS_FLOAT_PREC_BITS);
     mpf_set_z (cur_val, size->priv->bytes);
@@ -379,11 +380,17 @@ gchar* bs_size_human_readable (BSSize *size, BSBunit min_unit, gint max_places, 
     if (min_unit == BS_BUNIT_UNDEF)
         min_unit = BS_BUNIT_B;
 
+    sign = mpf_sgn (cur_val);
+    mpf_abs (cur_val, cur_val);
+
     mpf_div_2exp (cur_val, cur_val, 10 * (min_unit - BS_BUNIT_B));
-    while ((mpf_cmpabs_ui (cur_val, 1024) > 0) && min_unit != BS_BUNIT_YiB) {
+    while ((mpf_cmp_ui (cur_val, 1024) > 0) && min_unit != BS_BUNIT_YiB) {
         mpf_div_2exp (cur_val, cur_val, 10);
         min_unit++;
     }
+
+    if (sign == -1)
+        mpf_neg (cur_val, cur_val);
 
     len = gmp_asprintf (&num_str, "%.*Ff", max_places >= 0 ? max_places : BS_FLOAT_PREC_BITS,
                         cur_val);
@@ -648,7 +655,7 @@ BSSize* bs_size_round_to_nearest (BSSize *size, BSSize *round_to, BSRoundDir dir
  * Returns: -1, 0, or 1 if @size1 is smaller, equal to or bigger than
  *          @size2 respectively comparing absolute values if @abs is %TRUE
  */
-gint bs_size_cmp (BSSize *size1, BSSize size2, gboolean abs) {
+gint bs_size_cmp (BSSize *size1, BSSize *size2, gboolean abs) {
     if (abs)
         return mpz_cmpabs (size1->priv->bytes, size2->priv->bytes);
     else

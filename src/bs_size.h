@@ -76,7 +76,7 @@ BSSize* bs_size_mod (BSSize *size1, BSSize *size2, GError **error);
 BSSize* bs_size_round_to_nearest (BSSize *size, BSSize *round_to, BSRoundDir dir, GError **error);
 
 /* Comparisons */
-gint bs_size_cmp (BSSize *size1, BSSize size2, gboolean abs);
+gint bs_size_cmp (BSSize *size1, BSSize *size2, gboolean abs);
 gint bs_size_cmp_bytes (BSSize *size1, guint64 bytes, gboolean abs);
 
 G_END_DECLS
