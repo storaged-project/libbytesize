@@ -7,6 +7,8 @@ AC_INIT([libbytesize], [0.1], [vpodzime@redhat.com])
 AC_DISABLE_STATIC
 
 AM_INIT_AUTOMAKE([foreign -Wall -Werror -Wno-syntax -Wno-portability])
+AM_GNU_GETTEXT_VERSION([0.19.1])
+AM_GNU_GETTEXT([external])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_PROG_AR
@@ -14,7 +16,7 @@ AC_PROG_CC
 
 LT_INIT
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile po/Makefile.in])
 
 LIBBYTESIZE_PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.42.2])
 LIBBYTESIZE_PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.42.2])
