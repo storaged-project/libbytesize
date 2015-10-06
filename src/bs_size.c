@@ -4,7 +4,9 @@
 #include <langinfo.h>
 
 #include "bs_size.h"
+#include "gettext.h"
 
+#define  _(String) gettext (String)
 #define N_(String) String
 
 /**
@@ -365,7 +367,7 @@ gchar* bs_size_convert_to (BSSize *size, BSUnit unit, GError **error) {
  *                           @size according to the restrictions given by the
  *                           other parameters
  */
-gchar* bs_size_human_readable (BSSize *size, BSBunit min_unit, gint max_places, gboolean xlate __attribute__ ((unused))) {
+gchar* bs_size_human_readable (BSSize *size, BSBunit min_unit, gint max_places, gboolean xlate) {
     mpf_t cur_val;
     gchar *num_str = NULL;
     gchar *ret = NULL;
@@ -403,7 +405,7 @@ gchar* bs_size_human_readable (BSSize *size, BSBunit min_unit, gint max_places, 
         zero--;
     zero[1] = '\0';
 
-    ret = g_strdup_printf ("%s %s", num_str, b_units[min_unit - BS_BUNIT_B]);
+    ret = g_strdup_printf ("%s %s", num_str, xlate ? _(b_units[min_unit - BS_BUNIT_B]) : b_units[min_unit - BS_BUNIT_B]);
     g_free (num_str);
 
     return ret;
