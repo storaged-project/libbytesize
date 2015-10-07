@@ -22,6 +22,7 @@ po/POTFILES
 po/stamp-po
 po/remove-potcdate.sed
 dist/libbytesize.spec
+src/bytesize.pc
 **/*.deps
 **/*.libs
 **/*.la

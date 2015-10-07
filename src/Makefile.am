@@ -36,6 +36,9 @@ gir_DATA = $(INTROSPECTION_GIRS)
 libincludedir = $(includedir)/bytesize
 libinclude_HEADERS = bs_size.h
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = ${builddir}/bytesize.pc
+
 SUBDIRS = python
 CLEANFILES = $(INTROSPECTION_GIRS) $(typelib_DATA)
 MAINTAINERCLEANFILES = Makefile.in
