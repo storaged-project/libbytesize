@@ -33,6 +33,9 @@ typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
 
+libincludedir = $(includedir)/bytesize
+libinclude_HEADERS = bs_size.h
+
 SUBDIRS = python
 CLEANFILES = $(INTROSPECTION_GIRS) $(typelib_DATA)
 MAINTAINERCLEANFILES = Makefile.in

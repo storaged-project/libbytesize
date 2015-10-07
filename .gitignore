@@ -21,6 +21,7 @@ missing
 po/POTFILES
 po/stamp-po
 po/remove-potcdate.sed
+dist/libbytesize.spec
 **/*.deps
 **/*.libs
 **/*.la
