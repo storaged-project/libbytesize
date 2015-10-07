@@ -51,7 +51,7 @@ typedef struct _BSSizePrivate BSSizePrivate;
 GType bs_size_get_type (void);
 
 /* Constructors */
-BSSize* bs_size_new_from_bytes (guint64 bytes, GError **error);
+BSSize* bs_size_new_from_bytes (guint64 bytes, gint sgn, GError **error);
 BSSize* bs_size_new_from_str (const gchar *size_str, GError **error);
 BSSize* bs_size_new_from_size (BSSize *size, GError **error);
 BSSize* bs_size_new (void);

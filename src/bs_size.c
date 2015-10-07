@@ -129,9 +129,11 @@ BSSize* bs_size_new (void) {
  *
  * Returns: a new #BSSize
  */
-BSSize* bs_size_new_from_bytes (guint64 bytes, GError **error __attribute__((unused))) {
+BSSize* bs_size_new_from_bytes (guint64 bytes, gint sgn, GError **error __attribute__((unused))) {
     BSSize *ret = bs_size_new ();
     mpz_set_ui (ret->priv->bytes, bytes);
+    if (sgn == -1)
+        mpz_neg (ret->priv->bytes, ret->priv->bytes);
     return ret;
 }
 
