@@ -632,6 +632,34 @@ gchar* bs_size_true_div (BSSize *size1, BSSize *size2, GError **error) {
 }
 
 /**
+ * bs_size_true_div_int:
+ *
+ * Returns: (transfer full): a string representing the floating-point number
+ *                           that equals to @size / @divisor
+ */
+gchar* bs_size_true_div_int (BSSize *size, guint64 divisor, GError **error) {
+    mpf_t op1;
+    gchar *ret = NULL;
+
+    if (divisor == 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
+                     "Division by zero");
+        return 0;
+    }
+
+    mpf_init2 (op1, BS_FLOAT_PREC_BITS);
+    mpf_set_z (op1, size->priv->bytes);
+
+    mpf_div_ui (op1, op1, divisor);
+
+    gmp_asprintf (&ret, "%.*Fg", BS_FLOAT_PREC_BITS/3, op1);
+
+    mpf_clear (op1);
+
+    return ret;
+}
+
+/**
  * bs_size_mod:
  *
  * Returns: (transfer full): a #BSSize instance that is a remainder of
