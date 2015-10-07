@@ -7,9 +7,9 @@ lib_LTLIBRARIES = libbytesize.la
 libbytesize_la_CFLAGS = $(GLIB_CFLAGS) $(GOBJECT_CFLAGS) -Wall -Wextra -Werror
 libbytesize_la_LIBADD = $(GLIB_LIBS) $(GOBJECT_LIBS) -lgmp
 libbytesize_la_LDFLAGS = -version-info 0:0:0
-libbytesize_la_SOURCES = bs_size.c bs_size.h
+libbytesize_la_SOURCES = bs_size.c bs_size.h gettext.h
 
-noinst_SOURCES = gettext.h
+noinst_dist_SOURCES = gettext.h
 
 if HAVE_INTROSPECTION
 GIHEADERS = ${srcdir}/bs_size.h
@@ -32,3 +32,7 @@ typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
+
+SUBDIRS = python
+CLEANFILES = $(INTROSPECTION_GIRS) $(typelib_DATA)
+MAINTAINERCLEANFILES = Makefile.in

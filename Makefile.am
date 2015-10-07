@@ -13,7 +13,7 @@ LIBDIRS = src/.libs
 GIDIR = src/
 
 run-ipython: all
-	GI_TYPELIB_PATH=${GIDIR} LD_LIBRARY_PATH=${LIBDIRS} G_MESSAGES_DEBUG=all ipython
+	PYTHONPATH=src/python GI_TYPELIB_PATH=${GIDIR} LD_LIBRARY_PATH=${LIBDIRS} G_MESSAGES_DEBUG=all ipython
 
 
 EXTRA_DIST = config.rpath
