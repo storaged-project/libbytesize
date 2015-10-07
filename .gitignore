@@ -20,10 +20,14 @@ autom4te.cache/
 missing
 po/POTFILES
 po/stamp-po
+po/remove-potcdate.sed
 **/*.deps
 **/*.libs
 **/*.la
 **/*.lo
+**/*.pyc
+**/__pycache__
 **/Makefile
 **/Makefile.in
 **/*.stamp
+*.tar.gz
