@@ -69,7 +69,7 @@ BSSize* bs_size_add_bytes (BSSize *size, guint64 bytes);
 BSSize* bs_size_sub (BSSize *size1, BSSize *size2);
 BSSize* bs_size_sub_bytes (BSSize *size, guint64 bytes);
 BSSize* bs_size_mul_int (BSSize *size, guint64 times);
-BSSize* bs_size_mul_float_str (BSSize *size, gchar *float_str, GError **error);
+BSSize* bs_size_mul_float_str (BSSize *size, const gchar *float_str, GError **error);
 guint64 bs_size_div (BSSize *size1, BSSize *size2, GError **error);
 BSSize* bs_size_div_int (BSSize *size, guint64 divisor, GError **error);
 gchar* bs_size_true_div (BSSize *size1, BSSize *size2, GError **error);

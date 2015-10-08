@@ -522,7 +522,7 @@ BSSize* bs_size_mul_int (BSSize *size, guint64 times) {
  * appropriate precision while 0.3 as float is probably something like
  * 0.294343... with unknown precision.
  */
-BSSize* bs_size_mul_float_str (BSSize *size, gchar *float_str, GError **error) {
+BSSize* bs_size_mul_float_str (BSSize *size, const gchar *float_str, GError **error) {
     mpf_t op1, op2;
     gint status = 0;
     BSSize *ret = NULL;
