@@ -600,7 +600,7 @@ guint64 bs_size_div (const BSSize *size1, const BSSize *size2, GError **error) {
     }
 
     mpz_init (result);
-    mpz_fdiv_q (result, size1->priv->bytes, size2->priv->bytes);
+    mpz_tdiv_q (result, size1->priv->bytes, size2->priv->bytes);
 
     if (mpz_cmp_ui (result, G_MAXUINT64) > 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_OVER,
@@ -633,7 +633,7 @@ BSSize* bs_size_div_int (const BSSize *size, guint64 divisor, GError **error) {
     }
 
     ret = bs_size_new ();
-    mpz_fdiv_q_ui (ret->priv->bytes, size->priv->bytes, divisor);
+    mpz_tdiv_q_ui (ret->priv->bytes, size->priv->bytes, divisor);
 
     return ret;
 }
