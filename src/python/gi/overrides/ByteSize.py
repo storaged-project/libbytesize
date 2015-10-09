@@ -119,7 +119,36 @@ class Size(ByteSize.Size):
         else:
             raise ValueError("Invalid size specification: '%s'"  % round_to)
 
+    def cmp(self, other, abs_vals=False):
+        if isinstance(other, six.integer_types):
+            if (other < 0 and abs_vals):
+                other = abs(other)
+            if other <= GLib.MAXUINT64:
+                return ByteSize.Size.cmp_bytes(self, other, abs_vals) == 0
+            else:
+                other = ByteSize.Size.new_from_str(str(other))
+        return ByteSize.Size.cmp(self, other, abs_vals)
+
+
     ## INTERNAL METHODS ##
+    def __eq__(self, other):
+        return self.cmp(other, False) == 0
+
+    def __ne__(self, other):
+        return self.cmp(other, False) != 0
+
+    def __lt__(self, other):
+        return self.cmp(other, False) == -1
+
+    def __le__(self, other):
+        return self.cmp(other, False) in (-1, 0)
+
+    def __gt__(segf, other):
+        return segf.cmp(other, False) == 1
+
+    def __ge__(segf, other):
+        return segf.cmp(other, False) in (1, 0)
+
     def __add__(self, other):
         if isinstance(other, six.integer_types):
             if other <= GLib.MAXUINT64:
