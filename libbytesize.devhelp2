@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
+<book xmlns="http://www.devhelp.net/book" title="libbytesize Reference Manual" link="index.html" author="" name="libbytesize" version="2" language="c">
+  <chapters>
+    <sub name="libbytesize Reference Manual" link="ch01.html">
+      <sub name="BSSize" link="libbytesize-BSSize.html"/>
+    </sub>
+    <sub name="GI Overrides" link="ch02.html"/>
+    <sub name="API Index" link="api-index-full.html"/>
+    <sub name="Index of deprecated API" link="deprecated-api-index.html"/>
+    <sub name="Annotation Glossary" link="annotation-glossary.html"/>
+  </chapters>
+  <functions>
+    <keyword type="function" name="bs_size_new ()" link="libbytesize-BSSize.html#bs-size-new"/>
+    <keyword type="function" name="bs_size_new_from_bytes ()" link="libbytesize-BSSize.html#bs-size-new-from-bytes"/>
+    <keyword type="function" name="bs_size_new_from_str ()" link="libbytesize-BSSize.html#bs-size-new-from-str"/>
+    <keyword type="function" name="bs_size_new_from_size ()" link="libbytesize-BSSize.html#bs-size-new-from-size"/>
+    <keyword type="function" name="bs_size_get_bytes ()" link="libbytesize-BSSize.html#bs-size-get-bytes"/>
+    <keyword type="function" name="bs_size_sgn ()" link="libbytesize-BSSize.html#bs-size-sgn"/>
+    <keyword type="function" name="bs_size_get_bytes_str ()" link="libbytesize-BSSize.html#bs-size-get-bytes-str"/>
+    <keyword type="function" name="bs_size_convert_to ()" link="libbytesize-BSSize.html#bs-size-convert-to"/>
+    <keyword type="function" name="bs_size_human_readable ()" link="libbytesize-BSSize.html#bs-size-human-readable"/>
+    <keyword type="function" name="bs_size_add ()" link="libbytesize-BSSize.html#bs-size-add"/>
+    <keyword type="function" name="bs_size_add_bytes ()" link="libbytesize-BSSize.html#bs-size-add-bytes"/>
+    <keyword type="function" name="bs_size_sub ()" link="libbytesize-BSSize.html#bs-size-sub"/>
+    <keyword type="function" name="bs_size_sub_bytes ()" link="libbytesize-BSSize.html#bs-size-sub-bytes"/>
+    <keyword type="function" name="bs_size_mul_int ()" link="libbytesize-BSSize.html#bs-size-mul-int"/>
+    <keyword type="function" name="bs_size_mul_float_str ()" link="libbytesize-BSSize.html#bs-size-mul-float-str"/>
+    <keyword type="function" name="bs_size_div ()" link="libbytesize-BSSize.html#bs-size-div"/>
+    <keyword type="function" name="bs_size_div_int ()" link="libbytesize-BSSize.html#bs-size-div-int"/>
+    <keyword type="function" name="bs_size_true_div ()" link="libbytesize-BSSize.html#bs-size-true-div"/>
+    <keyword type="function" name="bs_size_true_div_int ()" link="libbytesize-BSSize.html#bs-size-true-div-int"/>
+    <keyword type="function" name="bs_size_mod ()" link="libbytesize-BSSize.html#bs-size-mod"/>
+    <keyword type="function" name="bs_size_round_to_nearest ()" link="libbytesize-BSSize.html#bs-size-round-to-nearest"/>
+    <keyword type="function" name="bs_size_cmp ()" link="libbytesize-BSSize.html#bs-size-cmp"/>
+    <keyword type="function" name="bs_size_cmp_bytes ()" link="libbytesize-BSSize.html#bs-size-cmp-bytes"/>
+    <keyword type="macro" name="BS_SIZE_ERROR" link="libbytesize-BSSize.html#BS-SIZE-ERROR:CAPS"/>
+    <keyword type="enum" name="enum BSSizeError" link="libbytesize-BSSize.html#BSSizeError"/>
+    <keyword type="enum" name="enum BSBunit" link="libbytesize-BSSize.html#BSBunit"/>
+    <keyword type="enum" name="enum BSDunit" link="libbytesize-BSSize.html#BSDunit"/>
+    <keyword type="enum" name="enum BSRoundDir" link="libbytesize-BSSize.html#BSRoundDir"/>
+    <keyword type="union" name="BSUnit" link="libbytesize-BSSize.html#BSUnit"/>
+    <keyword type="macro" name="BS_FLOAT_PREC_BITS" link="libbytesize-BSSize.html#BS-FLOAT-PREC-BITS:CAPS"/>
+    <keyword type="constant" name="BS_SIZE_ERROR_INVALID_SPEC" link="libbytesize-BSSize.html#BS-SIZE-ERROR-INVALID-SPEC:CAPS"/>
+    <keyword type="constant" name="BS_SIZE_ERROR_OVER" link="libbytesize-BSSize.html#BS-SIZE-ERROR-OVER:CAPS"/>
+    <keyword type="constant" name="BS_SIZE_ERROR_ZERO_DIV" link="libbytesize-BSSize.html#BS-SIZE-ERROR-ZERO-DIV:CAPS"/>
+    <keyword type="constant" name="BS_BUNIT_B" link="libbytesize-BSSize.html#BS-BUNIT-B:CAPS"/>
+    <keyword type="constant" name="BS_BUNIT_KiB" link="libbytesize-BSSize.html#BS-BUNIT-KiB"/>
+    <keyword type="constant" name="BS_BUNIT_MiB" link="libbytesize-BSSize.html#BS-BUNIT-MiB"/>
+    <keyword type="constant" name="BS_BUNIT_GiB" link="libbytesize-BSSize.html#BS-BUNIT-GiB"/>
+    <keyword type="constant" name="BS_BUNIT_TiB" link="libbytesize-BSSize.html#BS-BUNIT-TiB"/>
+    <keyword type="constant" name="BS_BUNIT_PiB" link="libbytesize-BSSize.html#BS-BUNIT-PiB"/>
+    <keyword type="constant" name="BS_BUNIT_EiB" link="libbytesize-BSSize.html#BS-BUNIT-EiB"/>
+    <keyword type="constant" name="BS_BUNIT_ZiB" link="libbytesize-BSSize.html#BS-BUNIT-ZiB"/>
+    <keyword type="constant" name="BS_BUNIT_YiB" link="libbytesize-BSSize.html#BS-BUNIT-YiB"/>
+    <keyword type="constant" name="BS_BUNIT_UNDEF" link="libbytesize-BSSize.html#BS-BUNIT-UNDEF:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_B" link="libbytesize-BSSize.html#BS-DUNIT-B:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_KB" link="libbytesize-BSSize.html#BS-DUNIT-KB:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_MB" link="libbytesize-BSSize.html#BS-DUNIT-MB:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_GB" link="libbytesize-BSSize.html#BS-DUNIT-GB:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_TB" link="libbytesize-BSSize.html#BS-DUNIT-TB:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_PB" link="libbytesize-BSSize.html#BS-DUNIT-PB:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_EB" link="libbytesize-BSSize.html#BS-DUNIT-EB:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_ZB" link="libbytesize-BSSize.html#BS-DUNIT-ZB:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_YB" link="libbytesize-BSSize.html#BS-DUNIT-YB:CAPS"/>
+    <keyword type="constant" name="BS_DUNIT_UNDEF" link="libbytesize-BSSize.html#BS-DUNIT-UNDEF:CAPS"/>
+    <keyword type="constant" name="BS_ROUND_DIR_UP" link="libbytesize-BSSize.html#BS-ROUND-DIR-UP:CAPS"/>
+    <keyword type="constant" name="BS_ROUND_DIR_DOWN" link="libbytesize-BSSize.html#BS-ROUND-DIR-DOWN:CAPS"/>
+  </functions>
+</book>

@@ -1,0 +1,68 @@
+Name:        libbytesize
+Version:     0.1
+Release:     1%{?dist}
+Summary:     A library for working with sizes in bytes.
+License:     LGPLv3+
+URL:         https://github.com/vpodzime/libbytesize
+Source0:     https://github.com/vpodzime/libbytesize/archive/%{name}-%{version}.tar.gz
+
+BuildRequires: glib2-devel
+BuildRequires: gobject-introspection-devel
+BuildRequires: gmp-devel
+BuildRequires: gettext-devel
+BuildRequires: python-devel
+BuildRequires: python3-devel
+BuildRequires: gtk-doc
+BuildRequires: glib2-doc
+
+%description
+The libbytesize is a C library with GObject introspection support that
+facilitates work with sizes in bytes. Be it parsing the input from users or
+producing a nice human readable representation of a size in bytes this library
+takes localization into account. It also provides support for sizes bigger than
+MAXUINT64.
+
+%package devel
+Summary:     Development files for libbytesize
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: glib2-devel
+
+%description devel
+This package contains header files and pkg-config files needed for development
+with the libbytesize library.
+
+%prep
+%setup -q -n %{name}-%{version}
+
+%build
+%configure
+%{__make} %{?_smp_mflags}
+
+%install
+%{make_install}
+find %{buildroot} -type f -name "*.la" | xargs %{__rm}
+
+
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+
+%files
+%{!?_licensedir:%global license %%doc}
+%license LICENSE
+%{_libdir}/libbytesize.so.*
+%{_libdir}/girepository*/ByteSize*.typelib
+%{python2_sitearch}/gi/overrides/*
+%{python3_sitearch}/gi/overrides/ByteSize*
+%{python3_sitearch}/gi/overrides/__pycache__/ByteSize*
+
+%files devel
+%{_libdir}/libbytesize.so
+%dir %{_includedir}/bytesize
+%{_includedir}/bytesize/bs_size.h
+%{_libdir}/pkgconfig/bytesize.pc
+%{_datadir}/gtk-doc/html/libbytesize
+%{_datadir}/gir*/ByteSize*.gir
+
+%changelog
+* Wed Oct 07 2015 Vratislav Podzimek <vpodzime@redhat.com> - 0.1-1
+- Initial release
