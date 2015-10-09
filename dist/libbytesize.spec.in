@@ -60,7 +60,7 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %dir %{_includedir}/bytesize
 %{_includedir}/bytesize/bs_size.h
 %{_libdir}/pkgconfig/bytesize.pc
-#%{_datadir}/gtk-doc/html/libbytesize
+%{_datadir}/gtk-doc/html/libbytesize
 %{_datadir}/gir*/ByteSize*.gir
 
 %changelog

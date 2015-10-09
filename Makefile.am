@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
 
-SUBDIRS = po src dist
+SUBDIRS = po src dist docs
 
 dist_noinst_DATA = LICENSE README.rst
 

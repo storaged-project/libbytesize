@@ -23,6 +23,17 @@ po/stamp-po
 po/remove-potcdate.sed
 dist/libbytesize.spec
 src/bytesize.pc
+docs/libbytesize-decl-list.txt
+docs/libbytesize-decl.txt
+docs/libbytesize-overrides.txt
+docs/libbytesize-undeclared.txt
+docs/libbytesize-undocumented.txt
+docs/libbytesize-unused.txt
+docs/libbytesize.types
+docs/xml/
+docs/html/
+docs/libbytesize-docs.xml
+dist/libbytesize.spec
 **/*.deps
 **/*.libs
 **/*.la
