@@ -4,7 +4,7 @@ AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" -DDEFAULT_TEXT_DOMAIN=\"libbytesize\"
 LDADD = $(LIBINTL)
 
 lib_LTLIBRARIES = libbytesize.la
-libbytesize_la_CFLAGS = $(GLIB_CFLAGS) $(GOBJECT_CFLAGS) -Wall -Wextra -Werror
+libbytesize_la_CFLAGS = $(GLIB_CFLAGS) $(GOBJECT_CFLAGS) -Wall -Wextra -Werror -Wno-overflow
 libbytesize_la_LIBADD = $(GLIB_LIBS) $(GOBJECT_LIBS) -lgmp
 libbytesize_la_LDFLAGS = -version-info 0:0:0
 libbytesize_la_SOURCES = bs_size.c bs_size.h gettext.h
