@@ -25,6 +25,7 @@ dist/libbytesize.spec
 src/bytesize.pc
 docs/libbytesize-decl-list.txt
 docs/libbytesize-decl.txt
+docs/libbytesize-decl.txt.bak
 docs/libbytesize-overrides.txt
 docs/libbytesize-undeclared.txt
 docs/libbytesize-undocumented.txt

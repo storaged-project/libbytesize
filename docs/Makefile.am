@@ -27,6 +27,7 @@ dist_noinst_DATA = ${srcdir}/libbytesize-sections.txt ${srcdir}/libbytesize-docs
 CLEANFILES = html.stamp sgml.stamp \
 	libbytesize-decl-list.txt \
 	libbytesize-decl.txt \
+	libbytesize-decl.txt.bak \
 	libbytesize-overrides.txt \
 	libbytesize-undeclared.txt \
 	libbytesize-undocumented.txt \
