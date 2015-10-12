@@ -121,7 +121,8 @@ BSSize* bs_size_new (void) {
 /**
  * bs_size_new_from_bytes: (constructor)
  * @bytes: number of bytes
- * @sgn: sign of the size - if being -1, the size is initialized to -@bytes
+ * @sgn: sign of the size -- if being -1, the size is initialized to
+ *       -@bytes, other values are ignored
  *
  * Creates a new #BSSize instance.
  *
@@ -698,6 +699,7 @@ BSSize* bs_size_grow_mul_float_str (BSSize *size, const gchar *float_str, GError
  *
  * Divide @size1 by @size2. Gives the answer to the question "How many times
  * does @size2 fit in @size1?".
+ * **This function ignores the signs of the sizes.**
  *
  * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
  *          (IOW, @size1 / @size2 using integer division)
@@ -839,12 +841,15 @@ gchar* bs_size_true_div_int (const BSSize *size, guint64 divisor, GError **error
  * bs_size_mod:
  *
  * Gives @size1 modulo @size2 (i.e. the remainder of integer division @size1 /
- * @size2).
+ * @size2). Gives the answer to the question "If I split @size1 into chunks of
+ * size @size2, what will be the remainder?"
+ * **This function ignores the signs of the sizes.**
  *
  * Returns: (transfer full): a #BSSize instance that is a remainder of
  *                           @size1 / @size2 using integer division
  */
 BSSize* bs_size_mod (const BSSize *size1, const BSSize *size2, GError **error) {
+    mpz_t aux;
     BSSize *ret = NULL;
     if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
@@ -852,9 +857,15 @@ BSSize* bs_size_mod (const BSSize *size1, const BSSize *size2, GError **error) {
         return 0;
     }
 
+    mpz_init (aux);
+    mpz_set (aux, size1->priv->bytes);
+    if (mpz_sgn (size1->priv->bytes) == -1)
+        /* negative @size1, get the absolute value so that we get results
+           matching the specification/documentation of this function */
+        mpz_neg (aux, aux);
 
     ret = bs_size_new ();
-    mpz_mod (ret->priv->bytes, size1->priv->bytes, size2->priv->bytes);
+    mpz_mod (ret->priv->bytes, aux, size2->priv->bytes);
 
     return ret;
 }
