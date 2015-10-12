@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
+import locale
 import unittest
 from gi.repository.ByteSize import Size
 from gi.repository import ByteSize
@@ -12,6 +12,14 @@ class SizeTestCase(unittest.TestCase):
         actual = Size.new().get_bytes()
         expected = (0, 0)
         self.assertEqual(actual, expected)
+    #enddef
+
+    def setUp(self):
+        locale.setlocale(locale.LC_ALL,'en_US.utf8')
+    #enddef
+
+    def tearDown(self):
+        locale.setlocale(locale.LC_ALL,'en_US.utf8')
     #enddef
 
     def testNewFromStr(self):
@@ -34,6 +42,16 @@ class SizeTestCase(unittest.TestCase):
         actual = Size.new_from_str('-1.5 GiB').get_bytes()
         expected = (1610612736, -1)
         self.assertEqual(actual, expected)
+
+        # TODO known bug, uncomment
+        #locale.setlocale(locale.LC_ALL,'czech')
+
+        #actual = Size.new_from_str('-1,5 KB').get_bytes()
+        #expected = (1610612736, -1)
+        #self.assertEqual(actual, expected)
+
+        #locale.setlocale(locale.LC_ALL,'en_US.utf8')
+
     #enddef
 
     def testNewFromBytes(self):
@@ -48,16 +66,6 @@ class SizeTestCase(unittest.TestCase):
         actual = Size.new_from_bytes(1024, -1).get_bytes()
         expected = (1024, -1)
         self.assertEqual(actual, expected)
-
-        # TODO currently fails; uncomment
-        #with self.assertRaises(Exception):
-        #    Size.new_from_bytes(1, 0)
-        #endwith
-
-        # TODO currently fails; uncomment
-        #with self.assertRaises(Exception):
-        #   Size.new_from_bytes(0, -1)
-        ##endwith
     #enddef
 
     def testNewFromSize(self):
@@ -221,19 +229,16 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(cmpResult, 0)
     #enddef
 
-    # TODO implement
     def testConvertTo(self):
-        pass
-        #x = Size.new_from_str("1 KiB")
-        #x.convert_to(ByteSize.B)
+        x = Size.new_from_str("1 KiB")
+        x.convert_to(ByteSize.Bunit.KIB)
     #enddef
 
     def testDiv(self):
-        # TODO currently fails, uncomment (fixed in new version)
-        #x = Size.new_from_str("1 KiB")
-        #y = Size.new_from_str("-0.1 KiB")
-        #divResult = x.div(y)
-        #self.assertEqual(divResult, 10)
+        x = Size.new_from_str("1 KiB")
+        y = Size.new_from_str("-0.1 KiB")
+        divResult = x.div(y)
+        self.assertEqual(divResult, 10)
 
         x = Size.new_from_str("1 MiB")
         y = Size.new_from_str("1 KiB")
@@ -245,11 +250,10 @@ class SizeTestCase(unittest.TestCase):
         divResult = x.div(y)
         self.assertEqual(divResult, 1)
 
-        # TODO currently fails, uncomment (fixed in new version)
-        #x = Size.new_from_str("-1 KiB")
-        #y = Size.new_from_str("0.1 KiB")
-        #divResult = x.div(y)
-        #self.assertEqual(divResult, 10)
+        x = Size.new_from_str("-1 KiB")
+        y = Size.new_from_str("0.1 KiB")
+        divResult = x.div(y)
+        self.assertEqual(divResult, 10)
     #enddef
 
     def testDivInt(self):
@@ -271,15 +275,11 @@ class SizeTestCase(unittest.TestCase):
     #enddef
 
     def testHumanReadable(self):
-        pass
+        strSize = Size.new_from_str("12 KiB").human_readable(ByteSize.Bunit.KIB, 2, True)
+        self.assertEqual(strSize, "12 KiB")
 
-        # TODO currently fails, uncomment
-        # strSize = Size.new_from_str("12 KiB").human_readable(ByteSize.KiB, 2, True)
-        # self.assertEqual(strSize, "12 KiB")
-
-        # TODO currently fails, uncomment 
-        #strSize = Size.new_from_str("1 KB").human_readable(ByteSize.KiB, 2, False)
-        #self.assertEqual(strSize, "0.98 KiB")
+        strSize = Size.new_from_str("1 KB").human_readable(ByteSize.Bunit.KIB, 2, False)
+        self.assertEqual(strSize, "0.98 KiB")
     #enddef
 
     def testSgn(self):
@@ -294,15 +294,14 @@ class SizeTestCase(unittest.TestCase):
     #enddef
 
     def testTrueDiv(self):
-        # TODO currently fails, uncomment (check if fixed)
-        #x = Size.new_from_str("1024 B")
-        #y = Size.new_from_str("-102.4 B")
-        #divResult = float(x.true_div(y)[:7]) # just some number to cover accurancy and not cross max float range
-        #self.assertAlmostEqual(divResult, 1024/-102.4)
+        x = Size.new_from_str("1024 B")
+        y = Size.new_from_str("-102.4 B") # rounds to whole bytes
+        divResult = float(x.true_div(y)[:15]) # just some number to cover accurancy and not cross max float range
+        self.assertAlmostEqual(divResult, 1024/-102)
 
         x = Size.new_from_str("1 MiB")
         y = Size.new_from_str("1 KiB")
-        divResult = float(x.true_div(y)[:7]) # just some number to cover accurancy and not cross max float range
+        divResult = float(x.true_div(y)[:15]) # just some number to cover accurancy and not cross max float range
         self.assertAlmostEqual(divResult, 1024.0)
     #enddef
 
@@ -313,25 +312,25 @@ class SizeTestCase(unittest.TestCase):
         expected = (24, 1)
         self.assertEqual(actual, expected)
 
-        # TODO currently fails, uncomment 
-        #x = Size.new_from_str("1024 B")
-        #y = Size.new_from_str("-1000 B")
-        #actual = x.mod(y).get_bytes()
-        #expected = (976, -1)
-        #self.assertEqual(actual, expected)
+        # when modding the signs are ignored
+
+        x = Size.new_from_str("1024 B")
+        y = Size.new_from_str("-1000 B")
+        actual = x.mod(y).get_bytes()
+        expected = (24, 1)
+        self.assertEqual(actual, expected)
 
         x = Size.new_from_str("-1024 B")
         y = Size.new_from_str("1000 B")
         actual = x.mod(y).get_bytes()
-        expected = (976, 1)
+        expected = (24, 1)
         self.assertEqual(actual, expected)
 
-        # TODO currently fails, uncomment 
-        #x = Size.new_from_str("-1024 B")
-        #y = Size.new_from_str("-1000 B")
-        #actual = x.mod(y).get_bytes()
-        #expected = (24, -1)
-        #self.assertEqual(actual, expected)
+        x = Size.new_from_str("-1024 B")
+        y = Size.new_from_str("-1000 B")
+        actual = x.mod(y).get_bytes()
+        expected = (24, 1)
+        self.assertEqual(actual, expected)
 
         x = Size.new_from_str("1024 B")
         y = Size.new_from_str("1024 B")
@@ -375,19 +374,23 @@ class SizeTestCase(unittest.TestCase):
     #enddef
 
     def testRoundToNearest(self):
-        # TODO currently fails, uncomment 
-        #x = Size.new_from_str("1500 B")
-        #actual = x.round_to_nearest(ByteSize.KiB, ByteSize.ROUND_UP).get_bytes(0)
-        #expected = (2048, 1)
-        #self.assertEqual(actual, expected)
+        x = Size.new_from_str("1500 B")
+        roundTo = Size.new_from_str("1 KiB")
+        actual = x.round_to_nearest(roundTo, ByteSize.RoundDir.UP).get_bytes()
+        expected = (2048, 1)
+        self.assertEqual(actual, expected)
 
-        # TODO currently fails, uncomment 
-        #x = Size.new_from_str("1500 B")
-        #actual = x.round_to_nearest(ByteSize.KiB, ByteSize.ROUND_DOWN).get_bytes(0)
-        #expected = (2048, 1)
-        #self.assertEqual(actual, expected)
+        x = Size.new_from_str("1500 B")
+        roundTo = Size.new_from_str("1 KiB")
+        actual = x.round_to_nearest(roundTo, ByteSize.RoundDir.DOWN).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
 
-        pass
+        x = Size.new_from_str("1500 B")
+        roundTo = Size.new_from_str("10 KiB")
+        actual = x.round_to_nearest(roundTo, ByteSize.RoundDir.DOWN).get_bytes()
+        expected = (0, 0)
+        self.assertEqual(actual, expected)
     #enddef
 
 #endclass
