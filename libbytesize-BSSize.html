@@ -332,7 +332,9 @@
 functions/methods that are required for parsing users input when entering
 size, showing size in nice human-readable format, storing sizes bigger than
 <a href="../glib/glib-Basic-Types.html#G-MAXUINT64:CAPS"><code class="literal">G_MAXUINT64</code></a> and doing calculations with sizes without loss of
-precision/information.</p>
+precision/information. The class is able to hold negative sizes and do
+operations on/with them, but some of the (division and multiplication)
+operations simply ignore the signs of the operands (check the documentation).</p>
 <p>The reason why some functions take or return a float as a string instead of a
 float directly is because a string "0.3" can be translated into 0.3 with
 appropriate precision while 0.3 as float is probably something like
@@ -374,8 +376,9 @@ bs_size_new_from_bytes (<em class="parameter"><code><a href="../glib/glib-Basic-
 </tr>
 <tr>
 <td class="parameter_name"><p>sgn</p></td>
-<td class="parameter_description"><p>sign of the size - if being -1, the size is initialized to -<em class="parameter"><code>bytes</code></em>
-</p></td>
+<td class="parameter_description"><p>sign of the size -- if being -1, the size is initialized to
+-<em class="parameter"><code>bytes</code></em>
+, other values are ignored</p></td>
 <td class="parameter_annotations"> </td>
 </tr>
 </tbody>
@@ -833,7 +836,8 @@ bs_size_div (<em class="parameter"><code>const <span class="type">BSSize</span> 
 . Gives the answer to the question "How many times
 does <em class="parameter"><code>size2</code></em>
  fit in <em class="parameter"><code>size1</code></em>
-?".</p>
+?".
+**This function ignores the signs of the sizes.**</p>
 <div class="refsect3">
 <a name="id-1.2.2.7.23.5"></a><h4>Returns</h4>
 <p> integer number x so that x * <em class="parameter"><code>size1</code></em>
@@ -939,7 +943,11 @@ bs_size_mod (<em class="parameter"><code>const <span class="type">BSSize</span> 
  (i.e. the remainder of integer division <em class="parameter"><code>size1</code></em>
  /
 <em class="parameter"><code>size2</code></em>
-).</p>
+). Gives the answer to the question "If I split <em class="parameter"><code>size1</code></em>
+ into chunks of
+size <em class="parameter"><code>size2</code></em>
+, what will be the remainder?"
+**This function ignores the signs of the sizes.**</p>
 <div class="refsect3">
 <a name="id-1.2.2.7.28.5"></a><h4>Returns</h4>
 <p> a <span class="type">BSSize</span> instance that is a remainder of
