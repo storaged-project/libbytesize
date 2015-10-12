@@ -24,7 +24,7 @@
  * The reason why some functions take or return a float as a string instead of a
  * float directly is because a string "0.3" can be translated into 0.3 with
  * appropriate precision while 0.3 as float is probably something like
- * 0.294343... with unknown precisi
+ * 0.294343... with unknown precision.
  *
  */
 
@@ -488,6 +488,22 @@ BSSize* bs_size_add (const BSSize *size1, const BSSize *size2) {
 }
 
 /**
+ * bs_size_grow:
+ *
+ * Grows @size1 by @size2. IOW, adds @size2 to @size1 in-place (modifying
+ * @size1).
+ *
+ * Basically an in-place variant of bs_size_add().
+ *
+ * Returns: (transfer none): @size1 modified by adding @size2 to it
+ */
+BSSize* bs_size_grow (BSSize *size1, const BSSize *size2) {
+    mpz_add (size1->priv->bytes, size1->priv->bytes, size2->priv->bytes);
+
+    return size1;
+}
+
+/**
  * bs_size_add_bytes:
  *
  * Add @bytes to the @size. To add a negative number of bytes use
@@ -503,6 +519,21 @@ BSSize* bs_size_add_bytes (const BSSize *size, guint64 bytes) {
 }
 
 /**
+ * bs_size_grow_bytes:
+ *
+ * Grows @size by @bytes. IOW, adds @bytes to @size in-place (modifying @size).
+ *
+ * Basically an in-place variant of bs_size_add_bytes().
+ *
+ * Returns: (transfer none): @size modified by adding @bytes to it
+ */
+BSSize* bs_size_grow_bytes (BSSize *size, const guint64 bytes) {
+    mpz_add_ui (size->priv->bytes, size->priv->bytes, bytes);
+
+    return size;
+}
+
+/**
  * bs_size_sub:
  *
  * Subtract @size2 from @size1.
@@ -514,6 +545,22 @@ BSSize* bs_size_sub (const BSSize *size1, const BSSize *size2) {
     mpz_sub (ret->priv->bytes, size1->priv->bytes, size2->priv->bytes);
 
     return ret;
+}
+
+/**
+ * bs_size_shrink:
+ *
+ * Shrinks @size1 by @size2. IOW, subtracts @size2 from @size1 in-place
+ * (modifying @size1).
+ *
+ * Basically an in-place variant of bs_size_sub().
+ *
+ * Returns: (transfer none): @size1 modified by subtracting @size2 from it
+ */
+BSSize* bs_size_shrink (BSSize *size1, const BSSize *size2) {
+    mpz_sub (size1->priv->bytes, size1->priv->bytes, size2->priv->bytes);
+
+    return size1;
 }
 
 /**
@@ -532,6 +579,23 @@ BSSize* bs_size_sub_bytes (const BSSize *size, guint64 bytes) {
 }
 
 /**
+ * bs_size_shrink_bytes:
+ *
+ * Shrinks @size by @bytes. IOW, subtracts @bytes from @size in-place
+ * (modifying @size). To shrink by a negative number of bytes use
+ * bs_size_grow_bytes().
+ *
+ * Basically an in-place variant of bs_size_sub_bytes().
+ *
+ * Returns: (transfer none): @size modified by subtracting @bytes from it
+ */
+BSSize* bs_size_shrink_bytes (BSSize *size, guint64 bytes) {
+    mpz_sub_ui (size->priv->bytes, size->priv->bytes, bytes);
+
+    return size;
+}
+
+/**
  * bs_size_mul_int:
  *
  * Multiply @size by @times.
@@ -543,6 +607,21 @@ BSSize* bs_size_mul_int (const BSSize *size, guint64 times) {
     mpz_mul_ui (ret->priv->bytes, size->priv->bytes, times);
 
     return ret;
+}
+
+/**
+ * bs_size_grow_mul_int:
+ *
+ * Grow @size @times times. IOW, multiply @size by @times in-place.
+ *
+ * Basically an in-place variant of bs_size_mul_int().
+ *
+ * Returns: (transfer none): @size modified by growing it @times times
+ */
+BSSize* bs_size_grow_mul_int (BSSize *size, guint64 times) {
+    mpz_mul_ui (size->priv->bytes, size->priv->bytes, times);
+
+    return size;
 }
 
 /**
@@ -578,6 +657,40 @@ BSSize* bs_size_mul_float_str (const BSSize *size, const gchar *float_str, GErro
     mpf_clears (op1, op2, NULL);
 
     return ret;
+}
+
+/**
+ * bs_size_grow_mul_float_str:
+ *
+ * Grow @size by the floating-point number @float_str represents times. IOW,
+ * multiply @size by @float_str in-place.
+ *
+ * Basically an in-place variant of bs_size_grow_mul_float_str().
+ *
+ * Returns: (transfer none): @size modified by growing it @float_str times.
+ */
+BSSize* bs_size_grow_mul_float_str (BSSize *size, const gchar *float_str, GError **error) {
+    mpf_t op1, op2;
+    gint status = 0;
+
+    mpf_init2 (op1, BS_FLOAT_PREC_BITS);
+    mpf_init2 (op2, BS_FLOAT_PREC_BITS);
+
+    mpf_set_z (op1, size->priv->bytes);
+    status = mpf_set_str (op2, float_str, 10);
+    if (status != 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
+                     "'%s' is not a valid floating point number string", float_str);
+        mpf_clears (op1, op2, NULL);
+        return NULL;
+    }
+
+    mpf_mul (op1, op1, op2);
+
+    mpz_set_f (size->priv->bytes, op1);
+    mpf_clears (op1, op2, NULL);
+
+    return size;
 }
 
 /**
@@ -636,6 +749,27 @@ BSSize* bs_size_div_int (const BSSize *size, guint64 divisor, GError **error) {
     mpz_tdiv_q_ui (ret->priv->bytes, size->priv->bytes, divisor);
 
     return ret;
+}
+
+/**
+ * bs_size_shrink_div_int:
+ *
+ * Shrink @size by dividing by @divisor. IOW, divide @size by @divisor in-place.
+ *
+ * Basically an in-place variant of bs_size_div_int().
+ *
+ * Returns: (transfer none): @size modified by division by @divisor
+ */
+BSSize* bs_size_shrink_div_int (BSSize *size, guint64 divisor, GError **error) {
+    if (divisor == 0) {
+        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
+                     "Division by zero");
+        return NULL;
+    }
+
+    mpz_tdiv_q_ui (size->priv->bytes, size->priv->bytes, divisor);
+
+    return size;
 }
 
 /**
