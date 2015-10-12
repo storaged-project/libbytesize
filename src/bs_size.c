@@ -19,7 +19,9 @@
  * functions/methods that are required for parsing users input when entering
  * size, showing size in nice human-readable format, storing sizes bigger than
  * %G_MAXUINT64 and doing calculations with sizes without loss of
- * precision/information.
+ * precision/information. The class is able to hold negative sizes and do
+ * operations on/with them, but some of the (division and multiplication)
+ * operations simply ignore the signs of the operands (check the documentation).
  *
  * The reason why some functions take or return a float as a string instead of a
  * float directly is because a string "0.3" can be translated into 0.3 with
