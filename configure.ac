@@ -22,7 +22,8 @@ AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
                  po/Makefile.in \
                  src/python/Makefile src/python/gi/Makefile src/python/gi/overrides/Makefile \
                  dist/Makefile dist/libbytesize.spec \
-                 docs/Makefile docs/libbytesize-docs.xml])
+                 docs/Makefile docs/libbytesize-docs.xml \
+                 tests/Makefile])
 
 LIBBYTESIZE_PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.42.2])
 LIBBYTESIZE_PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.42.2])
