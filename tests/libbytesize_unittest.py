@@ -297,7 +297,7 @@ class SizeTestCase(unittest.TestCase):
         x = Size.new_from_str("1024 B")
         y = Size.new_from_str("-102.4 B") # rounds to whole bytes
         divResult = float(x.true_div(y)[:15]) # just some number to cover accurancy and not cross max float range
-        self.assertAlmostEqual(divResult, 1024/-102)
+        self.assertAlmostEqual(divResult, 1024.0/-102.0)
 
         x = Size.new_from_str("1 MiB")
         y = Size.new_from_str("1 KiB")
