@@ -124,7 +124,23 @@
 <span class="returnvalue">BSSize</span> *
 </td>
 <td class="function_name">
+<a class="link" href="libbytesize-BSSize.html#bs-size-grow" title="bs_size_grow ()">bs_size_grow</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">BSSize</span> *
+</td>
+<td class="function_name">
 <a class="link" href="libbytesize-BSSize.html#bs-size-add-bytes" title="bs_size_add_bytes ()">bs_size_add_bytes</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">BSSize</span> *
+</td>
+<td class="function_name">
+<a class="link" href="libbytesize-BSSize.html#bs-size-grow-bytes" title="bs_size_grow_bytes ()">bs_size_grow_bytes</a> <span class="c_punctuation">()</span>
 </td>
 </tr>
 <tr>
@@ -140,7 +156,23 @@
 <span class="returnvalue">BSSize</span> *
 </td>
 <td class="function_name">
+<a class="link" href="libbytesize-BSSize.html#bs-size-shrink" title="bs_size_shrink ()">bs_size_shrink</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">BSSize</span> *
+</td>
+<td class="function_name">
 <a class="link" href="libbytesize-BSSize.html#bs-size-sub-bytes" title="bs_size_sub_bytes ()">bs_size_sub_bytes</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">BSSize</span> *
+</td>
+<td class="function_name">
+<a class="link" href="libbytesize-BSSize.html#bs-size-shrink-bytes" title="bs_size_shrink_bytes ()">bs_size_shrink_bytes</a> <span class="c_punctuation">()</span>
 </td>
 </tr>
 <tr>
@@ -156,7 +188,23 @@
 <span class="returnvalue">BSSize</span> *
 </td>
 <td class="function_name">
+<a class="link" href="libbytesize-BSSize.html#bs-size-grow-mul-int" title="bs_size_grow_mul_int ()">bs_size_grow_mul_int</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">BSSize</span> *
+</td>
+<td class="function_name">
 <a class="link" href="libbytesize-BSSize.html#bs-size-mul-float-str" title="bs_size_mul_float_str ()">bs_size_mul_float_str</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">BSSize</span> *
+</td>
+<td class="function_name">
+<a class="link" href="libbytesize-BSSize.html#bs-size-grow-mul-float-str" title="bs_size_grow_mul_float_str ()">bs_size_grow_mul_float_str</a> <span class="c_punctuation">()</span>
 </td>
 </tr>
 <tr>
@@ -173,6 +221,14 @@
 </td>
 <td class="function_name">
 <a class="link" href="libbytesize-BSSize.html#bs-size-div-int" title="bs_size_div_int ()">bs_size_div_int</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">BSSize</span> *
+</td>
+<td class="function_name">
+<a class="link" href="libbytesize-BSSize.html#bs-size-shrink-div-int" title="bs_size_shrink_div_int ()">bs_size_shrink_div_int</a> <span class="c_punctuation">()</span>
 </td>
 </tr>
 <tr>
@@ -280,7 +336,7 @@ precision/information.</p>
 <p>The reason why some functions take or return a float as a string instead of a
 float directly is because a string "0.3" can be translated into 0.3 with
 appropriate precision while 0.3 as float is probably something like
-0.294343... with unknown precisi</p>
+0.294343... with unknown precision.</p>
 </div>
 <div class="refsect1">
 <a name="libbytesize-BSSize.functions_details"></a><h2>Functions</h2>
@@ -548,6 +604,28 @@ and <em class="parameter"><code>size2</code></em>
 </div>
 <hr>
 <div class="refsect2">
+<a name="bs-size-grow"></a><h3>bs_size_grow ()</h3>
+<pre class="programlisting"><span class="returnvalue">BSSize</span> *
+bs_size_grow (<em class="parameter"><code><span class="type">BSSize</span> *size1</code></em>,
+              <em class="parameter"><code>const <span class="type">BSSize</span> *size2</code></em>);</pre>
+<p>Grows <em class="parameter"><code>size1</code></em>
+ by <em class="parameter"><code>size2</code></em>
+. IOW, adds <em class="parameter"><code>size2</code></em>
+ to <em class="parameter"><code>size1</code></em>
+ in-place (modifying
+<em class="parameter"><code>size1</code></em>
+).</p>
+<p>Basically an in-place variant of <a class="link" href="libbytesize-BSSize.html#bs-size-add" title="bs_size_add ()"><code class="function">bs_size_add()</code></a>.</p>
+<div class="refsect3">
+<a name="id-1.2.2.7.12.6"></a><h4>Returns</h4>
+<p> <em class="parameter"><code>size1</code></em>
+modified by adding <em class="parameter"><code>size2</code></em>
+to it. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
 <a name="bs-size-add-bytes"></a><h3>bs_size_add_bytes ()</h3>
 <pre class="programlisting"><span class="returnvalue">BSSize</span> *
 bs_size_add_bytes (<em class="parameter"><code>const <span class="type">BSSize</span> *size</code></em>,
@@ -557,11 +635,32 @@ bs_size_add_bytes (<em class="parameter"><code>const <span class="type">BSSize</
 . To add a negative number of bytes use
 <a class="link" href="libbytesize-BSSize.html#bs-size-sub-bytes" title="bs_size_sub_bytes ()"><code class="function">bs_size_sub_bytes()</code></a>.</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.12.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.13.5"></a><h4>Returns</h4>
 <p> a new instance of <span class="type">BSSize</span> which is a sum of <em class="parameter"><code>size</code></em>
 and <em class="parameter"><code>bytes</code></em>
 . </p>
 <p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="bs-size-grow-bytes"></a><h3>bs_size_grow_bytes ()</h3>
+<pre class="programlisting"><span class="returnvalue">BSSize</span> *
+bs_size_grow_bytes (<em class="parameter"><code><span class="type">BSSize</span> *size</code></em>,
+                    <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a> bytes</code></em>);</pre>
+<p>Grows <em class="parameter"><code>size</code></em>
+ by <em class="parameter"><code>bytes</code></em>
+. IOW, adds <em class="parameter"><code>bytes</code></em>
+ to <em class="parameter"><code>size</code></em>
+ in-place (modifying <em class="parameter"><code>size</code></em>
+).</p>
+<p>Basically an in-place variant of <a class="link" href="libbytesize-BSSize.html#bs-size-add-bytes" title="bs_size_add_bytes ()"><code class="function">bs_size_add_bytes()</code></a>.</p>
+<div class="refsect3">
+<a name="id-1.2.2.7.14.6"></a><h4>Returns</h4>
+<p> <em class="parameter"><code>size</code></em>
+modified by adding <em class="parameter"><code>bytes</code></em>
+to it. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
 </div>
 </div>
 <hr>
@@ -574,11 +673,33 @@ bs_size_sub (<em class="parameter"><code>const <span class="type">BSSize</span> 
  from <em class="parameter"><code>size1</code></em>
 .</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.13.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.15.5"></a><h4>Returns</h4>
 <p> a new instance of <span class="type">BSSize</span> which is equals to <em class="parameter"><code>size1</code></em>
 - <em class="parameter"><code>size2</code></em>
 . </p>
 <p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="bs-size-shrink"></a><h3>bs_size_shrink ()</h3>
+<pre class="programlisting"><span class="returnvalue">BSSize</span> *
+bs_size_shrink (<em class="parameter"><code><span class="type">BSSize</span> *size1</code></em>,
+                <em class="parameter"><code>const <span class="type">BSSize</span> *size2</code></em>);</pre>
+<p>Shrinks <em class="parameter"><code>size1</code></em>
+ by <em class="parameter"><code>size2</code></em>
+. IOW, subtracts <em class="parameter"><code>size2</code></em>
+ from <em class="parameter"><code>size1</code></em>
+ in-place
+(modifying <em class="parameter"><code>size1</code></em>
+).</p>
+<p>Basically an in-place variant of <a class="link" href="libbytesize-BSSize.html#bs-size-sub" title="bs_size_sub ()"><code class="function">bs_size_sub()</code></a>.</p>
+<div class="refsect3">
+<a name="id-1.2.2.7.16.6"></a><h4>Returns</h4>
+<p> <em class="parameter"><code>size1</code></em>
+modified by subtracting <em class="parameter"><code>size2</code></em>
+from it. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
 </div>
 </div>
 <hr>
@@ -592,11 +713,34 @@ bs_size_sub_bytes (<em class="parameter"><code>const <span class="type">BSSize</
 . To subtract a negative number of bytes use
 <a class="link" href="libbytesize-BSSize.html#bs-size-add-bytes" title="bs_size_add_bytes ()"><code class="function">bs_size_add_bytes()</code></a>.</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.14.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.17.5"></a><h4>Returns</h4>
 <p> a new instance of <span class="type">BSSize</span> which is equals to <em class="parameter"><code>size</code></em>
 - <em class="parameter"><code>bytes</code></em>
 . </p>
 <p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="bs-size-shrink-bytes"></a><h3>bs_size_shrink_bytes ()</h3>
+<pre class="programlisting"><span class="returnvalue">BSSize</span> *
+bs_size_shrink_bytes (<em class="parameter"><code><span class="type">BSSize</span> *size</code></em>,
+                      <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a> bytes</code></em>);</pre>
+<p>Shrinks <em class="parameter"><code>size</code></em>
+ by <em class="parameter"><code>bytes</code></em>
+. IOW, subtracts <em class="parameter"><code>bytes</code></em>
+ from <em class="parameter"><code>size</code></em>
+ in-place
+(modifying <em class="parameter"><code>size</code></em>
+). To shrink by a negative number of bytes use
+<a class="link" href="libbytesize-BSSize.html#bs-size-grow-bytes" title="bs_size_grow_bytes ()"><code class="function">bs_size_grow_bytes()</code></a>.</p>
+<p>Basically an in-place variant of <a class="link" href="libbytesize-BSSize.html#bs-size-sub-bytes" title="bs_size_sub_bytes ()"><code class="function">bs_size_sub_bytes()</code></a>.</p>
+<div class="refsect3">
+<a name="id-1.2.2.7.18.6"></a><h4>Returns</h4>
+<p> <em class="parameter"><code>size</code></em>
+modified by subtracting <em class="parameter"><code>bytes</code></em>
+from it. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
 </div>
 </div>
 <hr>
@@ -609,11 +753,31 @@ bs_size_mul_int (<em class="parameter"><code>const <span class="type">BSSize</sp
  by <em class="parameter"><code>times</code></em>
 .</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.15.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.19.5"></a><h4>Returns</h4>
 <p> a new instance of <span class="type">BSSize</span> which is equals to <em class="parameter"><code>size</code></em>
 * <em class="parameter"><code>times</code></em>
 . </p>
 <p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="bs-size-grow-mul-int"></a><h3>bs_size_grow_mul_int ()</h3>
+<pre class="programlisting"><span class="returnvalue">BSSize</span> *
+bs_size_grow_mul_int (<em class="parameter"><code><span class="type">BSSize</span> *size</code></em>,
+                      <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a> times</code></em>);</pre>
+<p>Grow <em class="parameter"><code>size</code></em>
+ <em class="parameter"><code>times</code></em>
+ times. IOW, multiply <em class="parameter"><code>size</code></em>
+ by <em class="parameter"><code>times</code></em>
+ in-place.</p>
+<p>Basically an in-place variant of <a class="link" href="libbytesize-BSSize.html#bs-size-mul-int" title="bs_size_mul_int ()"><code class="function">bs_size_mul_int()</code></a>.</p>
+<div class="refsect3">
+<a name="id-1.2.2.7.20.6"></a><h4>Returns</h4>
+<p> <em class="parameter"><code>size</code></em>
+modified by growing it <em class="parameter"><code>times</code></em>
+times. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
 </div>
 </div>
 <hr>
@@ -627,12 +791,34 @@ bs_size_mul_float_str (<em class="parameter"><code>const <span class="type">BSSi
  by the floating-point number <em class="parameter"><code>float_str</code></em>
  represents.</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.16.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.21.5"></a><h4>Returns</h4>
 <p> a new <span class="type">BSSize</span> instance which equals to
 <em class="parameter"><code>size</code></em>
 * <em class="parameter"><code>times_str</code></em>
 . </p>
 <p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="bs-size-grow-mul-float-str"></a><h3>bs_size_grow_mul_float_str ()</h3>
+<pre class="programlisting"><span class="returnvalue">BSSize</span> *
+bs_size_grow_mul_float_str (<em class="parameter"><code><span class="type">BSSize</span> *size</code></em>,
+                            <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *float_str</code></em>,
+                            <em class="parameter"><code><a href="../glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+<p>Grow <em class="parameter"><code>size</code></em>
+ by the floating-point number <em class="parameter"><code>float_str</code></em>
+ represents times. IOW,
+multiply <em class="parameter"><code>size</code></em>
+ by <em class="parameter"><code>float_str</code></em>
+ in-place.</p>
+<p>Basically an in-place variant of <a class="link" href="libbytesize-BSSize.html#bs-size-grow-mul-float-str" title="bs_size_grow_mul_float_str ()"><code class="function">bs_size_grow_mul_float_str()</code></a>.</p>
+<div class="refsect3">
+<a name="id-1.2.2.7.22.6"></a><h4>Returns</h4>
+<p> <em class="parameter"><code>size</code></em>
+modified by growing it <em class="parameter"><code>float_str</code></em>
+times. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
 </div>
 </div>
 <hr>
@@ -649,7 +835,7 @@ does <em class="parameter"><code>size2</code></em>
  fit in <em class="parameter"><code>size1</code></em>
 ?".</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.17.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.23.5"></a><h4>Returns</h4>
 <p> integer number x so that x * <em class="parameter"><code>size1</code></em>
 &lt; <em class="parameter"><code>size2</code></em>
 and (x+1) * <em class="parameter"><code>size1</code></em>
@@ -674,12 +860,33 @@ of each chunk if <em class="parameter"><code>size</code></em>
  is split into a <em class="parameter"><code>divisor</code></em>
  number of pieces?"</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.18.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.24.5"></a><h4>Returns</h4>
 <p> a <span class="type">BSSize</span> instance x so that x * <em class="parameter"><code>divisor</code></em>
 = <em class="parameter"><code>size</code></em>
 ,
 rounded to a number of bytes. </p>
 <p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="bs-size-shrink-div-int"></a><h3>bs_size_shrink_div_int ()</h3>
+<pre class="programlisting"><span class="returnvalue">BSSize</span> *
+bs_size_shrink_div_int (<em class="parameter"><code><span class="type">BSSize</span> *size</code></em>,
+                        <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a> shrink_divisor</code></em>,
+                        <em class="parameter"><code><a href="../glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+<p>Shrink <em class="parameter"><code>size</code></em>
+ by dividing by <em class="parameter"><code>divisor</code></em>
+. IOW, divide <em class="parameter"><code>size</code></em>
+ by <em class="parameter"><code>divisor</code></em>
+ in-place.</p>
+<p>Basically an in-place variant of <a class="link" href="libbytesize-BSSize.html#bs-size-div-int" title="bs_size_div_int ()"><code class="function">bs_size_div_int()</code></a>.</p>
+<div class="refsect3">
+<a name="id-1.2.2.7.25.6"></a><h4>Returns</h4>
+<p> <em class="parameter"><code>size</code></em>
+modified by division by <em class="parameter"><code>divisor</code></em>
+. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
 </div>
 </div>
 <hr>
@@ -693,7 +900,7 @@ bs_size_true_div (<em class="parameter"><code>const <span class="type">BSSize</s
  by <em class="parameter"><code>size2</code></em>
 .</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.19.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.26.5"></a><h4>Returns</h4>
 <p> a string representing the floating-point number
 that equals to <em class="parameter"><code>size1</code></em>
 / <em class="parameter"><code>size2</code></em>
@@ -712,7 +919,7 @@ bs_size_true_div_int (<em class="parameter"><code>const <span class="type">BSSiz
  by <em class="parameter"><code>divisor</code></em>
 .</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.20.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.27.5"></a><h4>Returns</h4>
 <p> a string representing the floating-point number
 that equals to <em class="parameter"><code>size</code></em>
 / <em class="parameter"><code>divisor</code></em>
@@ -734,7 +941,7 @@ bs_size_mod (<em class="parameter"><code>const <span class="type">BSSize</span> 
 <em class="parameter"><code>size2</code></em>
 ).</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.21.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.28.5"></a><h4>Returns</h4>
 <p> a <span class="type">BSSize</span> instance that is a remainder of
 <em class="parameter"><code>size1</code></em>
 / <em class="parameter"><code>size2</code></em>
@@ -756,7 +963,7 @@ bs_size_round_to_nearest (<em class="parameter"><code>const <span class="type">B
 given by <em class="parameter"><code>dir</code></em>
 .</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.22.5"></a><h4>Parameters</h4>
+<a name="id-1.2.2.7.29.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -784,7 +991,7 @@ smaller than <em class="parameter"><code>size</code></em>
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.2.2.7.22.6"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.29.6"></a><h4>Returns</h4>
 <p> a new instance of <span class="type">BSSize</span> that is <em class="parameter"><code>size</code></em>
 rounded to
 a multiple of <em class="parameter"><code>round_to</code></em>
@@ -805,7 +1012,7 @@ bs_size_cmp (<em class="parameter"><code>const <span class="type">BSSize</span> 
 . This function behaves like the standard *cmp*()
 functions.</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.23.5"></a><h4>Parameters</h4>
+<a name="id-1.2.2.7.30.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -822,7 +1029,7 @@ instead</p></td>
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.2.2.7.23.6"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.30.6"></a><h4>Returns</h4>
 <p> -1, 0, or 1 if <em class="parameter"><code>size1</code></em>
 is smaller, equal to or bigger than
 <em class="parameter"><code>size2</code></em>
@@ -845,7 +1052,7 @@ bs_size_cmp_bytes (<em class="parameter"><code>const <span class="type">BSSize</
 <em class="parameter"><code>bytes</code></em>
 . This function behaves like the standard *cmp*() functions.</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.24.5"></a><h4>Parameters</h4>
+<a name="id-1.2.2.7.31.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -862,7 +1069,7 @@ instead.</p></td>
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.2.2.7.24.6"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.31.6"></a><h4>Returns</h4>
 <p> -1, 0, or 1 if <em class="parameter"><code>size</code></em>
 is smaller, equal to or bigger than
 <em class="parameter"><code>bytes</code></em>

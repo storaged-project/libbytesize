@@ -21,13 +21,20 @@
     <keyword type="function" name="bs_size_convert_to ()" link="libbytesize-BSSize.html#bs-size-convert-to"/>
     <keyword type="function" name="bs_size_human_readable ()" link="libbytesize-BSSize.html#bs-size-human-readable"/>
     <keyword type="function" name="bs_size_add ()" link="libbytesize-BSSize.html#bs-size-add"/>
+    <keyword type="function" name="bs_size_grow ()" link="libbytesize-BSSize.html#bs-size-grow"/>
     <keyword type="function" name="bs_size_add_bytes ()" link="libbytesize-BSSize.html#bs-size-add-bytes"/>
+    <keyword type="function" name="bs_size_grow_bytes ()" link="libbytesize-BSSize.html#bs-size-grow-bytes"/>
     <keyword type="function" name="bs_size_sub ()" link="libbytesize-BSSize.html#bs-size-sub"/>
+    <keyword type="function" name="bs_size_shrink ()" link="libbytesize-BSSize.html#bs-size-shrink"/>
     <keyword type="function" name="bs_size_sub_bytes ()" link="libbytesize-BSSize.html#bs-size-sub-bytes"/>
+    <keyword type="function" name="bs_size_shrink_bytes ()" link="libbytesize-BSSize.html#bs-size-shrink-bytes"/>
     <keyword type="function" name="bs_size_mul_int ()" link="libbytesize-BSSize.html#bs-size-mul-int"/>
+    <keyword type="function" name="bs_size_grow_mul_int ()" link="libbytesize-BSSize.html#bs-size-grow-mul-int"/>
     <keyword type="function" name="bs_size_mul_float_str ()" link="libbytesize-BSSize.html#bs-size-mul-float-str"/>
+    <keyword type="function" name="bs_size_grow_mul_float_str ()" link="libbytesize-BSSize.html#bs-size-grow-mul-float-str"/>
     <keyword type="function" name="bs_size_div ()" link="libbytesize-BSSize.html#bs-size-div"/>
     <keyword type="function" name="bs_size_div_int ()" link="libbytesize-BSSize.html#bs-size-div-int"/>
+    <keyword type="function" name="bs_size_shrink_div_int ()" link="libbytesize-BSSize.html#bs-size-shrink-div-int"/>
     <keyword type="function" name="bs_size_true_div ()" link="libbytesize-BSSize.html#bs-size-true-div"/>
     <keyword type="function" name="bs_size_true_div_int ()" link="libbytesize-BSSize.html#bs-size-true-div-int"/>
     <keyword type="function" name="bs_size_mod ()" link="libbytesize-BSSize.html#bs-size-mod"/>

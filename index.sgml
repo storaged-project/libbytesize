@@ -15,13 +15,20 @@
 <ANCHOR id="bs-size-convert-to" href="libbytesize/libbytesize-BSSize.html#bs-size-convert-to">
 <ANCHOR id="bs-size-human-readable" href="libbytesize/libbytesize-BSSize.html#bs-size-human-readable">
 <ANCHOR id="bs-size-add" href="libbytesize/libbytesize-BSSize.html#bs-size-add">
+<ANCHOR id="bs-size-grow" href="libbytesize/libbytesize-BSSize.html#bs-size-grow">
 <ANCHOR id="bs-size-add-bytes" href="libbytesize/libbytesize-BSSize.html#bs-size-add-bytes">
+<ANCHOR id="bs-size-grow-bytes" href="libbytesize/libbytesize-BSSize.html#bs-size-grow-bytes">
 <ANCHOR id="bs-size-sub" href="libbytesize/libbytesize-BSSize.html#bs-size-sub">
+<ANCHOR id="bs-size-shrink" href="libbytesize/libbytesize-BSSize.html#bs-size-shrink">
 <ANCHOR id="bs-size-sub-bytes" href="libbytesize/libbytesize-BSSize.html#bs-size-sub-bytes">
+<ANCHOR id="bs-size-shrink-bytes" href="libbytesize/libbytesize-BSSize.html#bs-size-shrink-bytes">
 <ANCHOR id="bs-size-mul-int" href="libbytesize/libbytesize-BSSize.html#bs-size-mul-int">
+<ANCHOR id="bs-size-grow-mul-int" href="libbytesize/libbytesize-BSSize.html#bs-size-grow-mul-int">
 <ANCHOR id="bs-size-mul-float-str" href="libbytesize/libbytesize-BSSize.html#bs-size-mul-float-str">
+<ANCHOR id="bs-size-grow-mul-float-str" href="libbytesize/libbytesize-BSSize.html#bs-size-grow-mul-float-str">
 <ANCHOR id="bs-size-div" href="libbytesize/libbytesize-BSSize.html#bs-size-div">
 <ANCHOR id="bs-size-div-int" href="libbytesize/libbytesize-BSSize.html#bs-size-div-int">
+<ANCHOR id="bs-size-shrink-div-int" href="libbytesize/libbytesize-BSSize.html#bs-size-shrink-div-int">
 <ANCHOR id="bs-size-true-div" href="libbytesize/libbytesize-BSSize.html#bs-size-true-div">
 <ANCHOR id="bs-size-true-div-int" href="libbytesize/libbytesize-BSSize.html#bs-size-true-div-int">
 <ANCHOR id="bs-size-mod" href="libbytesize/libbytesize-BSSize.html#bs-size-mod">
@@ -64,3 +71,4 @@
 <ANCHOR id="annotation-glossterm-allow-none" href="libbytesize/annotation-glossary.html#annotation-glossterm-allow-none">
 <ANCHOR id="annotation-glossterm-out" href="libbytesize/annotation-glossary.html#annotation-glossterm-out">
 <ANCHOR id="annotation-glossterm-transfer full" href="libbytesize/annotation-glossary.html#annotation-glossterm-transfer full">
+<ANCHOR id="annotation-glossterm-transfer none" href="libbytesize/annotation-glossary.html#annotation-glossterm-transfer none">
