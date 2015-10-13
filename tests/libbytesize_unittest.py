@@ -43,14 +43,44 @@ class SizeTestCase(unittest.TestCase):
         expected = (1610612736, -1)
         self.assertEqual(actual, expected)
 
-        # TODO known bug, uncomment
-        #locale.setlocale(locale.LC_ALL,'czech')
+        locale.setlocale(locale.LC_ALL,'cs_CZ.UTF-8')
 
-        #actual = Size.new_from_str('-1,5 KB').get_bytes()
-        #expected = (1610612736, -1)
-        #self.assertEqual(actual, expected)
+        actual = Size.new_from_str('1,5 KiB').get_bytes()
+        expected = (1536, 1)
+        self.assertEqual(actual, expected)
 
-        #locale.setlocale(locale.LC_ALL,'en_US.utf8')
+        actual = Size.new_from_str('-1,5 KiB').get_bytes()
+        expected = (1536, -1)
+        self.assertEqual(actual, expected)
+
+        actual = Size.new_from_str('1.5 KiB').get_bytes()
+        expected = (1536, 1)
+        self.assertEqual(actual, expected)
+
+        actual = Size.new_from_str('-1.5 KiB').get_bytes()
+        expected = (1536, -1)
+        self.assertEqual(actual, expected)
+
+        # this persian locale uses a two-byte unicode character for the radix
+        locale.setlocale(locale.LC_ALL, 'ps_AF.UTF-8')
+
+        actual = Size.new_from_str('1٫5 KiB').get_bytes()
+        expected = (1536, 1)
+        self.assertEqual(actual, expected)
+
+        actual = Size.new_from_str('-1٫5 KiB').get_bytes()
+        expected = (1536, -1)
+        self.assertEqual(actual, expected)
+
+        actual = Size.new_from_str('1.5 KiB').get_bytes()
+        expected = (1536, 1)
+        self.assertEqual(actual, expected)
+
+        actual = Size.new_from_str('-1.5 KiB').get_bytes()
+        expected = (1536, -1)
+        self.assertEqual(actual, expected)
+
+        locale.setlocale(locale.LC_ALL,'en_US.UTF-8')
 
     #enddef
 

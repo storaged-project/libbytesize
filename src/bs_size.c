@@ -139,19 +139,37 @@ BSSize* bs_size_new_from_bytes (guint64 bytes, gint sgn) {
 }
 
 /**
- * replace_char: (skip)
+ * replace_char_with_str: (skip)
  *
- * Replaces all appereances of @orig in @str with @new (in place).
+ * Replaces all appereances of @char in @str with @string.
  */
-static gchar *replace_char (gchar *str, gchar orig, gchar new) {
-    gchar *pos = str;
+static gchar *replace_char_with_str (const gchar *str, gchar orig, const gchar *new) {
+    guint64 offset = 0;
+    guint64 i = 0;
+    guint64 j = 0;
+    gchar *ret = NULL;
+
     if (!str)
-        return str;
+        return NULL;
 
-    for (pos=str; pos; pos++)
-        *pos = *pos == orig ? new : *pos;
+    /* allocate space for the string [strlen(str)] with the char replaced by the
+       string [strlen(new) - 1] and a \0 byte at the end [ + 1] */
+    ret = g_new0 (gchar, strlen(str) + strlen(new) - 1 + 1);
 
-    return str;
+    for (i=0; str[i]; i++) {
+        if (str[i] == orig)
+            for (j=0; new[j]; j++) {
+                ret[i+offset] = new[j];
+                if (new[j+1])
+                    /* something more to copy over */
+                    offset++;
+            }
+        else
+            ret[i+offset] = str[i];
+    }
+    ret[i+offset] = '\0';
+
+    return ret;
 }
 
 static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
@@ -217,16 +235,17 @@ static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
 BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
     gchar const * const pattern = "(?P<numeric>  # the numeric part consists of three parts, below \n" \
                                   " (-|\\+)?     # optional sign character \n" \
-                                  " (?P<base>([0-9\\.]+))         # base \n" \
+                                  " (?P<base>([0-9\\.%s]+))       # base \n" \
                                   " (?P<exp>(e|E)(-|\\+)[0-9]+)?) # exponent \n" \
                                   "\\s*               # white space \n" \
                                   "(?P<rest>[^\\s]*$) # unit specification";
+    gchar *real_pattern = NULL;
     GRegex *regex = NULL;
     gboolean success = FALSE;
     GMatchInfo *match_info = NULL;
     gchar *num_str = NULL;
-    gchar *radix_char = NULL;
-    gchar *loc_size_str = g_strdup (size_str);
+    const gchar *radix_char = NULL;
+    gchar *loc_size_str = NULL;
     mpf_t size;
     gint status = 0;
     gchar *unit_str = NULL;
@@ -234,14 +253,19 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
 
     radix_char = nl_langinfo (RADIXCHAR);
     if (g_strcmp0 (radix_char, ".") != 0)
-        replace_char (loc_size_str, '.', *radix_char);
+        real_pattern = g_strdup_printf (pattern, radix_char);
+    else
+        real_pattern = g_strdup_printf (pattern, "");
 
-    regex = g_regex_new (pattern, G_REGEX_EXTENDED, 0, error);
+    regex = g_regex_new (real_pattern, G_REGEX_EXTENDED, 0, error);
     if (!regex) {
+        g_free (real_pattern);
         g_free (loc_size_str);
         /* error is already populated */
         return NULL;
     }
+
+    loc_size_str = replace_char_with_str (size_str, '.', radix_char);
 
     success = g_regex_match (regex, loc_size_str, 0, &match_info);
     if (!success) {
@@ -249,10 +273,12 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
                      "Failed to parse size spec: %s", size_str);
         g_regex_unref (regex);
         g_match_info_free (match_info);
+        g_free (real_pattern);
         g_free (loc_size_str);
         return NULL;
     }
     g_regex_unref (regex);
+    g_free (real_pattern);
 
     num_str = g_match_info_fetch_named (match_info, "numeric");
     if (!num_str) {
