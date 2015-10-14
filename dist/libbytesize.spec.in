@@ -23,13 +23,27 @@ takes localization into account. It also provides support for sizes bigger than
 MAXUINT64.
 
 %package devel
-Summary:     Development files for libbytesize
+Summary:  Development files for libbytesize
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: glib2-devel
 
 %description devel
 This package contains header files and pkg-config files needed for development
 with the libbytesize library.
+
+%package -n python-%{name}
+Summary: Python 2 GI overrides for libbytesize
+
+%description -n python-%{name}
+This package contains Python 2 GI overrides for libbytesize making the use of
+the library from Python 2 easier and more convenient.
+
+%package -n python3-%{name}
+Summary: Python 3 GI overrides for libbytesize
+
+%description -n python3-%{name}
+This package contains Python 3 GI overrides for libbytesize making the use of
+the library from Python 3 easier and more convenient.
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -51,9 +65,6 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %license LICENSE
 %{_libdir}/libbytesize.so.*
 %{_libdir}/girepository*/ByteSize*.typelib
-%{python2_sitearch}/gi/overrides/*
-%{python3_sitearch}/gi/overrides/ByteSize*
-%{python3_sitearch}/gi/overrides/__pycache__/ByteSize*
 
 %files devel
 %{_libdir}/libbytesize.so
@@ -62,6 +73,13 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{_libdir}/pkgconfig/bytesize.pc
 %{_datadir}/gtk-doc/html/libbytesize
 %{_datadir}/gir*/ByteSize*.gir
+
+%files -n python-%{name}
+%{python2_sitearch}/gi/overrides/*
+
+%files -n python3-%{name}
+%{python3_sitearch}/gi/overrides/ByteSize*
+%{python3_sitearch}/gi/overrides/__pycache__/ByteSize*
 
 %changelog
 * Wed Oct 07 2015 Vratislav Podzimek <vpodzime@redhat.com> - 0.1-1
