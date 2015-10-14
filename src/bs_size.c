@@ -461,6 +461,7 @@ gchar* bs_size_human_readable (const BSSize *size, BSBunit min_unit, gint max_pl
     gchar *zero = NULL;
     gchar *radix_char = NULL;
     gint sign = 0;
+    gboolean at_radix = FALSE;
 
     mpf_init2 (cur_val, BS_FLOAT_PREC_BITS);
     mpf_set_z (cur_val, size->priv->bytes);
@@ -488,8 +489,10 @@ gchar* bs_size_human_readable (const BSSize *size, BSBunit min_unit, gint max_pl
     /* remove trailing zeros and the radix char */
     radix_char = nl_langinfo (RADIXCHAR);
     zero = num_str + (len - 1);
-    while ((zero != num_str) && ((*zero == '0') || (*zero == *radix_char)))
+    while ((zero != num_str) && ((*zero == '0') || (*zero == *radix_char)) && !at_radix) {
+        at_radix = *zero == *radix_char;
         zero--;
+    }
     zero[1] = '\0';
 
     ret = g_strdup_printf ("%s %s", num_str, xlate ? _(b_units[min_unit - BS_BUNIT_B]) : b_units[min_unit - BS_BUNIT_B]);
