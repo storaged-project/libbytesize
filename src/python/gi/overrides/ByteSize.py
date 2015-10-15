@@ -59,7 +59,7 @@ __all__.extend(("ROUND_UP", "ROUND_DOWN"))
 class Size(ByteSize.Size):
     def __new__(cls, spec=None):
         if isinstance(spec, six.string_types):
-            return ByteSize.Size.new_from_str(spec)
+            ret = ByteSize.Size.new_from_str(spec)
         elif isinstance(spec, six.integer_types):
             abs_val = abs(spec)
             if abs_val == spec:
@@ -67,17 +67,20 @@ class Size(ByteSize.Size):
             else:
                 sgn = -1
             if abs_val <= GLib.MAXUINT64:
-                return ByteSize.Size.new_from_bytes(abs_val, sgn)
+                ret = ByteSize.Size.new_from_bytes(abs_val, sgn)
             else:
-                return ByteSize.Size.new_from_str(str(spec))
+                ret = ByteSize.Size.new_from_str(str(spec))
         elif isinstance(spec, Decimal):
-            return ByteSize.Size.new_from_str(str(spec))
+            ret = ByteSize.Size.new_from_str(str(spec))
         elif isinstance(spec, ByteSize.Size):
-            return ByteSize.Size.new_from_size(spec)
+            ret = ByteSize.Size.new_from_size(spec)
         elif spec is None:
-            return ByteSize.Size.new()
+            ret = ByteSize.Size.new()
         else:
             raise ValueError("Cannot construct new size from '%s'" % spec)
+
+        ret.__class__ = cls
+        return ret
 
     ## METHODS ##
     def get_bytes(self):
