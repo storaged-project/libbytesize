@@ -210,5 +210,13 @@ class Size(ByteSize.Size):
     def __str__(self):
         return self.human_readable()
 
+    def __deepcopy__(self):
+        return ByteSize.Size.new_from_size(self)
+
+    # pickling support for Size
+    # see https://docs.python.org/3/library/pickle.html#object.__reduce__
+    def __reduce__(self):
+        return (self.__class__, self.get_bytes())
+
 Size = override(Size)
 __all__.append("Size")
