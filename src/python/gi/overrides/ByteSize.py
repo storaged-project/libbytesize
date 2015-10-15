@@ -155,7 +155,7 @@ class Size(ByteSize.Size):
                 return ByteSize.Size.add_bytes(self, other)
             else:
                 other = ByteSize.Size.new_from_str(str(other))
-        elif isinstance(other, Decimal):
+        elif isinstance(other, (Decimal, float)):
             other = ByteSize.Size.new_from_str(str(other))
         return ByteSize.Size.add(self, other)
 
@@ -168,12 +168,15 @@ class Size(ByteSize.Size):
                 return ByteSize.Size.sub_bytes(self, other)
             else:
                 other = ByteSize.Size.new_from_str(str(other))
+        elif isinstance(other, (Decimal, float)):
+            other = ByteSize.Size.new_from_str(str(other))
         return ByteSize.Size.sub(self, other)
 
     def __mul__(self, other):
         if isinstance(other, ByteSize.Size):
             raise ValueError("Cannot multiply Size by Size. It just doesn't make sense.")
-        elif isinstance(other, float):
+        elif isinstance(other, (Decimal, float)) or (isinstance(other, six.integer_types)
+                                                     and other > GLib.MAXUINT64):
             return ByteSize.Size.mul_float_str(self, str(other))
         else:
             return ByteSize.Size.mul_int(self, other)
@@ -185,19 +188,33 @@ class Size(ByteSize.Size):
             raise AttributeError
 
         if isinstance(other, six.integer_types):
-            return ByteSize.Size.div_int(self, other)
+            if other <= GLib.MAXUINT64:
+                return ByteSize.Size.div_int(self, other)
+            else:
+                other = ByteSize.Size.new_from_str(str(other))
+                return int(Decimal(ByteSize.Size.true_div(self, other)))
+        elif isinstance(other, (Decimal, float)):
+            other = ByteSize.Size.new_from_str(str(other))
         else:
             return Decimal(ByteSize.Size.true_div(self, other))
 
     def __truediv__(self, other):
         if isinstance(other, six.integer_types):
-            return Decimal(ByteSize.Size.true_div_int(self, other))
+            if other <= GLib.MAXUINT64:
+                return Decimal(ByteSize.Size.true_div_int(self, other))
+            else:
+                other = ByteSize.Size.new_from_str(str(other))
+        elif isinstance(other, (Decimal, float)):
+            other = ByteSize.Size.new_from_str(str(other))
 
         return Decimal(ByteSize.Size.true_div(self, other))
 
     def __floordiv__(self, other):
         if isinstance(other, six.integer_types):
-            return ByteSize.Size.div_int(self, other)
+            if other <= GLib.MAXUINT64:
+                return ByteSize.Size.div_int(self, other)
+            else:
+                other = ByteSize.Size.new_from_str(str(other))
 
         return ByteSize.Size.div(self, other)
 
