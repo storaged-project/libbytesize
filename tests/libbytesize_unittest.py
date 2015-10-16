@@ -332,6 +332,9 @@ class SizeTestCase(unittest.TestCase):
 
         strSize = Size.new_from_str("100.00 GiB").human_readable(ByteSize.Bunit.KIB, 2, False)
         self.assertEqual(strSize, "100 GiB")
+
+        strSize = Size.new_from_str("100 GiB").human_readable(ByteSize.Bunit.KIB, 0, False)
+        self.assertEqual(strSize, "100 GiB")
     #enddef
 
     def testSgn(self):
