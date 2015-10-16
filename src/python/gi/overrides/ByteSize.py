@@ -58,26 +58,29 @@ __all__.extend(("ROUND_UP", "ROUND_DOWN"))
 
 class Size(ByteSize.Size):
     def __new__(cls, spec=None):
-        if isinstance(spec, six.string_types):
-            ret = ByteSize.Size.new_from_str(spec)
-        elif isinstance(spec, six.integer_types):
-            abs_val = abs(spec)
-            if abs_val == spec:
-                sgn = 1
-            else:
-                sgn = -1
-            if abs_val <= GLib.MAXUINT64:
-                ret = ByteSize.Size.new_from_bytes(abs_val, sgn)
-            else:
+        try:
+            if isinstance(spec, six.string_types):
+                ret = ByteSize.Size.new_from_str(spec)
+            elif isinstance(spec, six.integer_types):
+                abs_val = abs(spec)
+                if abs_val == spec:
+                    sgn = 1
+                else:
+                    sgn = -1
+                if abs_val <= GLib.MAXUINT64:
+                    ret = ByteSize.Size.new_from_bytes(abs_val, sgn)
+                else:
+                    ret = ByteSize.Size.new_from_str(str(spec))
+            elif isinstance(spec, (Decimal, float)):
                 ret = ByteSize.Size.new_from_str(str(spec))
-        elif isinstance(spec, Decimal):
-            ret = ByteSize.Size.new_from_str(str(spec))
-        elif isinstance(spec, ByteSize.Size):
-            ret = ByteSize.Size.new_from_size(spec)
-        elif spec is None:
-            ret = ByteSize.Size.new()
-        else:
-            raise ValueError("Cannot construct new size from '%s'" % spec)
+            elif isinstance(spec, ByteSize.Size):
+                ret = ByteSize.Size.new_from_size(spec)
+            elif spec is None:
+                ret = ByteSize.Size.new()
+            else:
+                raise ValueError("Cannot construct new size from '%s'" % spec)
+        except GLib.Error as e:
+            raise ValueError(e.message)
 
         ret.__class__ = cls
         return ret
