@@ -252,7 +252,7 @@ class Size(ByteSize.Size):
     # pickling support for Size
     # see https://docs.python.org/3/library/pickle.html#object.__reduce__
     def __reduce__(self):
-        return (self.__class__, self.get_bytes())
+        return (self.__class__, (self.get_bytes(),))
 
 Size = override(Size)
 __all__.append("Size")
