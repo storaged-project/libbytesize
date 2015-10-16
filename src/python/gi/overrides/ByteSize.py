@@ -240,6 +240,12 @@ class Size(ByteSize.Size):
     def __str__(self):
         return self.human_readable()
 
+    def __int__(self):
+        return self.get_bytes()
+
+    def __float__(self):
+        return float(self.get_bytes())
+
     def __deepcopy__(self):
         return ByteSize.Size.new_from_size(self)
 
