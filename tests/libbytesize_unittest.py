@@ -39,6 +39,18 @@ class SizeTestCase(unittest.TestCase):
         expected = (1048576, 1)
         self.assertEqual(actual, expected)
 
+        actual = Size.new_from_str('   1 MiB').get_bytes()
+        expected = (1048576, 1)
+        self.assertEqual(actual, expected)
+
+        actual = Size.new_from_str('1 MiB    ').get_bytes()
+        expected = (1048576, 1)
+        self.assertEqual(actual, expected)
+
+        actual = Size.new_from_str('    1 MiB   ').get_bytes()
+        expected = (1048576, 1)
+        self.assertEqual(actual, expected)
+
         actual = Size.new_from_str('-1.5 GiB').get_bytes()
         expected = (1610612736, -1)
         self.assertEqual(actual, expected)

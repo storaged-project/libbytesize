@@ -233,12 +233,13 @@ static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
  * Returns: a new #BSSize
  */
 BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
-    gchar const * const pattern = "(?P<numeric>  # the numeric part consists of three parts, below \n" \
+    gchar const * const pattern = "^\\s*         # white space \n" \
+                                  "(?P<numeric>  # the numeric part consists of three parts, below \n" \
                                   " (-|\\+)?     # optional sign character \n" \
                                   " (?P<base>([0-9\\.%s]+))       # base \n" \
                                   " (?P<exp>(e|E)(-|\\+)[0-9]+)?) # exponent \n" \
                                   "\\s*               # white space \n" \
-                                  "(?P<rest>[^\\s]*$) # unit specification";
+                                  "(?P<rest>[^\\s]*)\\s*$ # unit specification";
     gchar *real_pattern = NULL;
     GRegex *regex = NULL;
     gboolean success = FALSE;
