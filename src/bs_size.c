@@ -292,7 +292,7 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
     }
 
     mpf_init2 (size, BS_FLOAT_PREC_BITS);
-    status = mpf_set_str (size, num_str, 10);
+    status = mpf_set_str (size, *num_str == '+' ? num_str+1 : num_str, 10);
     if (status != 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
                      "Failed to parse size spec: %s", size_str);

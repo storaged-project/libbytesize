@@ -55,6 +55,10 @@ class SizeTestCase(unittest.TestCase):
         expected = (1610612736, -1)
         self.assertEqual(actual, expected)
 
+        actual = Size.new_from_str('+1.5 GiB').get_bytes()
+        expected = (1610612736, 1)
+        self.assertEqual(actual, expected)
+
         locale.setlocale(locale.LC_ALL,'cs_CZ.UTF-8')
 
         actual = Size.new_from_str('1,5 KiB').get_bytes()
