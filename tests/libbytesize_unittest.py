@@ -77,6 +77,14 @@ class SizeTestCase(unittest.TestCase):
         expected = (1536, -1)
         self.assertEqual(actual, expected)
 
+        actual = Size.new_from_str('1e-1 KB').get_bytes()
+        expected = (100, 1)
+        self.assertEqual(actual, expected)
+
+        actual = Size.new_from_str('-1e-1 KB').get_bytes()
+        expected = (100, -1)
+        self.assertEqual(actual, expected)
+
         # this persian locale uses a two-byte unicode character for the radix
         locale.setlocale(locale.LC_ALL, 'ps_AF.UTF-8')
 

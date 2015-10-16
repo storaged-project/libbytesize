@@ -1,6 +1,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gmp.h>
+#include <mpfr.h>
 #include <langinfo.h>
 
 #include "bs_size.h"
@@ -172,11 +173,11 @@ static gchar *replace_char_with_str (const gchar *str, gchar orig, const gchar *
     return ret;
 }
 
-static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
+static gboolean multiply_size_by_unit (mpfr_t size, gchar *unit_str) {
     BSBunit bunit = BS_BUNIT_UNDEF;
     BSDunit dunit = BS_DUNIT_UNDEF;
     guint64 pwr = 0;
-    mpf_t dec_mul;
+    mpfr_t dec_mul;
     gsize unit_str_len = 0;
 
     unit_str_len = strlen (unit_str);
@@ -184,18 +185,18 @@ static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
         if (g_ascii_strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
             pwr = (guint64) bunit - BS_BUNIT_B;
-            mpf_mul_2exp (size, size, 10 * pwr);
+            mpfr_mul_2exp (size, size, 10 * pwr, MPFR_RNDN);
             return TRUE;
         }
 
-    mpf_init2 (dec_mul, BS_FLOAT_PREC_BITS);
-    mpf_set_ui (dec_mul, 1000);
+    mpfr_init2 (dec_mul, BS_FLOAT_PREC_BITS);
+    mpfr_set_ui (dec_mul, 1000, MPFR_RNDN);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
         if (g_ascii_strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
             pwr = (guint64) (dunit - BS_DUNIT_B);
-            mpf_pow_ui (dec_mul, dec_mul, pwr);
-            mpf_mul (size, size, dec_mul);
-            mpf_clear (dec_mul);
+            mpfr_pow_ui (dec_mul, dec_mul, pwr, MPFR_RNDN);
+            mpfr_mul (size, size, dec_mul, MPFR_RNDN);
+            mpfr_clear (dec_mul);
             return TRUE;
         }
 
@@ -204,18 +205,18 @@ static gboolean multiply_size_by_unit (mpf_t size, gchar *unit_str) {
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
         if (g_ascii_strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
             pwr = (guint64) bunit - BS_BUNIT_B;
-            mpf_mul_2exp (size, size, 10 * pwr);
+            mpfr_mul_2exp (size, size, 10 * pwr, MPFR_RNDN);
             return TRUE;
         }
 
-    mpf_init2 (dec_mul, BS_FLOAT_PREC_BITS);
-    mpf_set_ui (dec_mul, 1000);
+    mpfr_init2 (dec_mul, BS_FLOAT_PREC_BITS);
+    mpfr_set_ui (dec_mul, 1000, MPFR_RNDN);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
         if (g_ascii_strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
             pwr = (guint64) (dunit - BS_DUNIT_B);
-            mpf_pow_ui (dec_mul, dec_mul, pwr);
-            mpf_mul (size, size, dec_mul);
-            mpf_clear (dec_mul);
+            mpfr_pow_ui (dec_mul, dec_mul, pwr, MPFR_RNDN);
+            mpfr_mul (size, size, dec_mul, MPFR_RNDN);
+            mpfr_clear (dec_mul);
             return TRUE;
         }
 
@@ -247,7 +248,7 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
     gchar *num_str = NULL;
     const gchar *radix_char = NULL;
     gchar *loc_size_str = NULL;
-    mpf_t size;
+    mpfr_t size;
     gint status = 0;
     gchar *unit_str = NULL;
     BSSize *ret = NULL;
@@ -291,14 +292,14 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
         return NULL;
     }
 
-    mpf_init2 (size, BS_FLOAT_PREC_BITS);
-    status = mpf_set_str (size, *num_str == '+' ? num_str+1 : num_str, 10);
+    mpfr_init2 (size, BS_FLOAT_PREC_BITS);
+    status = mpfr_set_str (size, *num_str == '+' ? num_str+1 : num_str, 10, MPFR_RNDN);
     if (status != 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
                      "Failed to parse size spec: %s", size_str);
         g_match_info_free (match_info);
         g_free (loc_size_str);
-        mpf_clear (size);
+        mpfr_clear (size);
         return NULL;
     }
 
@@ -310,17 +311,17 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
                          "Failed to recognize unit from the spec: %s", size_str);
             g_match_info_free (match_info);
             g_free (loc_size_str);
-            mpf_clear (size);
+            mpfr_clear (size);
             return NULL;
         }
     }
 
     ret = bs_size_new ();
-    mpz_set_f (ret->priv->bytes, size);
+    mpfr_get_z (ret->priv->bytes, size, MPFR_RNDN);
 
     g_free (loc_size_str);
     g_match_info_free (match_info);
-    mpf_clear (size);
+    mpfr_clear (size);
 
     return ret;
 }

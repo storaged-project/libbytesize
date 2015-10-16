@@ -49,7 +49,7 @@ AC_SUBST(py3execdir, $PYTHON3_EXECDIR)
 
 AC_CHECK_LIB(gmp, __gmpz_init)
 
-AC_CHECK_HEADERS([langinfo.h gmp.h],
+AC_CHECK_HEADERS([langinfo.h gmp.h mpfr.h],
                  [],
                  [LIBBYTESIZE_SOFT_FAILURE([Header file $ac_header not found.])],
                  [])
