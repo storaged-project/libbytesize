@@ -133,6 +133,9 @@ class Size(ByteSize.Size):
                 return ByteSize.Size.cmp_bytes(self, other, abs_vals) == 0
             else:
                 other = ByteSize.Size.new_from_str(str(other))
+        elif isinstance(other, (Decimal, float)):
+            other = ByteSize.Size.new_from_str(str(other))
+
         return ByteSize.Size.cmp(self, other, abs_vals)
 
 
