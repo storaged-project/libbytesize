@@ -181,6 +181,10 @@ class Size(ByteSize.Size):
             other = ByteSize.Size.new_from_str(str(other))
         return ByteSize.Size.sub(self, other)
 
+    def __rsub__(self, other):
+        other = ByteSize.Size.new_from_str(str(other))
+        return ByteSize.Size.sub(other, self)
+
     def __mul__(self, other):
         if isinstance(other, ByteSize.Size):
             raise ValueError("Cannot multiply Size by Size. It just doesn't make sense.")
