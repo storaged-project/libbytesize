@@ -456,6 +456,129 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
     #enddef
 
+    def testGrow(self):
+        x = Size.new_from_bytes(16, 1)
+        y = Size.new_from_bytes(8, 1)
+        x.grow(y)
+        actual = x.get_bytes()
+        expected = (24, 1)
+        self.assertEqual(actual, expected)
+    #enddef
+
+    def testGrowBytes(self):
+        x = Size.new_from_bytes(16, 1)
+        x.grow_bytes(8)
+        actual = x.get_bytes()
+        expected = (24, 1)
+        self.assertEqual(actual, expected)
+    #enddef
+
+    def testGrowMulFloatStr(self):
+        x = Size.new_from_str("8 B")
+        x.grow_mul_float_str("1.51")
+        actual = x.get_bytes()
+        self.assertEqual(actual, (12, 1))
+
+        x = Size.new_from_str("-8 B")
+        x.grow_mul_float_str("1.51")
+        actual = x.get_bytes()
+        self.assertEqual(actual, (12, -1))
+
+        x = Size.new_from_str("8 B")
+        x.grow_mul_float_str("-1.51")
+        actual = x.get_bytes()
+        self.assertEqual(actual, (12, -1))
+    #enddef
+
+    def testGrowMulInt(self):
+        x = Size.new_from_str("8 B")
+        x.grow_mul_int(2)
+        actual = x.get_bytes()
+        expected = (16, 1)
+        self.assertEqual(actual, expected)
+
+        x = Size.new_from_str("0 B")
+        x.grow_mul_int(1)
+        actual = x.get_bytes()
+        expected = (0, 0)
+        self.assertEqual(actual, expected)
+
+        x = Size.new_from_str("10 B")
+        x.grow_mul_int(0)
+        actual = x.get_bytes()
+        expected = (0, 0)
+        self.assertEqual(actual, expected)
+    #enddef
+
+    def testShrink(self):
+        x = Size.new_from_bytes(16, 1)
+        y = Size.new_from_bytes(8, 1)
+        x.shrink(y)
+        actual = x.get_bytes()
+        expected = (8, 1)
+        self.assertEqual(actual, expected)
+
+        x = Size.new_from_bytes(8, 1)
+        y = Size.new_from_bytes(16, 1)
+        x.shrink(y)
+        actual = x.get_bytes()
+        expected = (8, -1)
+        self.assertEqual(actual, expected)
+    #enddef
+
+    def testShrinkBytes(self):
+        x = Size.new_from_str("8 B")
+        x.shrink_bytes(2)
+        actual = x.get_bytes()
+        expected = (6, 1)
+        self.assertEqual(actual, expected)
+
+        x = Size.new_from_str("8 B")
+        x.shrink_bytes(16)
+        actual = x.get_bytes()
+        expected = (8, -1)
+        self.assertEqual(actual, expected)
+
+        x = Size.new_from_str("-8 B")
+        x.shrink_bytes(8)
+        actual = x.get_bytes()
+        expected = (16, -1)
+        self.assertEqual(actual, expected)
+    #enddef
+
+    def testShrinkDivInt(self):
+        x = Size.new_from_str("100 B")
+        y = 11
+        x.shrink_div_int(y)
+        actual = x.get_bytes()
+        expected = (9, 1)
+        self.assertEqual(actual, expected)
+
+        x = Size.new_from_str("98 B")
+        y = 11
+        x.shrink_div_int(y)
+        actual = x.get_bytes()
+        expected = (8, 1)
+        self.assertEqual(actual, expected)
+    #enddef
+
+    def testTrueDivInt(self):
+        x = Size.new_from_str("1000 B")
+        y = 100
+        divResult = float(x.true_div_int(y)[:15]) # just some number to cover accurancy and not cross max float range
+        self.assertAlmostEqual(divResult, 1000.0/100.0)
+
+        x = Size.new_from_str("-1 MiB")
+        y = 1024
+        divResult = float(x.true_div_int(y)[:15]) # just some number to cover accurancy and not cross max float range
+        self.assertAlmostEqual(divResult, -1024.0)
+
+        x = Size.new_from_str("0 MiB")
+        y = 1024
+        divResult = float(x.true_div_int(y)[:15]) # just some number to cover accurancy and not cross max float range
+        self.assertAlmostEqual(divResult, 0.0)
+    #enddef
+
 #endclass
 
 
