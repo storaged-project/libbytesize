@@ -248,6 +248,7 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
     gchar *num_str = NULL;
     const gchar *radix_char = NULL;
     gchar *loc_size_str = NULL;
+    mpf_t parsed_size;
     mpfr_t size;
     gint status = 0;
     gchar *unit_str = NULL;
@@ -292,16 +293,22 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
         return NULL;
     }
 
-    mpfr_init2 (size, BS_FLOAT_PREC_BITS);
-    status = mpfr_set_str (size, *num_str == '+' ? num_str+1 : num_str, 10, MPFR_RNDN);
+    /* parse the number using GMP because it knows how to handle localization
+       much better than MPFR */
+    mpf_init2 (parsed_size, BS_FLOAT_PREC_BITS);
+    status = mpf_set_str (parsed_size, *num_str == '+' ? num_str+1 : num_str, 10);
     if (status != 0) {
         g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
                      "Failed to parse size spec: %s", size_str);
         g_match_info_free (match_info);
         g_free (loc_size_str);
-        mpfr_clear (size);
+        mpf_clear (parsed_size);
         return NULL;
     }
+    /* but use MPFR from now on because GMP thinks 0.1*1000 = 99 */
+    mpfr_init2 (size, BS_FLOAT_PREC_BITS);
+    mpfr_set_f (size, parsed_size, MPFR_RNDN);
+    mpf_clear (parsed_size);
 
     unit_str = g_match_info_fetch_named (match_info, "rest");
     if (unit_str && g_strcmp0 (unit_str, "") != 0) {
