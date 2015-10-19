@@ -39,6 +39,7 @@ with the libbytesize library.
 
 %package -n python-%{realname}
 Summary: Python 2 GI overrides for libbytesize
+Provides: python2-%{realname} = %{version}-%{release}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: python-six
 Requires: pygobject3-base
