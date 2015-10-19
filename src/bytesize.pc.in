@@ -9,4 +9,4 @@ URL: https://github.com/rhinstaller/libbytesize
 Version: 0.1.0
 Requires: glib-2.0
 Cflags: -I${includedir}/bytesize
-Libs: -lbytesize -lgmp
+Libs: -lbytesize -lgmp -lmpfr

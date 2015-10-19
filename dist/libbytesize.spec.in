@@ -11,6 +11,7 @@ Source0:     https://github.com/rhinstaller/libbytesize/archive/%{name}-%{versio
 BuildRequires: glib2-devel
 BuildRequires: gobject-introspection-devel
 BuildRequires: gmp-devel
+BuildRequires: mpfr-devel
 BuildRequires: gettext-devel
 BuildRequires: python-devel
 BuildRequires: python3-devel
