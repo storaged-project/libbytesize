@@ -3,6 +3,13 @@
 
 import locale
 import unittest
+
+# prevent any overrides from loading, we want to test the library here not the
+# overrides (GI would otherwise load the overrides installed to the system if
+# there were any)
+import gi.overrides
+gi.overrides.__path__ = []
+
 from gi.repository.ByteSize import Size
 from gi.repository import ByteSize
 
