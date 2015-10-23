@@ -204,7 +204,7 @@ class Size(ByteSize.Size):
         if isinstance(other, ByteSize.Size):
             raise ValueError("Cannot multiply Size by Size. It just doesn't make sense.")
         elif isinstance(other, (Decimal, float)) or (isinstance(other, six.integer_types)
-                                                     and other > GLib.MAXUINT64):
+                                                     and other > GLib.MAXUINT64 or other < 0):
             return ByteSize.Size.mul_float_str(self, str(other))
         else:
             return ByteSize.Size.mul_int(self, other)
