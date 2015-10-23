@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import unittest
+import copy
+
 from decimal import Decimal
 
 # make sure local overrides are loaded not the system-installed version
@@ -15,7 +18,6 @@ if not gi.overrides.__path__[0].endswith("src/python/gi/overrides"):
     gi.overrides.__path__.remove(local_overrides)
     gi.overrides.__path__.insert(0, local_overrides)
 
-import unittest
 from gi.repository.ByteSize import Size
 
 
@@ -215,6 +217,13 @@ class SizeTestCase(unittest.TestCase):
         self.assertTrue(size1)
         self.assertFalse(size2)
     #enddef
+
+    def testDeepCopy(self):
+        size1 = Size("1 GiB")
+        size2 = copy.deepcopy(size1)
+
+        self.assertIsNot(size1, size2)
+        self.assertEqual(size1, size2)
 
 #endclass
 

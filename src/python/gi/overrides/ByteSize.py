@@ -261,7 +261,7 @@ class Size(ByteSize.Size):
     def __float__(self):
         return float(self.get_bytes())
 
-    def __deepcopy__(self):
+    def __deepcopy__(self, memo_dict):
         return ByteSize.Size.new_from_size(self)
 
     # pickling support for Size
