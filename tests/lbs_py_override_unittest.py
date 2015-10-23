@@ -165,6 +165,19 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
     #enddef
 
+    def testDivMod(self):
+        size1 = Size("120 B")
+        q, mod = divmod(size1, Size("100 B"))
+
+        self.assertEqual(q, 1)
+        self.assertEqual(mod, Size("20 B"))
+
+        size1 = Size("250 MiB")
+        q, mod = divmod(size1, Size("100 MiB"))
+
+        self.assertEqual(q, 2)
+        self.assertEqual(mod, Size("50 MiB"))
+
     def testEquality(self):
         size1 = Size("1 GiB")
         size2 = Size("2 GiB")

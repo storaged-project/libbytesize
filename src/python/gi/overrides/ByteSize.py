@@ -249,6 +249,12 @@ class Size(ByteSize.Size):
     def __mod__(self, other):
         return ByteSize.Size.mod(self, other)
 
+    def __divmod__(self, other):
+        rdiv = self.__floordiv__(other)
+        rmod = self.__mod__(other)
+
+        return (rdiv, rmod)
+
     def __repr__(self):
         return "Size (%s)" % self.human_readable(ByteSize.Bunit.B, -1, False)
 
