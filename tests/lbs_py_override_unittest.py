@@ -208,6 +208,14 @@ class SizeTestCase(unittest.TestCase):
         self.assertTrue(size3 != None)
     #enddef
 
+    def testBool(self):
+        size1 = Size("1 GiB")
+        size2 = Size(0)
+
+        self.assertTrue(size1)
+        self.assertFalse(size2)
+    #enddef
+
 #endclass
 
 # script entry point

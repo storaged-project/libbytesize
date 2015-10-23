@@ -168,6 +168,11 @@ class Size(ByteSize.Size):
     def __ge__(self, other):
         return self.cmp(other, False) in (1, 0)
 
+    def __bool__(self):
+        return self != 0
+
+    __nonzero__ = __bool__
+
     def __add__(self, other):
         if isinstance(other, six.integer_types):
             if other <= GLib.MAXUINT64:
