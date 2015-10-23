@@ -231,6 +231,20 @@ class SizeTestCase(unittest.TestCase):
         self.assertFalse(size2)
     #enddef
 
+    def testAbs(self):
+        size1 = Size("1 GiB")
+        self.assertEqual(size1, abs(size1))
+
+        size2 = Size("-2 GiB")
+        self.assertEqual(size2, -1 * abs(size2))
+
+    def testNeg(self):
+        size1 = Size("1 KiB")
+        self.assertEqual(-1024, -size1)
+
+        size1 = Size("-1 KiB")
+        self.assertEqual(1024, -size1)
+
     def testDeepCopy(self):
         size1 = Size("1 GiB")
         size2 = copy.deepcopy(size1)

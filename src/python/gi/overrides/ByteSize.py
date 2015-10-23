@@ -173,6 +173,12 @@ class Size(ByteSize.Size):
 
     __nonzero__ = __bool__
 
+    def __abs__(self):
+        return Size(abs(self.get_bytes()))
+
+    def __neg__(self):
+        return self.__mul__(-1)
+
     def __add__(self, other):
         if isinstance(other, six.integer_types):
             if other <= GLib.MAXUINT64:
