@@ -324,7 +324,7 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
     }
 
     ret = bs_size_new ();
-    mpfr_get_z (ret->priv->bytes, size, MPFR_RNDN);
+    mpfr_get_z (ret->priv->bytes, size, MPFR_RNDZ);
 
     g_free (loc_size_str);
     g_match_info_free (match_info);
