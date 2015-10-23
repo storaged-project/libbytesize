@@ -1,5 +1,5 @@
 Name:        libbytesize
-Version:     0.1
+Version:     0.2
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -96,5 +96,24 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{python3_sitearch}/gi/overrides/__pycache__/ByteSize*
 
 %changelog
+* Fri Oct 23 2015 Vratislav Podzimek <vpodzime@redhat.com> - 0.2-1
+- Distribute the tests for overrides (vpodzime)
+- Fix the rpmlog target (vpodzime)
+- Respect the signs when doing division (vpodzime)
+- Add two more internal methods that may be required (vpodzime)
+- Do not pass negative numbers as guint64 when comparing with negative ints (vpodzime)
+- Round toward zero when converting bytes from float to int (vpodzime)
+- Make sure we return Size if doing operations with big integers (vpodzime)
+- Implement the __divmod__() method (vpodzime)
+- Do not try to convert negative int to an unsigned int when multiplying (vpodzime)
+- Fix and test the __deepcopy__ method (vpodzime)
+- Implement the evaluation of Size instance as a bool value (vpodzime)
+- Fix some issues in comparison functions and add tests (vpodzime)
+- Add a function for getting string representation of a unit (vpodzime)
+- Hook the overrides tests to the 'test' target (vpodzime)
+- Merge pull request #4 from japokorn/master-tests_03_python_override (vpodzime)
+- Added tests for Python override (japokorn)
+- Make sure our tests don't get broken by installed overrides (vpodzime)
+
 * Wed Oct 07 2015 Vratislav Podzimek <vpodzime@redhat.com> - 0.1-1
 - Initial release
