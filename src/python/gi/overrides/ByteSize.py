@@ -252,9 +252,11 @@ class Size(ByteSize.Size):
                 return ByteSize.Size.div_int(self, other)
             else:
                 other = ByteSize.Size.new_from_str(str(other))
-                return Size(ByteSize.Size.div(self, other))
+                val, sgn = ByteSize.Size.div(self, other)
+                return Size(val) * sgn
 
-        return ByteSize.Size.div(self, other)
+        val, sgn = ByteSize.Size.div(self, other)
+        return val * sgn
 
     def __mod__(self, other):
         return ByteSize.Size.mod(self, other)

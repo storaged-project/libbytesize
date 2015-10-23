@@ -299,22 +299,22 @@ class SizeTestCase(unittest.TestCase):
         x = Size.new_from_str("1 KiB")
         y = Size.new_from_str("-0.1 KiB")
         divResult = x.div(y)
-        self.assertEqual(divResult, 10)
+        self.assertEqual(divResult, (10, -1))
 
         x = Size.new_from_str("1 MiB")
         y = Size.new_from_str("1 KiB")
         divResult = x.div(y)
-        self.assertEqual(divResult, 1024)
+        self.assertEqual(divResult, (1024, 1))
 
         x = Size.new_from_str("1 GB")
         y = Size.new_from_str("0.7 GB")
         divResult = x.div(y)
-        self.assertEqual(divResult, 1)
+        self.assertEqual(divResult, (1, 1))
 
         x = Size.new_from_str("-1 KiB")
         y = Size.new_from_str("0.1 KiB")
         divResult = x.div(y)
-        self.assertEqual(divResult, 10)
+        self.assertEqual(divResult, (10, -1))
     #enddef
 
     def testDivInt(self):

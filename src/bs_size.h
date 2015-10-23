@@ -119,7 +119,7 @@ BSSize* bs_size_mul_int (const BSSize *size, guint64 times);
 BSSize* bs_size_grow_mul_int (BSSize *size, guint64 times);
 BSSize* bs_size_mul_float_str (const BSSize *size, const gchar *float_str, GError **error);
 BSSize* bs_size_grow_mul_float_str (BSSize *size, const gchar *float_str, GError **error);
-guint64 bs_size_div (const BSSize *size1, const BSSize *size2, GError **error);
+guint64 bs_size_div (const BSSize *size1, const BSSize *size2, gint *sgn, GError **error);
 BSSize* bs_size_div_int (const BSSize *size, guint64 divisor, GError **error);
 BSSize* bs_size_shrink_div_int (BSSize *size, guint64 shrink_divisor, GError **error);
 gchar* bs_size_true_div (const BSSize *size1, const BSSize *size2, GError **error);

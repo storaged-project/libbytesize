@@ -739,15 +739,15 @@ BSSize* bs_size_grow_mul_float_str (BSSize *size, const gchar *float_str, GError
 
 /**
  * bs_size_div:
+ * @sgn: (allow-none) (out): sign of the result
  *
  * Divide @size1 by @size2. Gives the answer to the question "How many times
  * does @size2 fit in @size1?".
- * **This function ignores the signs of the sizes.**
  *
  * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
  *          (IOW, @size1 / @size2 using integer division)
  */
-guint64 bs_size_div (const BSSize *size1, const BSSize *size2, GError **error) {
+guint64 bs_size_div (const BSSize *size1, const BSSize *size2, gint *sgn, GError **error) {
     mpz_t result;
     guint64 ret = 0;
 
@@ -757,6 +757,8 @@ guint64 bs_size_div (const BSSize *size1, const BSSize *size2, GError **error) {
         return 0;
     }
 
+    if (sgn)
+        *sgn = mpz_sgn (size1->priv->bytes) * mpz_sgn (size2->priv->bytes);
     mpz_init (result);
     mpz_tdiv_q (result, size1->priv->bytes, size2->priv->bytes);
 
