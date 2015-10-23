@@ -220,20 +220,23 @@ class Size(ByteSize.Size):
                 return ByteSize.Size.div_int(self, other)
             else:
                 other = ByteSize.Size.new_from_str(str(other))
-                return int(Decimal(ByteSize.Size.true_div(self, other)))
+                return Size(Decimal(ByteSize.Size.true_div(self, other)))
         elif isinstance(other, (Decimal, float)):
             other = ByteSize.Size.new_from_str(str(other))
+            return Size(ByteSize.Size.true_div(self, other))
         else:
             return Decimal(ByteSize.Size.true_div(self, other))
 
     def __truediv__(self, other):
         if isinstance(other, six.integer_types):
             if other <= GLib.MAXUINT64:
-                return Decimal(ByteSize.Size.true_div_int(self, other))
+                return Size(ByteSize.Size.true_div_int(self, other))
             else:
                 other = ByteSize.Size.new_from_str(str(other))
+                return Size(ByteSize.Size.true_div(self, other))
         elif isinstance(other, (Decimal, float)):
             other = ByteSize.Size.new_from_str(str(other))
+            return Size(ByteSize.Size.true_div(self, other))
 
         return Decimal(ByteSize.Size.true_div(self, other))
 
@@ -243,6 +246,7 @@ class Size(ByteSize.Size):
                 return ByteSize.Size.div_int(self, other)
             else:
                 other = ByteSize.Size.new_from_str(str(other))
+                return Size(ByteSize.Size.div(self, other))
 
         return ByteSize.Size.div(self, other)
 
