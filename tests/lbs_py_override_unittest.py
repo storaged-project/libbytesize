@@ -163,6 +163,51 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
     #enddef
 
+    def testEquality(self):
+        size1 = Size("1 GiB")
+        size2 = Size("2 GiB")
+
+        self.assertTrue(size1 == size1)
+        self.assertTrue(size2 == size2)
+        self.assertFalse(size1 == size2)
+        self.assertFalse(size2 == size1)
+
+        self.assertFalse(size1 == None)
+        self.assertFalse(size1 == 0)
+
+        size3 = Size(0)
+        self.assertTrue(size3 == 0)
+    #enddef
+
+    def testCompare(self):
+        size1 = Size("1 GiB")
+        size2 = Size("2 GiB")
+
+        self.assertTrue(size2 > size1)
+        self.assertFalse(size1 > size2)
+        self.assertTrue(size2 >= size1)
+        self.assertFalse(size1 >= size2)
+        self.assertTrue(size1 >= size1)
+
+        self.assertFalse(size2 < size1)
+        self.assertTrue(size1 < size2)
+        self.assertFalse(size2 <= size1)
+        self.assertTrue(size1 <= size2)
+        self.assertTrue(size1 <= size1)
+
+        self.assertTrue(size1 > None)
+        self.assertTrue(size1 >= None)
+        self.assertFalse(size1 < None)
+        self.assertFalse(size1 <= None)
+        self.assertFalse(size1 == None)
+        self.assertTrue(size1 != None)
+
+        size3 = Size(0)
+        self.assertTrue(size3 > None)
+        self.assertFalse(size3 < None)
+        self.assertTrue(size3 != None)
+    #enddef
+
 #endclass
 
 # script entry point

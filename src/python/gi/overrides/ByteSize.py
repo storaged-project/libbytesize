@@ -138,11 +138,13 @@ class Size(ByteSize.Size):
             if (other < 0 and abs_vals):
                 other = abs(other)
             if other <= GLib.MAXUINT64:
-                return ByteSize.Size.cmp_bytes(self, other, abs_vals) == 0
+                return ByteSize.Size.cmp_bytes(self, other, abs_vals)
             else:
                 other = ByteSize.Size.new_from_str(str(other))
         elif isinstance(other, (Decimal, float)):
             other = ByteSize.Size.new_from_str(str(other))
+        elif other is None:
+            return 1
 
         return ByteSize.Size.cmp(self, other, abs_vals)
 
@@ -160,11 +162,11 @@ class Size(ByteSize.Size):
     def __le__(self, other):
         return self.cmp(other, False) in (-1, 0)
 
-    def __gt__(segf, other):
-        return segf.cmp(other, False) == 1
+    def __gt__(self, other):
+        return self.cmp(other, False) == 1
 
-    def __ge__(segf, other):
-        return segf.cmp(other, False) in (1, 0)
+    def __ge__(self, other):
+        return self.cmp(other, False) in (1, 0)
 
     def __add__(self, other):
         if isinstance(other, six.integer_types):
