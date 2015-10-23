@@ -24,6 +24,9 @@ from gi.repository import GLib
 from gi.importer import modules
 from gi.overrides import override
 
+import gettext
+_ = lambda x: gettext.translation("libbytesize", fallback=True).gettext(x) if x != "" else ""
+
 ByteSize = modules['ByteSize']._introspection_module
 __all__ = []
 
@@ -55,6 +58,11 @@ unit_strs = {
 ROUND_UP = ByteSize.RoundDir.UP
 ROUND_DOWN = ByteSize.RoundDir.DOWN
 __all__.extend(("ROUND_UP", "ROUND_DOWN"))
+
+def unit_str(unit, xlate=False):
+    for (u_str, u) in unit_strs.items():
+        if u == unit:
+            return _(u_str) if xlate else u_str
 
 class Size(ByteSize.Size):
     def __new__(cls, spec=None):
