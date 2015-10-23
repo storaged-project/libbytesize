@@ -137,7 +137,7 @@ class Size(ByteSize.Size):
         if isinstance(other, six.integer_types):
             if (other < 0 and abs_vals):
                 other = abs(other)
-            if other <= GLib.MAXUINT64:
+            if other <= GLib.MAXUINT64 and other > 0:
                 return ByteSize.Size.cmp_bytes(self, other, abs_vals)
             else:
                 other = ByteSize.Size.new_from_str(str(other))
