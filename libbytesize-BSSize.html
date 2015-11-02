@@ -8,7 +8,7 @@
 <link rel="up" href="ch01.html" title="libbytesize Reference Manual">
 <link rel="prev" href="ch01.html" title="libbytesize Reference Manual">
 <link rel="next" href="ch02.html" title="GI Overrides">
-<meta name="generator" content="GTK-Doc V1.21.1 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -347,10 +347,10 @@ appropriate precision while 0.3 as float is probably something like
 <pre class="programlisting"><span class="returnvalue">BSSize</span> *
 bs_size_new (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 <p>Creates a new <span class="type">BSSize</span> instance initialized to 0.</p>
+<p><span class="annotation">[<acronym title="This symbol is a constructor, not a static method."><span class="acronym">constructor</span></acronym>]</span></p>
 <div class="refsect3">
-<a name="id-1.2.2.7.2.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.2.6"></a><h4>Returns</h4>
 <p> a new <span class="type">BSSize</span> initialized to 0.</p>
-<p></p>
 </div>
 </div>
 <hr>
@@ -360,8 +360,9 @@ bs_size_new (<em class="parameter"><code><span class="type">void</span></code></
 bs_size_new_from_bytes (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a> bytes</code></em>,
                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> sgn</code></em>);</pre>
 <p>Creates a new <span class="type">BSSize</span> instance.</p>
+<p><span class="annotation">[<acronym title="This symbol is a constructor, not a static method."><span class="acronym">constructor</span></acronym>]</span></p>
 <div class="refsect3">
-<a name="id-1.2.2.7.3.5"></a><h4>Parameters</h4>
+<a name="id-1.2.2.7.3.6"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -385,9 +386,8 @@ bs_size_new_from_bytes (<em class="parameter"><code><a href="../glib/glib-Basic-
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.2.2.7.3.6"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.3.7"></a><h4>Returns</h4>
 <p> a new <span class="type">BSSize</span></p>
-<p></p>
 </div>
 </div>
 <hr>
@@ -397,8 +397,9 @@ bs_size_new_from_bytes (<em class="parameter"><code><a href="../glib/glib-Basic-
 bs_size_new_from_str (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *size_str</code></em>,
                       <em class="parameter"><code><a href="../glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
 <p>Creates a new <span class="type">BSSize</span> instance.</p>
+<p><span class="annotation">[<acronym title="This symbol is a constructor, not a static method."><span class="acronym">constructor</span></acronym>]</span></p>
 <div class="refsect3">
-<a name="id-1.2.2.7.4.5"></a><h4>Parameters</h4>
+<a name="id-1.2.2.7.4.6"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -414,9 +415,8 @@ bs_size_new_from_str (<em class="parameter"><code>const <a href="../glib/glib-Ba
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.2.2.7.4.6"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.4.7"></a><h4>Returns</h4>
 <p> a new <span class="type">BSSize</span></p>
-<p></p>
 </div>
 </div>
 <hr>
@@ -425,8 +425,9 @@ bs_size_new_from_str (<em class="parameter"><code>const <a href="../glib/glib-Ba
 <pre class="programlisting"><span class="returnvalue">BSSize</span> *
 bs_size_new_from_size (<em class="parameter"><code>const <span class="type">BSSize</span> *size</code></em>);</pre>
 <p>Creates a new instance of <span class="type">BSSize</span>.</p>
+<p><span class="annotation">[<acronym title="This symbol is a constructor, not a static method."><span class="acronym">constructor</span></acronym>]</span></p>
 <div class="refsect3">
-<a name="id-1.2.2.7.5.5"></a><h4>Parameters</h4>
+<a name="id-1.2.2.7.5.6"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -441,7 +442,7 @@ bs_size_new_from_size (<em class="parameter"><code>const <span class="type">BSSi
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.2.2.7.5.6"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.5.7"></a><h4>Returns</h4>
 <p> a new <span class="type">BSSize</span> instance which is copy of <em class="parameter"><code>size</code></em>
 . </p>
 <p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
@@ -477,7 +478,6 @@ size respectively. </p></td>
 <a name="id-1.2.2.7.6.6"></a><h4>Returns</h4>
 <p> the <em class="parameter"><code>size</code></em>
 in a number of bytes</p>
-<p></p>
 </div>
 </div>
 <hr>
@@ -490,7 +490,6 @@ bs_size_sgn (<em class="parameter"><code>const <span class="type">BSSize</span> 
 <a name="id-1.2.2.7.7.5"></a><h4>Returns</h4>
 <p> -1, 0 or 1 if <em class="parameter"><code>size</code></em>
 is negative, zero or positive, respectively</p>
-<p></p>
 </div>
 </div>
 <hr>
@@ -830,16 +829,31 @@ times. </p>
 <pre class="programlisting"><a href="../glib/glib-Basic-Types.html#guint64"><span class="returnvalue">guint64</span></a>
 bs_size_div (<em class="parameter"><code>const <span class="type">BSSize</span> *size1</code></em>,
              <em class="parameter"><code>const <span class="type">BSSize</span> *size2</code></em>,
+             <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *sgn</code></em>,
              <em class="parameter"><code><a href="../glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
 <p>Divide <em class="parameter"><code>size1</code></em>
  by <em class="parameter"><code>size2</code></em>
 . Gives the answer to the question "How many times
 does <em class="parameter"><code>size2</code></em>
  fit in <em class="parameter"><code>size1</code></em>
-?".
-**This function ignores the signs of the sizes.**</p>
+?".</p>
 <div class="refsect3">
-<a name="id-1.2.2.7.23.5"></a><h4>Returns</h4>
+<a name="id-1.2.2.7.23.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>sgn</p></td>
+<td class="parameter_description"><p> sign of the result. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>][<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.2.7.23.6"></a><h4>Returns</h4>
 <p> integer number x so that x * <em class="parameter"><code>size1</code></em>
 &lt; <em class="parameter"><code>size2</code></em>
 and (x+1) * <em class="parameter"><code>size1</code></em>
@@ -847,7 +861,6 @@ and (x+1) * <em class="parameter"><code>size1</code></em>
 (IOW, <em class="parameter"><code>size1</code></em>
 / <em class="parameter"><code>size2</code></em>
 using integer division)</p>
-<p></p>
 </div>
 </div>
 <hr>
@@ -1043,7 +1056,6 @@ is smaller, equal to or bigger than
 <em class="parameter"><code>size2</code></em>
 respectively comparing absolute values if <em class="parameter"><code>abs</code></em>
 is <a href="../glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a></p>
-<p></p>
 </div>
 </div>
 <hr>
@@ -1083,7 +1095,6 @@ is smaller, equal to or bigger than
 <em class="parameter"><code>bytes</code></em>
 respectively comparing absolute values if <em class="parameter"><code>abs</code></em>
 is <a href="../glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a></p>
-<p></p>
 </div>
 </div>
 </div>
@@ -1333,7 +1344,6 @@ with <span class="type">BSSize</span> instances.</p>
 </div>
 </div>
 <div class="footer">
-<hr>
-          Generated by GTK-Doc V1.21.1</div>
+<hr>Generated by GTK-Doc V1.24</div>
 </body>
 </html>
