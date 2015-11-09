@@ -263,7 +263,10 @@ class Size(ByteSize.Size):
 
     def __divmod__(self, other):
         rdiv = self.__floordiv__(other)
-        rmod = self.__mod__(other)
+        if not isinstance(other, ByteSize.Size):
+            rmod = self.__mod__(rdiv)
+        else:
+            rmod = self.__mod__(other)
 
         return (rdiv, rmod)
 

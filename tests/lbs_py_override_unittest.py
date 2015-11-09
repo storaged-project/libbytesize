@@ -178,6 +178,11 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(q, 2)
         self.assertEqual(mod, Size("50 MiB"))
 
+        size1 = Size("10 GiB") + Size("5 GiB")
+        q, mod = divmod(size1, 7)
+        self.assertEqual(q, 2300875337)
+        self.assertEqual(mod, 1)
+
     def testEquality(self):
         size1 = Size("1 GiB")
         size2 = Size("2 GiB")
