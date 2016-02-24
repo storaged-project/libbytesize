@@ -8,17 +8,13 @@ Source0:     https://github.com/rhinstaller/libbytesize/archive/%{name}-%{versio
 
 %define realname bytesize
 
-BuildRequires: glib2-devel
-BuildRequires: gobject-introspection-devel
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
+BuildRequires: pcre-devel
 BuildRequires: gettext-devel
 BuildRequires: python-devel
 BuildRequires: python3-devel
 BuildRequires: gtk-doc
-BuildRequires: glib2-doc
-
-Requires: gobject-introspection
 
 %description
 The libbytesize is a C library with GObject introspection support that
@@ -30,8 +26,6 @@ MAXUINT64.
 %package devel
 Summary:  Development files for libbytesize
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: glib2-devel
-Requires: gobject-introspection-devel
 
 %description devel
 This package contains header files and pkg-config files needed for development
@@ -78,7 +72,6 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
 %{_libdir}/libbytesize.so.*
-%{_libdir}/girepository*/ByteSize*.typelib
 
 %files devel
 %{_libdir}/libbytesize.so
@@ -86,7 +79,6 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{_includedir}/bytesize/bs_size.h
 %{_libdir}/pkgconfig/bytesize.pc
 %{_datadir}/gtk-doc/html/libbytesize
-%{_datadir}/gir*/ByteSize*.gir
 
 %files -n python-%{realname}
 %{python2_sitearch}/gi/overrides/*

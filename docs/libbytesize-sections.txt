@@ -1,7 +1,8 @@
 <SECTION>
-<FILE>size</FILE>
-BS_SIZE_ERROR
-BSSizeError
+<FILE>bs_size</FILE>
+BSSize
+BSErrorCode
+BSError
 BSBunit
 BSDunit
 BSRoundDir
@@ -11,6 +12,8 @@ bs_size_new
 bs_size_new_from_bytes
 bs_size_new_from_str
 bs_size_new_from_size
+bs_size_free
+bs_clear_error
 bs_size_get_bytes
 bs_size_sgn
 bs_size_get_bytes_str
@@ -37,15 +40,4 @@ bs_size_mod
 bs_size_round_to_nearest
 bs_size_cmp
 bs_size_cmp_bytes
-<SUBSECTION Standard>
-BSSize
-BSSizeClass
-BSSizePrivate
-BS_IS_SIZE
-BS_IS_SIZE_CLASS
-BS_SIZE
-BS_SIZE_CLASS
-BS_SIZE_GET_CLASS
-BS_TYPE_SIZE
-bs_size_get_type
 </SECTION>

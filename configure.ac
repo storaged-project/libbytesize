@@ -25,17 +25,7 @@ AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
                  docs/Makefile docs/libbytesize-docs.xml \
                  tests/Makefile])
 
-LIBBYTESIZE_PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.42.2])
-LIBBYTESIZE_PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.42.2])
-
-m4_ifdef([GOBJECT_INTROSPECTION_CHECK],
-[GOBJECT_INTROSPECTION_CHECK([1.3.0])],
-[found_introspection=no
-AM_CONDITIONAL(HAVE_INTROSPECTION, false)])
-
-# Complain if introspection was not enabled
-AS_IF([test "x$found_introspection" = xyes], [:],
-      [LIBBYTESIZE_SOFT_FAILURE([GObject introspection must be enabled])])
+LIBBYTESIZE_PKG_CHECK_MODULES([PCRE], [libpcre >= 8.38])
 
 AC_PATH_PROG([PYTHON3], [python3], [no])
 AS_IF([test "x$PYTHON3" == "xno"], [LIBBYTESIZE_SOFT_FAILURE([\
@@ -49,7 +39,7 @@ AC_SUBST(py3execdir, $PYTHON3_EXECDIR)
 
 AC_CHECK_LIB(gmp, __gmpz_init)
 
-AC_CHECK_HEADERS([langinfo.h gmp.h mpfr.h],
+AC_CHECK_HEADERS([langinfo.h gmp.h mpfr.h stdint.h stdbool.h stdarg.h string.h stdio.h ctype.h],
                  [],
                  [LIBBYTESIZE_SOFT_FAILURE([Header file $ac_header not found.])],
                  [])
