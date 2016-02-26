@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import unittest
@@ -6,20 +6,7 @@ import copy
 
 from decimal import Decimal
 
-# make sure local overrides are loaded not the system-installed version
-import gi.overrides
-if not gi.overrides.__path__[0].endswith("src/python/gi/overrides"):
-    local_overrides = None
-    # our overrides don't take precedence, let's fix it
-    for i, path in enumerate(gi.overrides.__path__):
-        if path.endswith("src/python/gi/overrides"):
-            local_overrides = path
-
-    gi.overrides.__path__.remove(local_overrides)
-    gi.overrides.__path__.insert(0, local_overrides)
-
-from gi.repository.ByteSize import Size
-
+from bytesize import Size
 
 class SizeTestCase(unittest.TestCase):
 

@@ -20,7 +20,7 @@ LT_INIT
 
 AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
                  po/Makefile.in \
-                 src/python/Makefile src/python/gi/Makefile src/python/gi/overrides/Makefile \
+                 src/python/Makefile \
                  dist/Makefile dist/libbytesize.spec \
                  docs/Makefile docs/libbytesize-docs.xml \
                  tests/Makefile])
