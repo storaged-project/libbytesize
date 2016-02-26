@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Red Hat, Inc.
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the libbytesize package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: libbytesize 0.1\n"
+"Project-Id-Version: libbytesize 0.3\n"
 "Report-Msgid-Bugs-To: vpodzime@redhat.com\n"
-"POT-Creation-Date: 2015-10-19 12:32+0200\n"
+"POT-Creation-Date: 2016-02-26 16:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,70 +17,70 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/bs_size.c:38 src/bs_size.c:41
+#: src/bs_size.c:41 src/bs_size.c:44
 msgid "B"
 msgstr ""
 
-#: src/bs_size.c:38
+#: src/bs_size.c:41
 msgid "KiB"
 msgstr ""
 
-#: src/bs_size.c:38
+#: src/bs_size.c:41
 msgid "MiB"
 msgstr ""
 
-#: src/bs_size.c:38
+#: src/bs_size.c:41
 msgid "GiB"
 msgstr ""
 
-#: src/bs_size.c:38
+#: src/bs_size.c:41
 msgid "TiB"
 msgstr ""
 
-#: src/bs_size.c:39
+#: src/bs_size.c:42
 msgid "PiB"
 msgstr ""
 
-#: src/bs_size.c:39
+#: src/bs_size.c:42
 msgid "EiB"
 msgstr ""
 
-#: src/bs_size.c:39
+#: src/bs_size.c:42
 msgid "ZiB"
 msgstr ""
 
-#: src/bs_size.c:39
+#: src/bs_size.c:42
 msgid "YiB"
 msgstr ""
 
-#: src/bs_size.c:41
+#: src/bs_size.c:44
 msgid "KB"
 msgstr ""
 
-#: src/bs_size.c:41
+#: src/bs_size.c:44
 msgid "MB"
 msgstr ""
 
-#: src/bs_size.c:41
+#: src/bs_size.c:44
 msgid "GB"
 msgstr ""
 
-#: src/bs_size.c:41
+#: src/bs_size.c:44
 msgid "TB"
 msgstr ""
 
-#: src/bs_size.c:42
+#: src/bs_size.c:45
 msgid "PB"
 msgstr ""
 
-#: src/bs_size.c:42
+#: src/bs_size.c:45
 msgid "EB"
 msgstr ""
 
-#: src/bs_size.c:42
+#: src/bs_size.c:45
 msgid "ZB"
 msgstr ""
 
-#: src/bs_size.c:42
+#: src/bs_size.c:45
 msgid "YB"
 msgstr ""
