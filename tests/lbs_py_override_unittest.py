@@ -244,6 +244,14 @@ class SizeTestCase(unittest.TestCase):
         self.assertIsNot(size1, size2)
         self.assertEqual(size1, size2)
 
+    def testHashable(self):
+        size = Size("1 KiB")
+        hs = hash(size)
+        self.assertIsNotNone(hs)
+
+        size_set = set((Size("1 KiB"), Size("1 KiB"), Size("1 KiB"), Size("2 KiB"), Size(0)))
+        self.assertEqual(len(size_set), 3)
+
 #endclass
 
 # script entry point
