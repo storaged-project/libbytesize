@@ -1,8 +1,11 @@
-#include <glib.h>
-#include <glib-object.h>
 #include <gmp.h>
 #include <mpfr.h>
 #include <langinfo.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <pcre.h>
 
 #include "bs_size.h"
 #include "gettext.h"
@@ -11,15 +14,15 @@
 #define N_(String) String
 
 /**
- * SECTION: size
+ * SECTION: bs_size
  * @title: BSSize
  * @short_description: a class facilitating work with sizes in bytes
  * @include: bs_size.h
  *
- * A #BSSize is class that facilitates work with sizes in bytes by providing
+ * #BSSize is a type that facilitates work with sizes in bytes by providing
  * functions/methods that are required for parsing users input when entering
  * size, showing size in nice human-readable format, storing sizes bigger than
- * %G_MAXUINT64 and doing calculations with sizes without loss of
+ * %UINT64_MAX and doing calculations with sizes without loss of
  * precision/information. The class is able to hold negative sizes and do
  * operations on/with them, but some of the (division and multiplication)
  * operations simply ignore the signs of the operands (check the documentation).
@@ -35,15 +38,15 @@
 /***************
  * STATIC DATA *
  ***************/
-static gchar const * const b_units[BS_BUNIT_UNDEF] = {N_("B"), N_("KiB"), N_("MiB"), N_("GiB"), N_("TiB"),
-                                                      N_("PiB"), N_("EiB"), N_("ZiB"), N_("YiB")};
+static char const * const b_units[BS_BUNIT_UNDEF] = {N_("B"), N_("KiB"), N_("MiB"), N_("GiB"), N_("TiB"),
+                                                     N_("PiB"), N_("EiB"), N_("ZiB"), N_("YiB")};
 
-static gchar const * const d_units[BS_DUNIT_UNDEF] = {N_("B"), N_("KB"), N_("MB"), N_("GB"), N_("TB"),
-                                                      N_("PB"), N_("EB"), N_("ZB"), N_("YB")};
+static char const * const d_units[BS_DUNIT_UNDEF] = {N_("B"), N_("KB"), N_("MB"), N_("GB"), N_("TB"),
+                                                     N_("PB"), N_("EB"), N_("ZB"), N_("YB")};
 
 
 /****************************
- * CLASS/OBJECT DEFINITIONS *
+ * STRUCT DEFINITIONS       *
  ****************************/
 /**
  * BSSize:
@@ -52,90 +55,28 @@ static gchar const * const d_units[BS_DUNIT_UNDEF] = {N_("B"), N_("KB"), N_("MB"
  * accessed.
  */
 struct _BSSize {
-    GObject parent;
-    BSSizePrivate *priv;
-};
-
-/**
- * BSSizeClass:
- * @parent_class: parent class of the #BSSizeClass
- */
-struct _BSSizeClass {
-    GObjectClass parent_class;
-};
-
-/**
- * BSSizePrivate:
- *
- * The BSSizePrivate struct contains only private fields and should not be directly
- * accessed.
- */
-struct _BSSizePrivate {
     mpz_t bytes;
 };
 
-GQuark bs_size_error_quark (void)
-{
-    return g_quark_from_static_string ("g-bs-size-error-quark");
-}
 
-G_DEFINE_TYPE (BSSize, bs_size, G_TYPE_OBJECT)
-
-static void bs_size_dispose(GObject *size);
-
-static void bs_size_class_init (BSSizeClass *klass) {
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-
-    object_class->dispose = bs_size_dispose;
-
-    g_type_class_add_private(object_class, sizeof(BSSizePrivate));
-}
-
-static void bs_size_init (BSSize *self) {
-    self->priv = G_TYPE_INSTANCE_GET_PRIVATE(self,
-                                             BS_TYPE_SIZE,
-                                             BSSizePrivate);
+/********************
+ * HELPER FUNCTIONS *
+ ********************/
+static void bs_size_init (BSSize size) {
     /* let's start with 64 bits of space */
-    mpz_init2 (self->priv->bytes, (mp_bitcnt_t) 64);
+    mpz_init2 (size->bytes, (mp_bitcnt_t) 64);
 }
 
-static void bs_size_dispose (GObject *object) {
-    BSSize *self = BS_SIZE (object);
-    mpz_clear (self->priv->bytes);
-
-    G_OBJECT_CLASS(bs_size_parent_class)->dispose (object);
-}
-
-
-/****************
- * CONSTRUCTORS *
- ****************/
-/**
- * bs_size_new: (constructor)
- *
- * Creates a new #BSSize instance initialized to 0.
- *
- * Returns: a new #BSSize initialized to 0.
- */
-BSSize* bs_size_new (void) {
-    return BS_SIZE (g_object_new (BS_TYPE_SIZE, NULL));
-}
-
-/**
- * bs_size_new_from_bytes: (constructor)
- * @bytes: number of bytes
- * @sgn: sign of the size -- if being -1, the size is initialized to
- *       -@bytes, other values are ignored
- *
- * Creates a new #BSSize instance.
- *
- * Returns: a new #BSSize
- */
-BSSize* bs_size_new_from_bytes (guint64 bytes, gint sgn) {
-    BSSize *ret = bs_size_new ();
-    mpz_set_ui (ret->priv->bytes, bytes);
-    if (sgn == -1)
-        mpz_neg (ret->priv->bytes, ret->priv->bytes);
+static char *strdup_printf (const char *fmt, ...) {
+    int num = 0;
+    char *ret = NULL;
+    va_list ap;
+    va_start (ap, fmt);
+    num = vasprintf (&ret, fmt, ap);
+    va_end (ap);
+    if (num <= 0)
+        /* make sure we return NULL on error */
+        ret = NULL;
     return ret;
 }
 
@@ -144,18 +85,18 @@ BSSize* bs_size_new_from_bytes (guint64 bytes, gint sgn) {
  *
  * Replaces all appereances of @char in @str with @string.
  */
-static gchar *replace_char_with_str (const gchar *str, gchar orig, const gchar *new) {
-    guint64 offset = 0;
-    guint64 i = 0;
-    guint64 j = 0;
-    gchar *ret = NULL;
+static char *replace_char_with_str (const char *str, char orig, const char *new) {
+    uint64_t offset = 0;
+    uint64_t i = 0;
+    uint64_t j = 0;
+    char *ret = NULL;
 
     if (!str)
         return NULL;
 
     /* allocate space for the string [strlen(str)] with the char replaced by the
        string [strlen(new) - 1] and a \0 byte at the end [ + 1] */
-    ret = g_new0 (gchar, strlen(str) + strlen(new) - 1 + 1);
+    ret = malloc (sizeof(char) * strlen(str) + strlen(new) - 1 + 1);
 
     for (i=0; str[i]; i++) {
         if (str[i] == orig)
@@ -173,54 +114,150 @@ static gchar *replace_char_with_str (const gchar *str, gchar orig, const gchar *
     return ret;
 }
 
-static gboolean multiply_size_by_unit (mpfr_t size, gchar *unit_str) {
+/**
+ * strstrip: (skip)
+ *
+ * Strips leading and trailing whitespace from the string (**IN-PLACE**)
+ */
+static void strstrip(char *str) {
+    int i = 0;
+    int begin = 0;
+    int end = strlen(str) - 1;
+
+    while (isspace(str[begin]))
+        begin++;
+    while ((end >= begin) && isspace(str[end]))
+        end--;
+
+    for (i=begin; i <= end; i++)
+        str[i - begin] = str[i];
+
+    str[i-begin] = '\0';
+}
+
+static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
     BSBunit bunit = BS_BUNIT_UNDEF;
     BSDunit dunit = BS_DUNIT_UNDEF;
-    guint64 pwr = 0;
+    uint64_t pwr = 0;
     mpfr_t dec_mul;
-    gsize unit_str_len = 0;
+    size_t unit_str_len = 0;
 
     unit_str_len = strlen (unit_str);
 
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
-        if (g_ascii_strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
-            pwr = (guint64) bunit - BS_BUNIT_B;
+        if (strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
+            pwr = (uint64_t) bunit - BS_BUNIT_B;
             mpfr_mul_2exp (size, size, 10 * pwr, MPFR_RNDN);
-            return TRUE;
+            return true;
         }
 
     mpfr_init2 (dec_mul, BS_FLOAT_PREC_BITS);
     mpfr_set_ui (dec_mul, 1000, MPFR_RNDN);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
-        if (g_ascii_strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
-            pwr = (guint64) (dunit - BS_DUNIT_B);
+        if (strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
+            pwr = (uint64_t) (dunit - BS_DUNIT_B);
             mpfr_pow_ui (dec_mul, dec_mul, pwr, MPFR_RNDN);
             mpfr_mul (size, size, dec_mul, MPFR_RNDN);
             mpfr_clear (dec_mul);
-            return TRUE;
+            return true;
         }
 
     /* not found among the binary and decimal units, let's try their translated
        verions */
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
-        if (g_ascii_strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
-            pwr = (guint64) bunit - BS_BUNIT_B;
+        if (strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
+            pwr = (uint64_t) bunit - BS_BUNIT_B;
             mpfr_mul_2exp (size, size, 10 * pwr, MPFR_RNDN);
-            return TRUE;
+            return true;
         }
 
     mpfr_init2 (dec_mul, BS_FLOAT_PREC_BITS);
     mpfr_set_ui (dec_mul, 1000, MPFR_RNDN);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
-        if (g_ascii_strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
-            pwr = (guint64) (dunit - BS_DUNIT_B);
+        if (strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
+            pwr = (uint64_t) (dunit - BS_DUNIT_B);
             mpfr_pow_ui (dec_mul, dec_mul, pwr, MPFR_RNDN);
             mpfr_mul (size, size, dec_mul, MPFR_RNDN);
             mpfr_clear (dec_mul);
-            return TRUE;
+            return true;
         }
 
-    return FALSE;
+    return false;
+}
+
+/**
+ * set_error: (skip)
+ *
+ * Sets @error to @code and @msg (if not %NULL). **TAKES OVER @msg.**
+ */
+static void set_error (BSError **error, BSErrorCode code, char *msg) {
+    *error = (BSError *) malloc (sizeof(BSError));
+    (*error)->code = code;
+    (*error)->msg = msg;
+    return;
+}
+
+
+/***************
+ * DESTRUCTORS *
+ * *************/
+/**
+ * bs_size_free:
+ *
+ * Clears @size and frees the allocated resources.
+ */
+void bs_size_free (BSSize size) {
+    mpz_clear (size->bytes);
+    free (size);
+}
+
+/**
+ * bs_clear_error:
+ *
+ * Clears @error and frees the allocated resources.
+ */
+void bs_clear_error (BSError **error) {
+    if (error && *error) {
+        free ((*error)->msg);
+        free (*error);
+        *error = NULL;
+    }
+    return;
+}
+
+
+/****************
+ * CONSTRUCTORS *
+ ****************/
+/**
+ * bs_size_new: (constructor)
+ *
+ * Creates a new #BSSize instance initialized to 0.
+ *
+ * Returns: a new #BSSize initialized to 0.
+ */
+BSSize bs_size_new (void) {
+    BSSize ret = (BSSize) malloc (sizeof(struct _BSSize));
+    bs_size_init (ret);
+    return ret;
+}
+
+/**
+ * bs_size_new_from_bytes: (constructor)
+ * @bytes: number of bytes
+ * @sgn: sign of the size -- if being -1, the size is initialized to
+ *       -@bytes, other values are ignored
+ *
+ * Creates a new #BSSize instance.
+ *
+ * Returns: a new #BSSize
+ */
+BSSize bs_size_new_from_bytes (uint64_t bytes, int sgn) {
+    BSSize ret = bs_size_new ();
+    mpz_set_ui (ret->bytes, bytes);
+    if (sgn == -1)
+        mpz_neg (ret->bytes, ret->bytes);
+    return ret;
 }
 
 
@@ -233,63 +270,60 @@ static gboolean multiply_size_by_unit (mpfr_t size, gchar *unit_str) {
  *
  * Returns: a new #BSSize
  */
-BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
-    gchar const * const pattern = "^\\s*         # white space \n" \
+BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
+    char const * const pattern = "^\\s*         # white space \n" \
                                   "(?P<numeric>  # the numeric part consists of three parts, below \n" \
                                   " (-|\\+)?     # optional sign character \n" \
                                   " (?P<base>([0-9\\.%s]+))       # base \n" \
                                   " (?P<exp>(e|E)(-|\\+)[0-9]+)?) # exponent \n" \
                                   "\\s*               # white space \n" \
                                   "(?P<rest>[^\\s]*)\\s*$ # unit specification";
-    gchar *real_pattern = NULL;
-    GRegex *regex = NULL;
-    gboolean success = FALSE;
-    GMatchInfo *match_info = NULL;
-    gchar *num_str = NULL;
-    const gchar *radix_char = NULL;
-    gchar *loc_size_str = NULL;
+    char *real_pattern = NULL;
+    pcre *regex = NULL;
+    const char *error_msg = NULL;
+    int erroffset;
+    int str_len = 0;
+    int ovector[30];            /* should be a multiple of 3 */
+    int str_count = 0;
+    char *num_str = NULL;
+    const char *radix_char = NULL;
+    char *loc_size_str = NULL;
     mpf_t parsed_size;
     mpfr_t size;
-    gint status = 0;
-    gchar *unit_str = NULL;
-    BSSize *ret = NULL;
+    int status = 0;
+    char *unit_str = NULL;
+    BSSize ret = NULL;
 
     radix_char = nl_langinfo (RADIXCHAR);
-    if (g_strcmp0 (radix_char, ".") != 0)
-        real_pattern = g_strdup_printf (pattern, radix_char);
+    if (strncmp (radix_char, ".", 1) != 0)
+        real_pattern = strdup_printf (pattern, radix_char);
     else
-        real_pattern = g_strdup_printf (pattern, "");
+        real_pattern = strdup_printf (pattern, "");
 
-    regex = g_regex_new (real_pattern, G_REGEX_EXTENDED, 0, error);
+    regex = pcre_compile (real_pattern, PCRE_EXTENDED, &error_msg, &erroffset, NULL);
+    free (real_pattern);
     if (!regex) {
-        g_free (real_pattern);
-        g_free (loc_size_str);
-        /* error is already populated */
+        /* TODO: populate error */
         return NULL;
     }
 
     loc_size_str = replace_char_with_str (size_str, '.', radix_char);
+    str_len = strlen (loc_size_str);
 
-    success = g_regex_match (regex, loc_size_str, 0, &match_info);
-    if (!success) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
-                     "Failed to parse size spec: %s", size_str);
-        g_regex_unref (regex);
-        g_match_info_free (match_info);
-        g_free (real_pattern);
-        g_free (loc_size_str);
+    str_count = pcre_exec (regex, NULL, loc_size_str, str_len,
+                           0, 0, ovector, 30);
+    if (str_count < 0) {
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
+        pcre_free (regex);
+        free (loc_size_str);
         return NULL;
     }
-    g_regex_unref (regex);
-    g_free (real_pattern);
 
-    num_str = g_match_info_fetch_named (match_info, "numeric");
-    if (!num_str) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
-                     "Failed to parse size spec: %s", size_str);
-        g_regex_unref (regex);
-        g_match_info_free (match_info);
-        g_free (loc_size_str);
+    status = pcre_get_named_substring (regex, loc_size_str, ovector, str_count, "numeric", (const char **)&num_str);
+    if (status < 0) {
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
+        pcre_free (regex);
+        free (loc_size_str);
         return NULL;
     }
 
@@ -297,11 +331,11 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
        much better than MPFR */
     mpf_init2 (parsed_size, BS_FLOAT_PREC_BITS);
     status = mpf_set_str (parsed_size, *num_str == '+' ? num_str+1 : num_str, 10);
+    free (num_str);
     if (status != 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
-                     "Failed to parse size spec: %s", size_str);
-        g_match_info_free (match_info);
-        g_free (loc_size_str);
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
+        pcre_free (regex);
+        free (loc_size_str);
         mpf_clear (parsed_size);
         return NULL;
     }
@@ -310,24 +344,25 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
     mpfr_set_f (size, parsed_size, MPFR_RNDN);
     mpf_clear (parsed_size);
 
-    unit_str = g_match_info_fetch_named (match_info, "rest");
-    if (unit_str && g_strcmp0 (unit_str, "") != 0) {
-        g_strstrip (unit_str);
+    status = pcre_get_named_substring (regex, loc_size_str, ovector, str_count, "rest", (const char **)&unit_str);
+    if ((status >= 0) && strncmp (unit_str, "", 1) != 0) {
+        strstrip (unit_str);
         if (!multiply_size_by_unit (size, unit_str)) {
-            g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
-                         "Failed to recognize unit from the spec: %s", size_str);
-            g_match_info_free (match_info);
-            g_free (loc_size_str);
+            set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to recognize unit from the spec: %s", size_str));
+            free (unit_str);
+            pcre_free (regex);
+            free (loc_size_str);
             mpfr_clear (size);
             return NULL;
         }
     }
+    free (unit_str);
+    pcre_free (regex);
 
     ret = bs_size_new ();
-    mpfr_get_z (ret->priv->bytes, size, MPFR_RNDZ);
+    mpfr_get_z (ret->bytes, size, MPFR_RNDZ);
 
-    g_free (loc_size_str);
-    g_match_info_free (match_info);
+    free (loc_size_str);
     mpfr_clear (size);
 
     return ret;
@@ -341,11 +376,11 @@ BSSize* bs_size_new_from_str (const gchar *size_str, GError **error) {
  *
  * Returns: (transfer full): a new #BSSize instance which is copy of @size.
  */
-BSSize* bs_size_new_from_size (const BSSize *size) {
-    BSSize *ret = NULL;
+BSSize bs_size_new_from_size (const BSSize size) {
+    BSSize ret = NULL;
 
     ret = bs_size_new ();
-    mpz_set (ret->priv->bytes, size->priv->bytes);
+    mpz_set (ret->bytes, size->bytes);
 
     return ret;
 }
@@ -363,15 +398,14 @@ BSSize* bs_size_new_from_size (const BSSize *size) {
  *
  * Returns: the @size in a number of bytes
  */
-guint64 bs_size_get_bytes (const BSSize *size, gint *sgn, GError **error) {
-    if (mpz_cmp_ui (size->priv->bytes, G_MAXUINT64) > 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_OVER,
-                     "The size is too big, cannot be returned as a 64bit number of bytes");
+uint64_t bs_size_get_bytes (const BSSize size, int *sgn, BSError **error) {
+    if (mpz_cmp_ui (size->bytes, UINT64_MAX) > 0) {
+        set_error (error, BS_ERROR_OVER, strdup("The size is too big, cannot be returned as a 64bit number of bytes"));
         return 0;
     }
     if (sgn)
-        *sgn = mpz_sgn (size->priv->bytes);
-    return (guint64) mpz_get_ui (size->priv->bytes);
+        *sgn = mpz_sgn (size->bytes);
+    return (uint64_t) mpz_get_ui (size->bytes);
 }
 
 /**
@@ -381,8 +415,8 @@ guint64 bs_size_get_bytes (const BSSize *size, gint *sgn, GError **error) {
  *
  * Returns: -1, 0 or 1 if @size is negative, zero or positive, respectively
  */
-gint bs_size_sgn (const BSSize *size) {
-    return mpz_sgn (size->priv->bytes);
+int bs_size_sgn (const BSSize size) {
+    return mpz_sgn (size->bytes);
 }
 
 /**
@@ -393,8 +427,8 @@ gint bs_size_sgn (const BSSize *size) {
  *
  * Returns: (transfer full): the string representing the @size as a number of bytes.
  */
-gchar* bs_size_get_bytes_str (const BSSize *size) {
-    return mpz_get_str (NULL, 10, size->priv->bytes);
+char* bs_size_get_bytes_str (const BSSize size) {
+    return mpz_get_str (NULL, 10, size->bytes);
 }
 
 /**
@@ -407,18 +441,18 @@ gchar* bs_size_get_bytes_str (const BSSize *size) {
  * Returns: (transfer full): a string representing the floating-point number
  *                           that equals to @size converted to @unit
  */
-gchar* bs_size_convert_to (const BSSize *size, BSUnit unit, GError **error) {
+char* bs_size_convert_to (const BSSize size, BSUnit unit, BSError **error) {
     BSBunit b_unit = BS_BUNIT_B;
     BSDunit d_unit = BS_DUNIT_B;
     mpf_t divisor;
     mpf_t result;
-    gboolean found_match = FALSE;
-    gchar *ret = NULL;
+    bool found_match = false;
+    char *ret = NULL;
 
     mpf_init2 (divisor, BS_FLOAT_PREC_BITS);
     for (b_unit = BS_BUNIT_B; !found_match && b_unit != BS_BUNIT_UNDEF; b_unit++) {
         if (unit.bunit == b_unit) {
-            found_match = TRUE;
+            found_match = true;
             mpf_set_ui (divisor, 1);
             mpf_mul_2exp (divisor, divisor, 10 * (b_unit - BS_BUNIT_B));
         }
@@ -426,21 +460,20 @@ gchar* bs_size_convert_to (const BSSize *size, BSUnit unit, GError **error) {
 
     for (d_unit = BS_DUNIT_B; !found_match && d_unit != BS_DUNIT_UNDEF; d_unit++) {
         if (unit.dunit == d_unit) {
-            found_match = TRUE;
+            found_match = true;
             mpf_set_ui (divisor, 1000);
             mpf_pow_ui (divisor, divisor, (d_unit - BS_DUNIT_B));
         }
     }
 
     if (!found_match) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
-                     "Invalid unit spec given");
+        set_error (error, BS_ERROR_INVALID_SPEC, "Invalid unit spec given");
         mpf_clear (divisor);
         return NULL;
     }
 
     mpf_init2 (result, BS_FLOAT_PREC_BITS);
-    mpf_set_z (result, size->priv->bytes);
+    mpf_set_z (result, size->bytes);
 
     mpf_div (result, result, divisor);
 
@@ -462,18 +495,18 @@ gchar* bs_size_convert_to (const BSSize *size, BSUnit unit, GError **error) {
  *                           @size according to the restrictions given by the
  *                           other parameters
  */
-gchar* bs_size_human_readable (const BSSize *size, BSBunit min_unit, gint max_places, gboolean xlate) {
+char* bs_size_human_readable (const BSSize size, BSBunit min_unit, int max_places, bool xlate) {
     mpf_t cur_val;
-    gchar *num_str = NULL;
-    gchar *ret = NULL;
-    gint len = 0;
-    gchar *zero = NULL;
-    gchar *radix_char = NULL;
-    gint sign = 0;
-    gboolean at_radix = FALSE;
+    char *num_str = NULL;
+    char *ret = NULL;
+    int len = 0;
+    char *zero = NULL;
+    char *radix_char = NULL;
+    int sign = 0;
+    bool at_radix = false;
 
     mpf_init2 (cur_val, BS_FLOAT_PREC_BITS);
-    mpf_set_z (cur_val, size->priv->bytes);
+    mpf_set_z (cur_val, size->bytes);
 
     if (min_unit == BS_BUNIT_UNDEF)
         min_unit = BS_BUNIT_B;
@@ -507,8 +540,8 @@ gchar* bs_size_human_readable (const BSSize *size, BSBunit min_unit, gint max_pl
         zero[1] = '\0';
     }
 
-    ret = g_strdup_printf ("%s %s", num_str, xlate ? _(b_units[min_unit - BS_BUNIT_B]) : b_units[min_unit - BS_BUNIT_B]);
-    g_free (num_str);
+    ret = strdup_printf ("%s %s", num_str, xlate ? _(b_units[min_unit - BS_BUNIT_B]) : b_units[min_unit - BS_BUNIT_B]);
+    free (num_str);
 
     return ret;
 }
@@ -524,9 +557,9 @@ gchar* bs_size_human_readable (const BSSize *size, BSBunit min_unit, gint max_pl
  *
  * Returns: (transfer full): a new instance of #BSSize which is a sum of @size1 and @size2
  */
-BSSize* bs_size_add (const BSSize *size1, const BSSize *size2) {
-    BSSize *ret = bs_size_new ();
-    mpz_add (ret->priv->bytes, size1->priv->bytes, size2->priv->bytes);
+BSSize bs_size_add (const BSSize size1, const BSSize size2) {
+    BSSize ret = bs_size_new ();
+    mpz_add (ret->bytes, size1->bytes, size2->bytes);
 
     return ret;
 }
@@ -541,8 +574,8 @@ BSSize* bs_size_add (const BSSize *size1, const BSSize *size2) {
  *
  * Returns: (transfer none): @size1 modified by adding @size2 to it
  */
-BSSize* bs_size_grow (BSSize *size1, const BSSize *size2) {
-    mpz_add (size1->priv->bytes, size1->priv->bytes, size2->priv->bytes);
+BSSize bs_size_grow (BSSize size1, const BSSize size2) {
+    mpz_add (size1->bytes, size1->bytes, size2->bytes);
 
     return size1;
 }
@@ -555,9 +588,9 @@ BSSize* bs_size_grow (BSSize *size1, const BSSize *size2) {
  *
  * Returns: (transfer full): a new instance of #BSSize which is a sum of @size and @bytes
  */
-BSSize* bs_size_add_bytes (const BSSize *size, guint64 bytes) {
-    BSSize *ret = bs_size_new ();
-    mpz_add_ui (ret->priv->bytes, size->priv->bytes, bytes);
+BSSize bs_size_add_bytes (const BSSize size, uint64_t bytes) {
+    BSSize ret = bs_size_new ();
+    mpz_add_ui (ret->bytes, size->bytes, bytes);
 
     return ret;
 }
@@ -571,8 +604,8 @@ BSSize* bs_size_add_bytes (const BSSize *size, guint64 bytes) {
  *
  * Returns: (transfer none): @size modified by adding @bytes to it
  */
-BSSize* bs_size_grow_bytes (BSSize *size, const guint64 bytes) {
-    mpz_add_ui (size->priv->bytes, size->priv->bytes, bytes);
+BSSize bs_size_grow_bytes (BSSize size, const uint64_t bytes) {
+    mpz_add_ui (size->bytes, size->bytes, bytes);
 
     return size;
 }
@@ -584,9 +617,9 @@ BSSize* bs_size_grow_bytes (BSSize *size, const guint64 bytes) {
  *
  * Returns: (transfer full): a new instance of #BSSize which is equals to @size1 - @size2
  */
-BSSize* bs_size_sub (const BSSize *size1, const BSSize *size2) {
-    BSSize *ret = bs_size_new ();
-    mpz_sub (ret->priv->bytes, size1->priv->bytes, size2->priv->bytes);
+BSSize bs_size_sub (const BSSize size1, const BSSize size2) {
+    BSSize ret = bs_size_new ();
+    mpz_sub (ret->bytes, size1->bytes, size2->bytes);
 
     return ret;
 }
@@ -601,8 +634,8 @@ BSSize* bs_size_sub (const BSSize *size1, const BSSize *size2) {
  *
  * Returns: (transfer none): @size1 modified by subtracting @size2 from it
  */
-BSSize* bs_size_shrink (BSSize *size1, const BSSize *size2) {
-    mpz_sub (size1->priv->bytes, size1->priv->bytes, size2->priv->bytes);
+BSSize bs_size_shrink (BSSize size1, const BSSize size2) {
+    mpz_sub (size1->bytes, size1->bytes, size2->bytes);
 
     return size1;
 }
@@ -615,9 +648,9 @@ BSSize* bs_size_shrink (BSSize *size1, const BSSize *size2) {
  *
  * Returns: (transfer full): a new instance of #BSSize which is equals to @size - @bytes
  */
-BSSize* bs_size_sub_bytes (const BSSize *size, guint64 bytes) {
-    BSSize *ret = bs_size_new ();
-    mpz_sub_ui (ret->priv->bytes, size->priv->bytes, bytes);
+BSSize bs_size_sub_bytes (const BSSize size, uint64_t bytes) {
+    BSSize ret = bs_size_new ();
+    mpz_sub_ui (ret->bytes, size->bytes, bytes);
 
     return ret;
 }
@@ -633,8 +666,8 @@ BSSize* bs_size_sub_bytes (const BSSize *size, guint64 bytes) {
  *
  * Returns: (transfer none): @size modified by subtracting @bytes from it
  */
-BSSize* bs_size_shrink_bytes (BSSize *size, guint64 bytes) {
-    mpz_sub_ui (size->priv->bytes, size->priv->bytes, bytes);
+BSSize bs_size_shrink_bytes (BSSize size, uint64_t bytes) {
+    mpz_sub_ui (size->bytes, size->bytes, bytes);
 
     return size;
 }
@@ -646,9 +679,9 @@ BSSize* bs_size_shrink_bytes (BSSize *size, guint64 bytes) {
  *
  * Returns: (transfer full): a new instance of #BSSize which is equals to @size * @times
  */
-BSSize* bs_size_mul_int (const BSSize *size, guint64 times) {
-    BSSize *ret = bs_size_new ();
-    mpz_mul_ui (ret->priv->bytes, size->priv->bytes, times);
+BSSize bs_size_mul_int (const BSSize size, uint64_t times) {
+    BSSize ret = bs_size_new ();
+    mpz_mul_ui (ret->bytes, size->bytes, times);
 
     return ret;
 }
@@ -662,8 +695,8 @@ BSSize* bs_size_mul_int (const BSSize *size, guint64 times) {
  *
  * Returns: (transfer none): @size modified by growing it @times times
  */
-BSSize* bs_size_grow_mul_int (BSSize *size, guint64 times) {
-    mpz_mul_ui (size->priv->bytes, size->priv->bytes, times);
+BSSize bs_size_grow_mul_int (BSSize size, uint64_t times) {
+    mpz_mul_ui (size->bytes, size->bytes, times);
 
     return size;
 }
@@ -677,19 +710,18 @@ BSSize* bs_size_grow_mul_int (BSSize *size, guint64 times) {
  *                           @size * @times_str
  *
  */
-BSSize* bs_size_mul_float_str (const BSSize *size, const gchar *float_str, GError **error) {
+BSSize bs_size_mul_float_str (const BSSize size, const char *float_str, BSError **error) {
     mpf_t op1, op2;
-    gint status = 0;
-    BSSize *ret = NULL;
+    int status = 0;
+    BSSize ret = NULL;
 
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
     mpf_init2 (op2, BS_FLOAT_PREC_BITS);
 
-    mpf_set_z (op1, size->priv->bytes);
+    mpf_set_z (op1, size->bytes);
     status = mpf_set_str (op2, float_str, 10);
     if (status != 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
-                     "'%s' is not a valid floating point number string", float_str);
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("'%s' is not a valid floating point number string", float_str));
         mpf_clears (op1, op2, NULL);
         return NULL;
     }
@@ -697,7 +729,7 @@ BSSize* bs_size_mul_float_str (const BSSize *size, const gchar *float_str, GErro
     mpf_mul (op1, op1, op2);
 
     ret = bs_size_new ();
-    mpz_set_f (ret->priv->bytes, op1);
+    mpz_set_f (ret->bytes, op1);
     mpf_clears (op1, op2, NULL);
 
     return ret;
@@ -713,25 +745,24 @@ BSSize* bs_size_mul_float_str (const BSSize *size, const gchar *float_str, GErro
  *
  * Returns: (transfer none): @size modified by growing it @float_str times.
  */
-BSSize* bs_size_grow_mul_float_str (BSSize *size, const gchar *float_str, GError **error) {
+BSSize bs_size_grow_mul_float_str (BSSize size, const char *float_str, BSError **error) {
     mpf_t op1, op2;
-    gint status = 0;
+    int status = 0;
 
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
     mpf_init2 (op2, BS_FLOAT_PREC_BITS);
 
-    mpf_set_z (op1, size->priv->bytes);
+    mpf_set_z (op1, size->bytes);
     status = mpf_set_str (op2, float_str, 10);
     if (status != 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_INVALID_SPEC,
-                     "'%s' is not a valid floating point number string", float_str);
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("'%s' is not a valid floating point number string", float_str));
         mpf_clears (op1, op2, NULL);
         return NULL;
     }
 
     mpf_mul (op1, op1, op2);
 
-    mpz_set_f (size->priv->bytes, op1);
+    mpz_set_f (size->bytes, op1);
     mpf_clears (op1, op2, NULL);
 
     return size;
@@ -747,28 +778,26 @@ BSSize* bs_size_grow_mul_float_str (BSSize *size, const gchar *float_str, GError
  * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
  *          (IOW, @size1 / @size2 using integer division)
  */
-guint64 bs_size_div (const BSSize *size1, const BSSize *size2, gint *sgn, GError **error) {
+uint64_t bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError **error) {
     mpz_t result;
-    guint64 ret = 0;
+    uint64_t ret = 0;
 
-    if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
-                     "Division by zero");
+    if (mpz_cmp_ui (size2->bytes, 0) == 0) {
+        set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
         return 0;
     }
 
     if (sgn)
-        *sgn = mpz_sgn (size1->priv->bytes) * mpz_sgn (size2->priv->bytes);
+        *sgn = mpz_sgn (size1->bytes) * mpz_sgn (size2->bytes);
     mpz_init (result);
-    mpz_tdiv_q (result, size1->priv->bytes, size2->priv->bytes);
+    mpz_tdiv_q (result, size1->bytes, size2->bytes);
 
-    if (mpz_cmp_ui (result, G_MAXUINT64) > 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_OVER,
-                     "The size is too big, cannot be returned as a 64bit number of bytes");
+    if (mpz_cmp_ui (result, UINT64_MAX) > 0) {
+        set_error (error, BS_ERROR_OVER, strdup_printf ("The size is too big, cannot be returned as a 64bit number of bytes"));
         mpz_clear (result);
         return 0;
     }
-    ret = (guint64) mpz_get_ui (result);
+    ret = (uint64_t) mpz_get_ui (result);
 
     mpz_clear (result);
     return ret;
@@ -783,17 +812,16 @@ guint64 bs_size_div (const BSSize *size1, const BSSize *size2, gint *sgn, GError
  * Returns: (transfer full): a #BSSize instance x so that x * @divisor = @size,
  *                           rounded to a number of bytes
  */
-BSSize* bs_size_div_int (const BSSize *size, guint64 divisor, GError **error) {
-    BSSize *ret = NULL;
+BSSize bs_size_div_int (const BSSize size, uint64_t divisor, BSError **error) {
+    BSSize ret = NULL;
 
     if (divisor == 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
-                     "Division by zero");
+        set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
         return NULL;
     }
 
     ret = bs_size_new ();
-    mpz_tdiv_q_ui (ret->priv->bytes, size->priv->bytes, divisor);
+    mpz_tdiv_q_ui (ret->bytes, size->bytes, divisor);
 
     return ret;
 }
@@ -807,14 +835,13 @@ BSSize* bs_size_div_int (const BSSize *size, guint64 divisor, GError **error) {
  *
  * Returns: (transfer none): @size modified by division by @divisor
  */
-BSSize* bs_size_shrink_div_int (BSSize *size, guint64 divisor, GError **error) {
+BSSize bs_size_shrink_div_int (BSSize size, uint64_t divisor, BSError **error) {
     if (divisor == 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
-                     "Division by zero");
+        set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
         return NULL;
     }
 
-    mpz_tdiv_q_ui (size->priv->bytes, size->priv->bytes, divisor);
+    mpz_tdiv_q_ui (size->bytes, size->bytes, divisor);
 
     return size;
 }
@@ -827,21 +854,20 @@ BSSize* bs_size_shrink_div_int (BSSize *size, guint64 divisor, GError **error) {
  * Returns: (transfer full): a string representing the floating-point number
  *                           that equals to @size1 / @size2
  */
-gchar* bs_size_true_div (const BSSize *size1, const BSSize *size2, GError **error) {
+char* bs_size_true_div (const BSSize size1, const BSSize size2, BSError **error) {
     mpf_t op1;
     mpf_t op2;
-    gchar *ret = NULL;
+    char *ret = NULL;
 
-    if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
-                     "Division by zero");
+    if (mpz_cmp_ui (size2->bytes, 0) == 0) {
+        set_error (error, BS_ERROR_ZERO_DIV, strdup_printf("Division by zero"));
         return 0;
     }
 
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
     mpf_init2 (op2, BS_FLOAT_PREC_BITS);
-    mpf_set_z (op1, size1->priv->bytes);
-    mpf_set_z (op2, size2->priv->bytes);
+    mpf_set_z (op1, size1->bytes);
+    mpf_set_z (op2, size2->bytes);
 
     mpf_div (op1, op1, op2);
 
@@ -860,18 +886,17 @@ gchar* bs_size_true_div (const BSSize *size1, const BSSize *size2, GError **erro
  * Returns: (transfer full): a string representing the floating-point number
  *                           that equals to @size / @divisor
  */
-gchar* bs_size_true_div_int (const BSSize *size, guint64 divisor, GError **error) {
+char* bs_size_true_div_int (const BSSize size, uint64_t divisor, BSError **error) {
     mpf_t op1;
-    gchar *ret = NULL;
+    char *ret = NULL;
 
     if (divisor == 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
-                     "Division by zero");
+        set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
         return 0;
     }
 
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
-    mpf_set_z (op1, size->priv->bytes);
+    mpf_set_z (op1, size->bytes);
 
     mpf_div_ui (op1, op1, divisor);
 
@@ -893,24 +918,23 @@ gchar* bs_size_true_div_int (const BSSize *size, guint64 divisor, GError **error
  * Returns: (transfer full): a #BSSize instance that is a remainder of
  *                           @size1 / @size2 using integer division
  */
-BSSize* bs_size_mod (const BSSize *size1, const BSSize *size2, GError **error) {
+BSSize bs_size_mod (const BSSize size1, const BSSize size2, BSError **error) {
     mpz_t aux;
-    BSSize *ret = NULL;
-    if (mpz_cmp_ui (size2->priv->bytes, 0) == 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
-                     "Division by zero");
+    BSSize ret = NULL;
+    if (mpz_cmp_ui (size2->bytes, 0) == 0) {
+        set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
         return 0;
     }
 
     mpz_init (aux);
-    mpz_set (aux, size1->priv->bytes);
-    if (mpz_sgn (size1->priv->bytes) == -1)
+    mpz_set (aux, size1->bytes);
+    if (mpz_sgn (size1->bytes) == -1)
         /* negative @size1, get the absolute value so that we get results
            matching the specification/documentation of this function */
         mpz_neg (aux, aux);
 
     ret = bs_size_new ();
-    mpz_mod (ret->priv->bytes, aux, size2->priv->bytes);
+    mpz_mod (ret->bytes, aux, size2->bytes);
 
     return ret;
 }
@@ -928,25 +952,24 @@ BSSize* bs_size_mod (const BSSize *size1, const BSSize *size2, GError **error) {
  * Returns: (transfer full): a new instance of #BSSize that is @size rounded to
  *                           a multiple of @round_to according to @dir
  */
-BSSize* bs_size_round_to_nearest (const BSSize *size, const BSSize *round_to, BSRoundDir dir, GError **error) {
-    BSSize *ret = NULL;
+BSSize bs_size_round_to_nearest (const BSSize size, const BSSize round_to, BSRoundDir dir, BSError **error) {
+    BSSize ret = NULL;
     mpz_t q;
 
-    if (mpz_cmp_ui (round_to->priv->bytes, 0) == 0) {
-        g_set_error (error, BS_SIZE_ERROR, BS_SIZE_ERROR_ZERO_DIV,
-                     "Division by zero");
+    if (mpz_cmp_ui (round_to->bytes, 0) == 0) {
+        set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
         return NULL;
     }
 
     mpz_init (q);
 
     if (dir == BS_ROUND_DIR_UP)
-        mpz_cdiv_q (q, size->priv->bytes, round_to->priv->bytes);
+        mpz_cdiv_q (q, size->bytes, round_to->bytes);
     else
-        mpz_fdiv_q (q, size->priv->bytes, round_to->priv->bytes);
+        mpz_fdiv_q (q, size->bytes, round_to->bytes);
 
     ret = bs_size_new ();
-    mpz_mul (ret->priv->bytes, q, round_to->priv->bytes);
+    mpz_mul (ret->bytes, q, round_to->bytes);
 
     mpz_clear (q);
 
@@ -965,13 +988,13 @@ BSSize* bs_size_round_to_nearest (const BSSize *size, const BSSize *round_to, BS
  * functions.
  *
  * Returns: -1, 0, or 1 if @size1 is smaller, equal to or bigger than
- *          @size2 respectively comparing absolute values if @abs is %TRUE
+ *          @size2 respectively comparing absolute values if @abs is %true
  */
-gint bs_size_cmp (const BSSize *size1, const BSSize *size2, gboolean abs) {
+int bs_size_cmp (const BSSize size1, const BSSize size2, bool abs) {
     if (abs)
-        return mpz_cmpabs (size1->priv->bytes, size2->priv->bytes);
+        return mpz_cmpabs (size1->bytes, size2->bytes);
     else
-        return mpz_cmp (size1->priv->bytes, size2->priv->bytes);
+        return mpz_cmp (size1->bytes, size2->bytes);
 }
 
 /**
@@ -982,11 +1005,11 @@ gint bs_size_cmp (const BSSize *size1, const BSSize *size2, gboolean abs) {
  * @bytes. This function behaves like the standard *cmp*() functions.
  *
  * Returns: -1, 0, or 1 if @size is smaller, equal to or bigger than
- *          @bytes respectively comparing absolute values if @abs is %TRUE
+ *          @bytes respectively comparing absolute values if @abs is %true
  */
-gint bs_size_cmp_bytes (const BSSize *size, guint64 bytes, gboolean abs) {
+int bs_size_cmp_bytes (const BSSize size, uint64_t bytes, bool abs) {
     if (abs)
-        return mpz_cmpabs_ui (size->priv->bytes, bytes);
+        return mpz_cmpabs_ui (size->bytes, bytes);
     else
-        return mpz_cmp_ui (size->priv->bytes, bytes);
+        return mpz_cmp_ui (size->bytes, bytes);
 }

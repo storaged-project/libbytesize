@@ -10,17 +10,16 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 config.guess config.sub \
     m4/*.m4
 
 LIBDIRS = src/.libs
-GIDIR = src/
+PYTHONDIR = src/python
 
 TEST_PYTHON ?= $(PYTHON)
 
 run-ipython: all
-	PYTHONPATH=src/python GI_TYPELIB_PATH=${GIDIR} LD_LIBRARY_PATH=${LIBDIRS} G_MESSAGES_DEBUG=all ipython
+	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) ipython
 
 test: all
-	GI_TYPELIB_PATH=${GIDIR} LD_LIBRARY_PATH=${LIBDIRS} G_MESSAGES_DEBUG=all $(TEST_PYTHON) tests/libbytesize_unittest.py
-	PYTHONPATH=src/python GI_TYPELIB_PATH=${GIDIR} LD_LIBRARY_PATH=${LIBDIRS} \
-          G_MESSAGES_DEBUG=all $(TEST_PYTHON) tests/lbs_py_override_unittest.py
+	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) $(TEST_PYTHON) tests/libbytesize_unittest.py
+	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) $(TEST_PYTHON) tests/lbs_py_override_unittest.py
 
 ci: distcheck
 	TEST_PYTHON=python2 $(MAKE) test

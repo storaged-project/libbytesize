@@ -8,17 +8,13 @@ Source0:     https://github.com/rhinstaller/libbytesize/archive/%{name}-%{versio
 
 %define realname bytesize
 
-BuildRequires: glib2-devel
-BuildRequires: gobject-introspection-devel
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
+BuildRequires: pcre-devel
 BuildRequires: gettext-devel
 BuildRequires: python-devel
 BuildRequires: python3-devel
 BuildRequires: gtk-doc
-BuildRequires: glib2-doc
-
-Requires: gobject-introspection
 
 %description
 The libbytesize is a C library with GObject introspection support that
@@ -30,32 +26,30 @@ MAXUINT64.
 %package devel
 Summary:  Development files for libbytesize
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: glib2-devel
-Requires: gobject-introspection-devel
 
 %description devel
 This package contains header files and pkg-config files needed for development
 with the libbytesize library.
 
 %package -n python-%{realname}
-Summary: Python 2 GI overrides for libbytesize
+Summary: Python 2 bindings for libbytesize
 Provides: python2-%{realname} = %{version}-%{release}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: python-six
 Requires: pygobject3-base
 
 %description -n python-%{realname}
-This package contains Python 2 GI overrides for libbytesize making the use of
+This package contains Python 2 bindings for libbytesize making the use of
 the library from Python 2 easier and more convenient.
 
 %package -n python3-%{realname}
-Summary: Python 3 GI overrides for libbytesize
+Summary: Python 3 bindings for libbytesize
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: python3-six
 Requires: python3-gobject
 
 %description -n python3-%{realname}
-This package contains Python 3 GI overrides for libbytesize making the use of
+This package contains Python 3 bindings for libbytesize making the use of
 the library from Python 3 easier and more convenient.
 
 %prep
@@ -78,7 +72,6 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
 %{_libdir}/libbytesize.so.*
-%{_libdir}/girepository*/ByteSize*.typelib
 
 %files devel
 %{_libdir}/libbytesize.so
@@ -86,14 +79,13 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{_includedir}/bytesize/bs_size.h
 %{_libdir}/pkgconfig/bytesize.pc
 %{_datadir}/gtk-doc/html/libbytesize
-%{_datadir}/gir*/ByteSize*.gir
 
 %files -n python-%{realname}
-%{python2_sitearch}/gi/overrides/*
+%{python2_sitearch}/bytesize/*
 
 %files -n python3-%{realname}
-%{python3_sitearch}/gi/overrides/ByteSize*
-%{python3_sitearch}/gi/overrides/__pycache__/ByteSize*
+%{python3_sitearch}/bytesize/bytesize.py
+%{python3_sitearch}/bytesize/__pycache__/bytesize.*
 
 %changelog
 * Fri Oct 23 2015 Vratislav Podzimek <vpodzime@redhat.com> - 0.2-1
