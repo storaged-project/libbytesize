@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
 
-SUBDIRS = po src dist docs tests
+SUBDIRS = . po src dist docs tests
 
 dist_noinst_DATA = LICENSE README.rst
 
@@ -14,6 +14,11 @@ PYTHONDIR = src/python
 
 TEST_PYTHON ?= $(PYTHON)
 
+ZANATA_PULL_ARGS = --transdir ./po/
+ZANATA_PUSH_ARGS = --srcdir ./po/ --push-type source --force
+
+all-local: po-empty
+
 run-ipython: all
 	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) ipython
 
@@ -24,6 +29,17 @@ test: all
 ci: distcheck
 	TEST_PYTHON=python2 $(MAKE) test
 	TEST_PYTHON=python3 $(MAKE) test
+
+po-empty:
+	for lingua in $$(cat po/LINGUAS) ; do \
+		[ -f ./po/$$lingua.po ] || \
+		msginit -i ./po/$(PACKAGE_NAME).pot -o ./po/$$lingua.po --no-translator || \
+		exit 1 ; \
+	done
+
+po-pull:
+	rpm -q zanata-python-client &>/dev/null || ( echo "need to run: yum install zanata-python-client"; exit 1 )
+	zanata pull $(ZANATA_PULL_ARGS)
 
 tag:
 	@TAG="$(PACKAGE_NAME)-$(PACKAGE_VERSION)" ; \
@@ -48,9 +64,11 @@ bumpver:
 	sed -ri "s/(AC_INIT\(\[$(PACKAGE_NAME)\], \[)[0-9]+\.[0-9]+(\],.*)/\1$$VERSION.$$NEWSUBVERSION\2/" configure.ac ; \
 	sed -ri "s/Version:(\\s+)[-0-9.]+/Version:\\1$$VERSION.$$NEWSUBVERSION/" dist/libbytesize.spec.in ;
 
-archive: distcheck
+archive: po-pull
+	$(MAKE) distcheck
 
-local: dist
+local: po-empty
+	$(MAKE) dist
 
 srpm: local
 	rpmbuild -ts --nodeps $(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz
@@ -62,5 +80,6 @@ rpm: local
 
 release: tag
 	$(MAKE) archive
+	zanata push $(ZANATA_PUSH_ARGS)
 
 EXTRA_DIST = config.rpath

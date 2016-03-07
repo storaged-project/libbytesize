@@ -45,3 +45,4 @@ dist/libbytesize.spec
 **/Makefile.in
 **/*.stamp
 *.tar.gz
+**/*.po
