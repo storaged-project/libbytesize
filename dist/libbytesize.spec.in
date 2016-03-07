@@ -36,7 +36,6 @@ Summary: Python 2 bindings for libbytesize
 Provides: python2-%{realname} = %{version}-%{release}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: python-six
-Requires: pygobject3-base
 
 %description -n python-%{realname}
 This package contains Python 2 bindings for libbytesize making the use of
@@ -46,7 +45,6 @@ the library from Python 2 easier and more convenient.
 Summary: Python 3 bindings for libbytesize
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: python3-six
-Requires: python3-gobject
 
 %description -n python3-%{realname}
 This package contains Python 3 bindings for libbytesize making the use of
@@ -93,6 +91,12 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 - Adapt the python bindings and tests (vpodzime)
 - Get rid of GObject and GLib (vpodzime)
 - Define the __divmod__ method even for not dividing by Size (vpodzime)
+
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Tue Nov 10 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Changes/python3.5
 
 * Fri Oct 23 2015 Vratislav Podzimek <vpodzime@redhat.com> - 0.2-1
 - Distribute the tests for overrides (vpodzime)
