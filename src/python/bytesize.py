@@ -4,6 +4,8 @@ from ctypes import POINTER, byref
 import six
 from decimal import Decimal
 
+import locale
+
 import gettext
 _ = lambda x: gettext.translation("libbytesize", fallback=True).gettext(x) if x != "" else ""
 
@@ -356,9 +358,15 @@ class Size(object):
             real_unit = unit_strs.get(unit)
             if real_unit is None:
                 raise ValueError("Invalid unit specification: '%s'" % unit)
-            return Decimal(self._c_size.convert_to(real_unit))
+            ret = self._c_size.convert_to(real_unit)
         else:
-            return Decimal(self._c_size.convert_to(unit))
+            ret = self._c_size.convert_to(unit)
+
+        radix = locale.nl_langinfo(locale.RADIXCHAR)
+        if radix != '.':
+            ret = ret.replace(radix, '.')
+
+        return Decimal(ret)
 
     def human_readable(self, min_unit=B, max_places=2, xlate=True):
         if isinstance(min_unit, six.string_types):
