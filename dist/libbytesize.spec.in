@@ -1,5 +1,5 @@
 Name:        libbytesize
-Version:     0.3
+Version:     0.4
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -85,6 +85,20 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{python3_sitearch}/bytesize/__pycache__/*
 
 %changelog
+* Wed Mar 09 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.4-1
+- Add the __init__.py file to provide a proper package (vpodzime)
+- Merge pull request #7 from vpodzime/master-decimal_locale (vpodzime)
+- Make sure we pass a locale-agnostic string to Decimal() (vpodzime)
+- Adapt the package description to no longer using GI (vpodzime)
+- Make Size instances hashable (vpodzime)
+- Sync the spec file with downstream (vpodzime)
+
+* Wed Mar  9 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.3-3
+- Make sure we pass a locale-agnostic string to Decimal() (vpodzime)
+
+* Mon Mar  7 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.3-2
+- Make Size instances hashable (vpodzime)
+
 * Fri Feb 26 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.3-1
 - Packaging changes related to getting rid of GLib/GObject (vpodzime)
 - Adapt the python bindings and tests (vpodzime)
