@@ -81,8 +81,8 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{python2_sitearch}/bytesize/*
 
 %files -n python3-%{realname}
-%{python3_sitearch}/bytesize/bytesize.py
-%{python3_sitearch}/bytesize/__pycache__/bytesize.*
+%{python3_sitearch}/bytesize/*
+%{python3_sitearch}/bytesize/__pycache__/*
 
 %changelog
 * Fri Feb 26 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.3-1
