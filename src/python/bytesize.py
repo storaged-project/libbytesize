@@ -557,6 +557,3 @@ class Size(object):
 
     def __hash__(self):
         return self.get_bytes()
-
-    def __del__(self):
-        del(self._c_size)
