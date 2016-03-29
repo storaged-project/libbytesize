@@ -46,3 +46,4 @@ dist/libbytesize.spec
 **/*.stamp
 *.tar.gz
 **/*.po
+**/*.gmo
