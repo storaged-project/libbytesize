@@ -7,6 +7,9 @@ DOMAIN = $(PACKAGE)
 subdir = po
 top_builddir = ..
 
+# Wrap xgettext in a script that fails on warnings
+XGETTEXT = $(top_srcdir)/translation-canary/xgettext_werror.sh
+
 # These options get passed to xgettext.
 XGETTEXT_OPTIONS = --keyword=_ --keyword=N_
 
