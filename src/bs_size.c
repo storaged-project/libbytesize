@@ -38,11 +38,47 @@
 /***************
  * STATIC DATA *
  ***************/
-static char const * const b_units[BS_BUNIT_UNDEF] = {N_("B"), N_("KiB"), N_("MiB"), N_("GiB"), N_("TiB"),
-                                                     N_("PiB"), N_("EiB"), N_("ZiB"), N_("YiB")};
+static char const * const b_units[BS_BUNIT_UNDEF] = {
+    /* TRANSLATORS: 'B' for bytes */
+    N_("B"),
+    /* TRANSLATORS: abbreviation for kibibyte, 2**10 bytes */
+    N_("KiB"),
+    /* TRANSLATORS: abbreviation for mebibyte, 2**20 bytes */
+    N_("MiB"),
+    /* TRANSLATORS: abbreviation for gibibyte, 2**30 bytes */
+    N_("GiB"),
+    /* TRANSLATORS: abbreviation for tebibyte, 2**40 bytes */
+    N_("TiB"),
+    /* TRANSLATORS: abbreviation for pebibyte, 2**50 bytes */
+    N_("PiB"),
+    /* TRANSLATORS: abbreviation for exbibyte, 2**60 bytes */
+    N_("EiB"),
+    /* TRANSLATORS: abbreviation for zebibyte, 2**70 bytes */
+    N_("ZiB"),
+    /* TRANSLATORS: abbreviation for yobibyte, 2**80 bytes */
+    N_("YiB")
+};
 
-static char const * const d_units[BS_DUNIT_UNDEF] = {N_("B"), N_("KB"), N_("MB"), N_("GB"), N_("TB"),
-                                                     N_("PB"), N_("EB"), N_("ZB"), N_("YB")};
+static char const * const d_units[BS_DUNIT_UNDEF] = {
+    /* TRANSLATORS: 'B' for bytes */
+    N_("B"),
+    /* TRANSLATORS: abbreviation for kilobyte, 10**3 bytes */
+    N_("KB"),
+    /* TRANSLATORS: abbreviation for megabyte, 10**6 bytes */
+    N_("MB"),
+    /* TRANSLATORS: abbreviation for gigabyte, 10**9 bytes */
+    N_("GB"),
+    /* TRANSLATORS: abbreviation for terabyte, 10**12 bytes */
+    N_("TB"),
+    /* TRANSLATORS: abbreviation for petabyte, 10**15 bytes */
+    N_("PB"),
+    /* TRANSLATORS: abbreviation for exabyte, 10**18 bytes */
+    N_("EB"),
+    /* TRANSLATORS: abbreviation for zettabyte, 10**21 bytes */
+    N_("ZB"),
+    /* TRANSLATORS: abbreviation for yottabyte, 10**24 bytes */
+    N_("YB")
+};
 
 
 /****************************
