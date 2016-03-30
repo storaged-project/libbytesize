@@ -22,9 +22,8 @@ all-local: po-empty
 run-ipython: all
 	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) ipython
 
-test: all
-	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) $(TEST_PYTHON) tests/libbytesize_unittest.py
-	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) $(TEST_PYTHON) tests/lbs_py_override_unittest.py
+test: check
+check: all
 
 ci: distcheck
 	TEST_PYTHON=python2 $(MAKE) test
