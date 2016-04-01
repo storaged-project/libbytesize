@@ -17,14 +17,18 @@ TEST_PYTHON ?= $(PYTHON)
 ZANATA_PULL_ARGS = --transdir ./po/
 ZANATA_PUSH_ARGS = --srcdir ./po/ --push-type source --force
 
+# Run tests on the translations before tarring them up.
+# This will remove the .po/.mo files for any language that fails the checks
+dist-hook:
+	PYTHONPATH=$(srcdir)/translation-canary python3 -m translation_canary.translated --release $(distdir)
+
 all-local: po-empty
 
 run-ipython: all
 	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) ipython
 
-test: all
-	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) $(TEST_PYTHON) tests/libbytesize_unittest.py
-	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) $(TEST_PYTHON) tests/lbs_py_override_unittest.py
+test: check
+check: all
 
 ci: distcheck
 	TEST_PYTHON=python2 $(MAKE) test
@@ -83,3 +87,7 @@ release: tag
 	zanata push $(ZANATA_PUSH_ARGS)
 
 EXTRA_DIST = config.rpath
+
+# Include the xgettext wrapper so pot-update can be run from the source distribution
+# This is needed for make distcheck.
+EXTRA_DIST += $(srcdir)/translation-canary/xgettext_werror.sh

@@ -55,3 +55,6 @@ dist/libbytesize.spec
 *.tar.gz
 **/*.po
 **/*.gmo
+tests/*.log
+tests/*.trs
+test-driver
