@@ -21,6 +21,14 @@ missing
 po/POTFILES
 po/stamp-po
 po/remove-potcdate.sed
+po/Makevars.template
+po/Rules-quot
+po/boldquot.sed
+po/en@boldquot.header
+po/en@quot.header
+po/insert-header.sin
+po/quot.sed
+po/remove-potcdate.sin
 dist/libbytesize.spec
 src/bytesize.pc
 docs/libbytesize-decl-list.txt
