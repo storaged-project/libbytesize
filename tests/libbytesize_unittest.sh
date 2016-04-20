@@ -7,3 +7,6 @@ fi
 
 python2 ${srcdir}/libbytesize_unittest.py
 python3 ${srcdir}/libbytesize_unittest.py
+
+python2 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8
+python3 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8

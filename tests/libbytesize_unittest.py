@@ -3,8 +3,11 @@
 
 import locale
 import unittest
+import sys
 
 from bytesize import SizeStruct, KiB, ROUND_UP, ROUND_DOWN
+
+DEFAULT_LOCALE = "en_US.utf8"
 
 class SizeTestCase(unittest.TestCase):
 
@@ -15,11 +18,11 @@ class SizeTestCase(unittest.TestCase):
     #enddef
 
     def setUp(self):
-        locale.setlocale(locale.LC_ALL,'en_US.utf8')
+        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
     #enddef
 
     def tearDown(self):
-        locale.setlocale(locale.LC_ALL,'en_US.utf8')
+        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
     #enddef
 
     def testNewFromStr(self):
@@ -332,7 +335,7 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(strSizeStruct, "12 KiB")
 
         strSizeStruct = SizeStruct.new_from_str("1 KB").human_readable(KiB, 2, False)
-        self.assertEqual(strSizeStruct, "0.98 KiB")
+        self.assertEqual(strSizeStruct, "0%s98 KiB" % locale.nl_langinfo(locale.RADIXCHAR))
 
         strSizeStruct = SizeStruct.new_from_str("100 GiB").human_readable(KiB, 2, False)
         self.assertEqual(strSizeStruct, "100 GiB")
@@ -358,12 +361,12 @@ class SizeTestCase(unittest.TestCase):
     def testTrueDiv(self):
         x = SizeStruct.new_from_str("1024 B")
         y = SizeStruct.new_from_str("-102.4 B") # rounds to whole bytes
-        divResult = float(x.true_div(y)[:15]) # just some number to cover accurancy and not cross max float range
+        divResult = float(x.true_div(y)[:15].replace(locale.nl_langinfo(locale.RADIXCHAR), ".")) # just some number to cover accurancy and not cross max float range
         self.assertAlmostEqual(divResult, 1024.0/-102.0)
 
         x = SizeStruct.new_from_str("1 MiB")
         y = SizeStruct.new_from_str("1 KiB")
-        divResult = float(x.true_div(y)[:15]) # just some number to cover accurancy and not cross max float range
+        divResult = float(x.true_div(y)[:15].replace(locale.nl_langinfo(locale.RADIXCHAR), ".")) # just some number to cover accurancy and not cross max float range
         self.assertAlmostEqual(divResult, 1024.0)
     #enddef
 
@@ -583,6 +586,11 @@ class SizeTestCase(unittest.TestCase):
 
 # script entry point
 if __name__=='__main__':
+    if len(sys.argv) > 1:
+        DEFAULT_LOCALE = sys.argv[1]
+        # the unittest module would try to intepret the argument too, let's
+        # remove it
+        sys.argv = [sys.argv[0]]
     unittest.main()
 #endif
 
