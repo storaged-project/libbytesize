@@ -750,17 +750,24 @@ BSSize bs_size_mul_float_str (const BSSize size, const char *float_str, BSError 
     mpf_t op1, op2;
     int status = 0;
     BSSize ret = NULL;
+    const char *radix_char = NULL;
+    char *loc_float_str = NULL;
+
+    radix_char = nl_langinfo (RADIXCHAR);
 
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
     mpf_init2 (op2, BS_FLOAT_PREC_BITS);
 
     mpf_set_z (op1, size->bytes);
-    status = mpf_set_str (op2, float_str, 10);
+    loc_float_str = replace_char_with_str (float_str, '.', radix_char);
+    status = mpf_set_str (op2, loc_float_str, 10);
     if (status != 0) {
-        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("'%s' is not a valid floating point number string", float_str));
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("'%s' is not a valid floating point number string", loc_float_str));
+        free (loc_float_str);
         mpf_clears (op1, op2, NULL);
         return NULL;
     }
+    free (loc_float_str);
 
     mpf_mul (op1, op1, op2);
 
@@ -784,17 +791,24 @@ BSSize bs_size_mul_float_str (const BSSize size, const char *float_str, BSError 
 BSSize bs_size_grow_mul_float_str (BSSize size, const char *float_str, BSError **error) {
     mpf_t op1, op2;
     int status = 0;
+    const char *radix_char = NULL;
+    char *loc_float_str = NULL;
+
+    radix_char = nl_langinfo (RADIXCHAR);
 
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
     mpf_init2 (op2, BS_FLOAT_PREC_BITS);
 
     mpf_set_z (op1, size->bytes);
-    status = mpf_set_str (op2, float_str, 10);
+    loc_float_str = replace_char_with_str (float_str, '.', radix_char);
+    status = mpf_set_str (op2, loc_float_str, 10);
     if (status != 0) {
-        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("'%s' is not a valid floating point number string", float_str));
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("'%s' is not a valid floating point number string", loc_float_str));
+        free (loc_float_str);
         mpf_clears (op1, op2, NULL);
         return NULL;
     }
+    free (loc_float_str);
 
     mpf_mul (op1, op1, op2);
 
