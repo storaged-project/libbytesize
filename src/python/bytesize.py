@@ -397,7 +397,7 @@ class Size(object):
         if isinstance(other, six.integer_types):
             if (other < 0 and abs_vals):
                 other = abs(other)
-            if other <= MAXUINT64 and other > 0:
+            if 0 <= other <= MAXUINT64:
                 return self._c_size.cmp_bytes(other, abs_vals)
             else:
                 other = SizeStruct.new_from_str(str(other))
