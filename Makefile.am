@@ -29,6 +29,7 @@ run-ipython: all
 
 test: check
 check: all
+	git checkout HEAD po/libbytesize.pot
 
 ci: distcheck
 	TEST_PYTHON=python2 $(MAKE) test
