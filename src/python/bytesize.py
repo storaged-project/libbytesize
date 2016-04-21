@@ -511,17 +511,27 @@ class Size(object):
 
         return Decimal(self._c_size.true_div(other._c_size))
 
+    def _safe_floordiv(self, other):
+        try:
+            val, sgn = self._c_size.div(other._c_size)
+            return val * sgn
+        except OverflowError:
+            return int(float(self._c_size.true_div(other._c_size)))
+
+    def _safe_floordiv_int(self, other):
+        try:
+            return Size(self._c_size.div_int(other))
+        except OverflowError:
+            return Size(float(self._c_size.true_div_int(other)))
+
     def __floordiv__(self, other):
         if isinstance(other, six.integer_types):
             if other <= MAXUINT64:
-                return Size(self._c_size.div_int(other))
+                return self._safe_floordiv_int(other)
             else:
                 other = SizeStruct.new_from_str(str(other))
-                val, sgn = self._c_size.div(other)
-                return Size(val) * sgn
-
-        val, sgn = self._c_size.div(other._c_size)
-        return val * sgn
+                return Size(self._safe_floordiv(other))
+        return self._safe_floordiv(other)
 
     def __mod__(self, other):
         return Size(self._c_size.mod(other._c_size))
