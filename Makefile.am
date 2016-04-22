@@ -32,8 +32,6 @@ check: all
 	-git checkout HEAD po/libbytesize.pot
 
 ci: distcheck
-	TEST_PYTHON=python2 $(MAKE) test
-	TEST_PYTHON=python3 $(MAKE) test
 
 po-empty:
 	for lingua in $$(cat po/LINGUAS) ; do \
