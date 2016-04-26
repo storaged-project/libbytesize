@@ -843,7 +843,7 @@ uint64_t bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError 
     mpz_tdiv_q (result, size1->bytes, size2->bytes);
 
     if (mpz_cmp_ui (result, UINT64_MAX) > 0) {
-        set_error (error, BS_ERROR_OVER, strdup_printf ("The size is too big, cannot be returned as a 64bit number of bytes"));
+        set_error (error, BS_ERROR_OVER, strdup_printf ("The size is too big, cannot be returned as a 64bit number"));
         mpz_clear (result);
         return 0;
     }

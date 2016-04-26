@@ -128,12 +128,20 @@ class SizeTestCase(unittest.TestCase):
         expected = Decimal("1")
         self.assertEqual(actual, expected)
 
+        actual = Size("128 EiB") // Size("64 EiB")
+        expected = 2
+        self.assertEqual(actual, expected)
+
         actual = Size("100 B") / 10
         expected = Decimal("10")
         self.assertEqual(actual, expected)
 
         actual = Size("120 B") / 100
         expected = Decimal("1.2")
+        self.assertEqual(actual, expected)
+
+        actual = Size("128 EiB") // 2
+        expected = Size("64 EiB")
         self.assertEqual(actual, expected)
 
         result = Size("120 B") // 100
