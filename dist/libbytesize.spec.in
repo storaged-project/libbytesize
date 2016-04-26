@@ -1,5 +1,5 @@
 Name:        libbytesize
-Version:     0.4
+Version:     0.5
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -87,6 +87,36 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{python3_sitearch}/bytesize/__pycache__/*
 
 %changelog
+* Tue Apr 26 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.5-1
+- Create both libbytesize-$version and $version tags (vpodzime)
+- Update the .pot file with the new version (vpodzime)
+- Improve how we create changelog (vpodzime)
+- Try harder when getting OverflowError in division (#1326897) (vpodzime)
+- Neutralize the radix char before passing string to MPFR (#1326108) (vpodzime)
+- Run tests with en_US and fr_FR locales (vpodzime)
+- Run the tests with both python2 and python3 again (vpodzime)
+- Do not run the same tests 3 times as part of the 'ci' target (vpodzime)
+- Don't fail if just the best-effort cleanup fails (vpodzime)
+- Throw away the new .pot file when just running tests (vpodzime)
+- Make sure we return one of -1, 0, 1 from cmp functions (#1326113) (vpodzime)
+- Use cmp_bytes(size, bytes) when comparing to 0 (vpodzime)
+- Ignore all .po~ files (vpodzime)
+- Add translator comments (dshea)
+- Integrate translation-canary into the build. (dshea)
+- Run the translation-canary tests from make check. (dshea)
+- Squashed 'translation-canary/' content from commit d6c0708 (dshea)
+- Make 'make check' work. (dshea)
+- Remove files from po/ we don't need to track (vpodzime)
+- Ignore the compiled translation files (vpodzime)
+- Distribute and package the translations (vpodzime)
+- Add the necessary pieces for getting translations (vpodzime)
+
+* Thu Apr 14 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.4-3
+- Only require -lgmp and -lmpfr for static linking (vpodzime)
+
+* Fri Mar 11 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.4-2
+- Do not try to delete the C struct twice (vpodzime)
+
 * Wed Mar 09 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.4-1
 - Add the __init__.py file to provide a proper package (vpodzime)
 - Merge pull request #7 from vpodzime/master-decimal_locale (vpodzime)
