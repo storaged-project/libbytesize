@@ -48,6 +48,9 @@ tag:
 	@TAG="$(PACKAGE_NAME)-$(PACKAGE_VERSION)" ; \
 	git tag -a -s -m "Tag as $$TAG" -f "$$TAG" ; \
 	echo "Tagged as $$TAG"
+	@TAG="$(PACKAGE_VERSION)" ; \
+	git tag -a -s -m "Tag as $$TAG" -f "$$TAG" ; \
+	echo "Tagged as $$TAG"
 
 rpmlog:
 	@cl=`grep -n %changelog dist/libbytesize.spec.in |cut -d : -f 1` ; \
