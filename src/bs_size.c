@@ -1027,10 +1027,17 @@ BSSize bs_size_round_to_nearest (const BSSize size, const BSSize round_to, BSRou
  *          @size2 respectively comparing absolute values if @abs is %true
  */
 int bs_size_cmp (const BSSize size1, const BSSize size2, bool abs) {
+    int ret = 0;
     if (abs)
-        return mpz_cmpabs (size1->bytes, size2->bytes);
+        ret = mpz_cmpabs (size1->bytes, size2->bytes);
     else
-        return mpz_cmp (size1->bytes, size2->bytes);
+        ret = mpz_cmp (size1->bytes, size2->bytes);
+    /* make sure we don't return things like 2 or -2 (which GMP can give us) */
+    if (ret > 0)
+        ret = 1;
+    else if (ret < 0)
+        ret = -1;
+    return ret;
 }
 
 /**
@@ -1044,8 +1051,15 @@ int bs_size_cmp (const BSSize size1, const BSSize size2, bool abs) {
  *          @bytes respectively comparing absolute values if @abs is %true
  */
 int bs_size_cmp_bytes (const BSSize size, uint64_t bytes, bool abs) {
+    int ret = 0;
     if (abs)
-        return mpz_cmpabs_ui (size->bytes, bytes);
+        ret = mpz_cmpabs_ui (size->bytes, bytes);
     else
-        return mpz_cmp_ui (size->bytes, bytes);
+        ret = mpz_cmp_ui (size->bytes, bytes);
+    /* make sure we don't return things like 2 or -2 (which GMP can give us) */
+    if (ret > 0)
+        ret = 1;
+    else if (ret < 0)
+        ret = -1;
+    return ret;
 }
