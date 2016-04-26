@@ -66,6 +66,7 @@ bumpver:
 	mv dist/libbytesize.spec.in.new dist/libbytesize.spec.in ; rm -f speclog ; \
 	sed -ri "s/(AC_INIT\(\[$(PACKAGE_NAME)\], \[)[0-9]+\.[0-9]+(\],.*)/\1$$VERSION.$$NEWSUBVERSION\2/" configure.ac ; \
 	sed -ri "s/Version:(\\s+)[-0-9.]+/Version:\\1$$VERSION.$$NEWSUBVERSION/" dist/libbytesize.spec.in ;
+	$(MAKE) -C po/ $(PACKAGE_NAME).pot-update
 
 archive: po-pull
 	$(MAKE) distcheck
