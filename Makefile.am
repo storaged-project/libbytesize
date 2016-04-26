@@ -52,7 +52,7 @@ tag:
 rpmlog:
 	@cl=`grep -n %changelog dist/libbytesize.spec.in |cut -d : -f 1` ; \
 	version_release=`tail --lines=+$$(($$cl + 1)) dist/libbytesize.spec.in|head -1|cut -d- -f2-3|sed 's/ //g'|sed -r 's/-[0-9]+//'` ; \
-	git log --pretty="format:- %s (%ae)" "$(PACKAGE_NAME)-$$version_release.." |sed -e 's/@.*)/)/' ; \
+	git log --no-merges --pretty="format:- %s (%ae)" "$(PACKAGE_NAME)-$$version_release.." |sed -e 's/@.*)/)/' ; \
 	echo
 
 bumpver:
@@ -62,7 +62,7 @@ bumpver:
 	DATELINE="* `date "+%a %b %d %Y"` `git config user.name` <`git config user.email`> - $$VERSION.$$NEWSUBVERSION-1"  ; \
 	cl=`grep -n %changelog dist/libbytesize.spec.in |cut -d : -f 1` ; \
 	tail --lines=+$$(($$cl + 1)) dist/libbytesize.spec.in > speclog ; \
-	(head -n $$cl dist/libbytesize.spec ; echo "$$DATELINE" ; make --quiet rpmlog 2>/dev/null ; echo ""; cat speclog) > dist/libbytesize.spec.in.new ; \
+	(head -n $$cl dist/libbytesize.spec.in ; echo "$$DATELINE" ; make --quiet rpmlog 2>/dev/null ; echo ""; cat speclog) > dist/libbytesize.spec.in.new ; \
 	mv dist/libbytesize.spec.in.new dist/libbytesize.spec.in ; rm -f speclog ; \
 	sed -ri "s/(AC_INIT\(\[$(PACKAGE_NAME)\], \[)[0-9]+\.[0-9]+(\],.*)/\1$$VERSION.$$NEWSUBVERSION\2/" configure.ac ; \
 	sed -ri "s/Version:(\\s+)[-0-9.]+/Version:\\1$$VERSION.$$NEWSUBVERSION/" dist/libbytesize.spec.in ;
