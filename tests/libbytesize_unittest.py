@@ -335,7 +335,12 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(strSizeStruct, "12 KiB")
 
         strSizeStruct = SizeStruct.new_from_str("1 KB").human_readable(KiB, 2, False)
-        self.assertEqual(strSizeStruct, "0%s98 KiB" % locale.nl_langinfo(locale.RADIXCHAR))
+        self.assertEqual(strSizeStruct, "0.98 KiB")
+
+        locale.setlocale(locale.LC_ALL, 'cs_CZ.UTF-8')
+        strSizeStruct = SizeStruct.new_from_str("1 KB").human_readable(KiB, 2, True)
+        self.assertEqual(strSizeStruct, "0,98 KiB")
+        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE);
 
         strSizeStruct = SizeStruct.new_from_str("100 GiB").human_readable(KiB, 2, False)
         self.assertEqual(strSizeStruct, "100 GiB")

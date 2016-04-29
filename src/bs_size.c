@@ -119,7 +119,7 @@ static char *strdup_printf (const char *fmt, ...) {
 /**
  * replace_char_with_str: (skip)
  *
- * Replaces all appereances of @char in @str with @new.
+ * Replaces all apperances of @char in @str with @new.
  */
 static char *replace_char_with_str (const char *str, char orig, const char *new) {
     uint64_t offset = 0;
@@ -151,6 +151,41 @@ static char *replace_char_with_str (const char *str, char orig, const char *new)
             ret[i+offset] = str[i];
     }
     ret[i+offset] = '\0';
+
+    return ret;
+}
+
+
+/**
+ * replace_str_with_str: (skip)
+ *
+ * Replaces the first appearance of @orig in @str with @new.
+ */
+static char *replace_str_with_str (const char *str, const char *orig, const char *new) {
+    char *pos = NULL;
+    int str_len = 0;
+    int orig_len = 0;
+    int new_len = 0;
+    char *ret = NULL;
+    int ret_size = 0;
+    char *dest = NULL;
+
+    pos = strstr (str, orig);
+    if (!pos)
+        /* nothing to do, just return a copy */
+        return strdup (str);
+
+    str_len = strlen (str);
+    orig_len = strlen (orig);
+    new_len = strlen (new);
+    ret_size = str_len + new_len - orig_len + 1;
+    ret = malloc (sizeof(char) * ret_size);
+    memset (ret, 0, ret_size);
+    memcpy (ret, str, pos - str);
+    dest = ret + (pos - str);
+    memcpy (dest, new, new_len);
+    dest = dest + new_len;
+    memcpy (dest, pos + orig_len, str_len - (pos - str) - orig_len);
 
     return ret;
 }
@@ -544,6 +579,7 @@ char* bs_size_human_readable (const BSSize size, BSBunit min_unit, int max_place
     char *zero = NULL;
     char *radix_char = NULL;
     int sign = 0;
+    char *loc_num_str = NULL;
     bool at_radix = false;
 
     mpf_init2 (cur_val, BS_FLOAT_PREC_BITS);
@@ -568,21 +604,28 @@ char* bs_size_human_readable (const BSSize size, BSBunit min_unit, int max_place
                         cur_val);
     mpf_clear (cur_val);
 
-    /* TODO: should use the proper radix char according to @xlate */
+    /* should use the proper radix char according to @xlate */
+    radix_char = nl_langinfo (RADIXCHAR);
+    if (!xlate) {
+        loc_num_str = replace_str_with_str (num_str, radix_char, ".");
+        free (num_str);
+        radix_char = ".";
+    } else
+        loc_num_str = num_str;
+
     /* remove trailing zeros and the radix char */
     /* if max_places == 0, there can't be anything trailing */
     if (max_places != 0) {
-        radix_char = nl_langinfo (RADIXCHAR);
-        zero = num_str + (len - 1);
-        while ((zero != num_str) && ((*zero == '0') || (*zero == *radix_char)) && !at_radix) {
+        zero = loc_num_str + (len - 1);
+        while ((zero != loc_num_str) && ((*zero == '0') || (*zero == *radix_char)) && !at_radix) {
             at_radix = *zero == *radix_char;
             zero--;
         }
         zero[1] = '\0';
     }
 
-    ret = strdup_printf ("%s %s", num_str, xlate ? _(b_units[min_unit - BS_BUNIT_B]) : b_units[min_unit - BS_BUNIT_B]);
-    free (num_str);
+    ret = strdup_printf ("%s %s", loc_num_str, xlate ? _(b_units[min_unit - BS_BUNIT_B]) : b_units[min_unit - BS_BUNIT_B]);
+    free (loc_num_str);
 
     return ret;
 }
