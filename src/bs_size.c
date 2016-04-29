@@ -119,20 +119,25 @@ static char *strdup_printf (const char *fmt, ...) {
 /**
  * replace_char_with_str: (skip)
  *
- * Replaces all appereances of @char in @str with @string.
+ * Replaces all appereances of @char in @str with @new.
  */
 static char *replace_char_with_str (const char *str, char orig, const char *new) {
     uint64_t offset = 0;
     uint64_t i = 0;
     uint64_t j = 0;
     char *ret = NULL;
+    const char *next = NULL;
+    uint64_t count = 0;
 
     if (!str)
         return NULL;
 
+    next = str;
+    for (next=strchr (next, orig); next; count++, next++);
+
     /* allocate space for the string [strlen(str)] with the char replaced by the
-       string [strlen(new) - 1] and a \0 byte at the end [ + 1] */
-    ret = malloc (sizeof(char) * strlen(str) + strlen(new) - 1 + 1);
+       string [strlen(new) - 1] $count times and a \0 byte at the end [ + 1] */
+    ret = malloc (sizeof(char) * (strlen(str) + (strlen(new) - 1) * count + 1));
 
     for (i=0; str[i]; i++) {
         if (str[i] == orig)
