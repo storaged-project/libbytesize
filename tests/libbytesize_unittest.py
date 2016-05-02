@@ -5,7 +5,7 @@ import locale
 import unittest
 import sys
 
-from bytesize import SizeStruct, KiB, ROUND_UP, ROUND_DOWN
+from bytesize import SizeStruct, KiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP
 
 DEFAULT_LOCALE = "en_US.utf8"
 
@@ -460,6 +460,75 @@ class SizeTestCase(unittest.TestCase):
         roundTo = SizeStruct.new_from_str("10 KiB")
         actual = x.round_to_nearest(roundTo, ROUND_DOWN).get_bytes()
         expected = (0, 0)
+        self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_str("1024 B")
+        roundTo = SizeStruct.new_from_str("1 KiB")
+        actual = x.round_to_nearest(roundTo, ROUND_DOWN).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_UP).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_HALF_UP).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_str("1023 B")
+        actual = x.round_to_nearest(roundTo, ROUND_DOWN).get_bytes()
+        expected = (0, 0)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_UP).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_HALF_UP).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_str("1025 B")
+        actual = x.round_to_nearest(roundTo, ROUND_DOWN).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_UP).get_bytes()
+        expected = (2048, 1)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_HALF_UP).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_str("1535 B")
+        actual = x.round_to_nearest(roundTo, ROUND_DOWN).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_UP).get_bytes()
+        expected = (2048, 1)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_HALF_UP).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_str("1536 B")
+        actual = x.round_to_nearest(roundTo, ROUND_DOWN).get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_UP).get_bytes()
+        expected = (2048, 1)
+        self.assertEqual(actual, expected)
+        actual = x.round_to_nearest(roundTo, ROUND_HALF_UP).get_bytes()
+        expected = (2048, 1)
+        self.assertEqual(actual, expected)
+
+        # now check something bigger
+        x = SizeStruct.new_from_str("575 GiB")
+        roundTo = SizeStruct.new_from_str("128 GiB")
+        actual = x.round_to_nearest(roundTo, ROUND_HALF_UP).get_bytes_str()
+        expected = SizeStruct.new_from_str("512 GiB").get_bytes_str()
+        self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_str("576 GiB")
+        roundTo = SizeStruct.new_from_str("128 GiB")
+        actual = x.round_to_nearest(roundTo, ROUND_HALF_UP).get_bytes_str()
+        expected = SizeStruct.new_from_str("640 GiB").get_bytes_str()
         self.assertEqual(actual, expected)
     #enddef
 

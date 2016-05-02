@@ -31,6 +31,7 @@ YB = 28
 
 ROUND_UP = 0
 ROUND_DOWN = 1
+ROUND_HALF_UP = 2
 
 MAXUINT64 = 2**64 - 1
 
@@ -378,7 +379,7 @@ class Size(object):
             raise ValueError("max_places has to be an integer number")
         return self._c_size.human_readable(min_unit, max_places, xlate)
 
-    def round_to_nearest(self, round_to, rounding=ROUND_UP):
+    def round_to_nearest(self, round_to, rounding):
         if isinstance(round_to, Size):
             return self._c_size.round_to_nearest(round_to._c_size, rounding)
 
