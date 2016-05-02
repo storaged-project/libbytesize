@@ -63,8 +63,9 @@ typedef enum {
  * Rounding direction for rounding operations.
  */
 typedef enum {
-    BS_ROUND_DIR_UP,
-    BS_ROUND_DIR_DOWN,
+    BS_ROUND_DIR_UP = 0,
+    BS_ROUND_DIR_DOWN = 1,
+    BS_ROUND_DIR_HALF_UP = 2
 } BSRoundDir;
 
 /**

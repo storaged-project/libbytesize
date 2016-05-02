@@ -1053,6 +1053,7 @@ BSSize bs_size_mod (const BSSize size1, const BSSize size2, BSError **error) {
 BSSize bs_size_round_to_nearest (const BSSize size, const BSSize round_to, BSRoundDir dir, BSError **error) {
     BSSize ret = NULL;
     mpz_t q;
+    mpz_t aux_size;
 
     if (mpz_cmp_ui (round_to->bytes, 0) == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
@@ -1061,9 +1062,16 @@ BSSize bs_size_round_to_nearest (const BSSize size, const BSSize round_to, BSRou
 
     mpz_init (q);
 
-    if (dir == BS_ROUND_DIR_UP)
+    if (dir == BS_ROUND_DIR_UP) {
         mpz_cdiv_q (q, size->bytes, round_to->bytes);
-    else
+    } else if (dir == BS_ROUND_DIR_HALF_UP) {
+        /* round half up == add half of what to round to and round down */
+        mpz_init (aux_size);
+        mpz_fdiv_q_ui (aux_size, round_to->bytes, 2);
+        mpz_add (aux_size, aux_size, size->bytes);
+        mpz_fdiv_q (q, aux_size, round_to->bytes);
+        mpz_clear (aux_size);
+    } else
         mpz_fdiv_q (q, size->bytes, round_to->bytes);
 
     ret = bs_size_new ();
