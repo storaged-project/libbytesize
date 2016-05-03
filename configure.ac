@@ -1,6 +1,6 @@
 # configure.ac for libbytesize
 
-AC_INIT([libbytesize], [0.5], [vpodzime@redhat.com])
+AC_INIT([libbytesize], [0.6], [vpodzime@redhat.com])
 
 # Disable building static libraries.
 # This needs to be set before initializing automake
