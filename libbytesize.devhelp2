@@ -4,7 +4,7 @@
     <sub name="libbytesize Reference Manual" link="ch01.html">
       <sub name="BSSize" link="libbytesize-BSSize.html"/>
     </sub>
-    <sub name="GI Overrides" link="ch02.html"/>
+    <sub name="Bindings" link="ch02.html"/>
     <sub name="API Index" link="api-index-full.html"/>
     <sub name="Index of deprecated API" link="deprecated-api-index.html"/>
     <sub name="Annotation Glossary" link="annotation-glossary.html"/>
@@ -14,6 +14,8 @@
     <keyword type="function" name="bs_size_new_from_bytes ()" link="libbytesize-BSSize.html#bs-size-new-from-bytes"/>
     <keyword type="function" name="bs_size_new_from_str ()" link="libbytesize-BSSize.html#bs-size-new-from-str"/>
     <keyword type="function" name="bs_size_new_from_size ()" link="libbytesize-BSSize.html#bs-size-new-from-size"/>
+    <keyword type="function" name="bs_size_free ()" link="libbytesize-BSSize.html#bs-size-free"/>
+    <keyword type="function" name="bs_clear_error ()" link="libbytesize-BSSize.html#bs-clear-error"/>
     <keyword type="function" name="bs_size_get_bytes ()" link="libbytesize-BSSize.html#bs-size-get-bytes"/>
     <keyword type="function" name="bs_size_sgn ()" link="libbytesize-BSSize.html#bs-size-sgn"/>
     <keyword type="function" name="bs_size_get_bytes_str ()" link="libbytesize-BSSize.html#bs-size-get-bytes-str"/>
@@ -40,16 +42,17 @@
     <keyword type="function" name="bs_size_round_to_nearest ()" link="libbytesize-BSSize.html#bs-size-round-to-nearest"/>
     <keyword type="function" name="bs_size_cmp ()" link="libbytesize-BSSize.html#bs-size-cmp"/>
     <keyword type="function" name="bs_size_cmp_bytes ()" link="libbytesize-BSSize.html#bs-size-cmp-bytes"/>
-    <keyword type="macro" name="BS_SIZE_ERROR" link="libbytesize-BSSize.html#BS-SIZE-ERROR:CAPS"/>
-    <keyword type="enum" name="enum BSSizeError" link="libbytesize-BSSize.html#BSSizeError"/>
+    <keyword type="typedef" name="BSSize" link="libbytesize-BSSize.html#BSSize"/>
+    <keyword type="enum" name="enum BSErrorCode" link="libbytesize-BSSize.html#BSErrorCode"/>
+    <keyword type="struct" name="BSError" link="libbytesize-BSSize.html#BSError"/>
     <keyword type="enum" name="enum BSBunit" link="libbytesize-BSSize.html#BSBunit"/>
     <keyword type="enum" name="enum BSDunit" link="libbytesize-BSSize.html#BSDunit"/>
     <keyword type="enum" name="enum BSRoundDir" link="libbytesize-BSSize.html#BSRoundDir"/>
     <keyword type="union" name="BSUnit" link="libbytesize-BSSize.html#BSUnit"/>
     <keyword type="macro" name="BS_FLOAT_PREC_BITS" link="libbytesize-BSSize.html#BS-FLOAT-PREC-BITS:CAPS"/>
-    <keyword type="constant" name="BS_SIZE_ERROR_INVALID_SPEC" link="libbytesize-BSSize.html#BS-SIZE-ERROR-INVALID-SPEC:CAPS"/>
-    <keyword type="constant" name="BS_SIZE_ERROR_OVER" link="libbytesize-BSSize.html#BS-SIZE-ERROR-OVER:CAPS"/>
-    <keyword type="constant" name="BS_SIZE_ERROR_ZERO_DIV" link="libbytesize-BSSize.html#BS-SIZE-ERROR-ZERO-DIV:CAPS"/>
+    <keyword type="constant" name="BS_ERROR_INVALID_SPEC" link="libbytesize-BSSize.html#BS-ERROR-INVALID-SPEC:CAPS"/>
+    <keyword type="constant" name="BS_ERROR_OVER" link="libbytesize-BSSize.html#BS-ERROR-OVER:CAPS"/>
+    <keyword type="constant" name="BS_ERROR_ZERO_DIV" link="libbytesize-BSSize.html#BS-ERROR-ZERO-DIV:CAPS"/>
     <keyword type="constant" name="BS_BUNIT_B" link="libbytesize-BSSize.html#BS-BUNIT-B:CAPS"/>
     <keyword type="constant" name="BS_BUNIT_KiB" link="libbytesize-BSSize.html#BS-BUNIT-KiB"/>
     <keyword type="constant" name="BS_BUNIT_MiB" link="libbytesize-BSSize.html#BS-BUNIT-MiB"/>
@@ -72,5 +75,6 @@
     <keyword type="constant" name="BS_DUNIT_UNDEF" link="libbytesize-BSSize.html#BS-DUNIT-UNDEF:CAPS"/>
     <keyword type="constant" name="BS_ROUND_DIR_UP" link="libbytesize-BSSize.html#BS-ROUND-DIR-UP:CAPS"/>
     <keyword type="constant" name="BS_ROUND_DIR_DOWN" link="libbytesize-BSSize.html#BS-ROUND-DIR-DOWN:CAPS"/>
+    <keyword type="constant" name="BS_ROUND_DIR_HALF_UP" link="libbytesize-BSSize.html#BS-ROUND-DIR-HALF-UP:CAPS"/>
   </functions>
 </book>

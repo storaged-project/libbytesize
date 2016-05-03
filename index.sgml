@@ -9,6 +9,8 @@
 <ANCHOR id="bs-size-new-from-bytes" href="libbytesize/libbytesize-BSSize.html#bs-size-new-from-bytes">
 <ANCHOR id="bs-size-new-from-str" href="libbytesize/libbytesize-BSSize.html#bs-size-new-from-str">
 <ANCHOR id="bs-size-new-from-size" href="libbytesize/libbytesize-BSSize.html#bs-size-new-from-size">
+<ANCHOR id="bs-size-free" href="libbytesize/libbytesize-BSSize.html#bs-size-free">
+<ANCHOR id="bs-clear-error" href="libbytesize/libbytesize-BSSize.html#bs-clear-error">
 <ANCHOR id="bs-size-get-bytes" href="libbytesize/libbytesize-BSSize.html#bs-size-get-bytes">
 <ANCHOR id="bs-size-sgn" href="libbytesize/libbytesize-BSSize.html#bs-size-sgn">
 <ANCHOR id="bs-size-get-bytes-str" href="libbytesize/libbytesize-BSSize.html#bs-size-get-bytes-str">
@@ -36,11 +38,12 @@
 <ANCHOR id="bs-size-cmp" href="libbytesize/libbytesize-BSSize.html#bs-size-cmp">
 <ANCHOR id="bs-size-cmp-bytes" href="libbytesize/libbytesize-BSSize.html#bs-size-cmp-bytes">
 <ANCHOR id="libbytesize-BSSize.other_details" href="libbytesize/libbytesize-BSSize.html#libbytesize-BSSize.other_details">
-<ANCHOR id="BS-SIZE-ERROR:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-SIZE-ERROR:CAPS">
-<ANCHOR id="BSSizeError" href="libbytesize/libbytesize-BSSize.html#BSSizeError">
-<ANCHOR id="BS-SIZE-ERROR-INVALID-SPEC:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-SIZE-ERROR-INVALID-SPEC:CAPS">
-<ANCHOR id="BS-SIZE-ERROR-OVER:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-SIZE-ERROR-OVER:CAPS">
-<ANCHOR id="BS-SIZE-ERROR-ZERO-DIV:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-SIZE-ERROR-ZERO-DIV:CAPS">
+<ANCHOR id="BSSize" href="libbytesize/libbytesize-BSSize.html#BSSize">
+<ANCHOR id="BSErrorCode" href="libbytesize/libbytesize-BSSize.html#BSErrorCode">
+<ANCHOR id="BS-ERROR-INVALID-SPEC:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-ERROR-INVALID-SPEC:CAPS">
+<ANCHOR id="BS-ERROR-OVER:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-ERROR-OVER:CAPS">
+<ANCHOR id="BS-ERROR-ZERO-DIV:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-ERROR-ZERO-DIV:CAPS">
+<ANCHOR id="BSError" href="libbytesize/libbytesize-BSSize.html#BSError">
 <ANCHOR id="BSBunit" href="libbytesize/libbytesize-BSSize.html#BSBunit">
 <ANCHOR id="BS-BUNIT-B:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-BUNIT-B:CAPS">
 <ANCHOR id="BS-BUNIT-KiB" href="libbytesize/libbytesize-BSSize.html#BS-BUNIT-KiB">
@@ -66,6 +69,7 @@
 <ANCHOR id="BSRoundDir" href="libbytesize/libbytesize-BSSize.html#BSRoundDir">
 <ANCHOR id="BS-ROUND-DIR-UP:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-ROUND-DIR-UP:CAPS">
 <ANCHOR id="BS-ROUND-DIR-DOWN:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-ROUND-DIR-DOWN:CAPS">
+<ANCHOR id="BS-ROUND-DIR-HALF-UP:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-ROUND-DIR-HALF-UP:CAPS">
 <ANCHOR id="BSUnit" href="libbytesize/libbytesize-BSSize.html#BSUnit">
 <ANCHOR id="BS-FLOAT-PREC-BITS:CAPS" href="libbytesize/libbytesize-BSSize.html#BS-FLOAT-PREC-BITS:CAPS">
 <ANCHOR id="annotation-glossterm-allow-none" href="libbytesize/annotation-glossary.html#annotation-glossterm-allow-none">
