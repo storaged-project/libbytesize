@@ -123,6 +123,12 @@ class SizeTestCase(unittest.TestCase):
         actual = SizeStruct.new_from_bytes(1024, -1).get_bytes()
         expected = (1024, -1)
         self.assertEqual(actual, expected)
+
+        # now let's try something bigger than MAXUINT32
+        actual = SizeStruct.new_from_bytes(5718360*1024, 1).get_bytes()
+        expected = (5718360*1024, 1)
+        self.assertEqual(actual, expected)
+
     #enddef
 
     def testNewFromSizeStruct(self):

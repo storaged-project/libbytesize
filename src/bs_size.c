@@ -3,6 +3,7 @@
 #include <langinfo.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 #include <ctype.h>
 #include <pcre.h>
@@ -329,8 +330,12 @@ BSSize bs_size_new (void) {
  * Returns: a new #BSSize
  */
 BSSize bs_size_new_from_bytes (uint64_t bytes, int sgn) {
+    char *num_str = NULL;
     BSSize ret = bs_size_new ();
-    mpz_set_ui (ret->bytes, bytes);
+
+    asprintf (&num_str, "%"PRIu64, bytes);
+    mpz_set_str (ret->bytes, num_str, 10);
+    free (num_str);
     if (sgn == -1)
         mpz_neg (ret->bytes, ret->bytes);
     return ret;
@@ -475,13 +480,29 @@ BSSize bs_size_new_from_size (const BSSize size) {
  * Returns: the @size in a number of bytes
  */
 uint64_t bs_size_get_bytes (const BSSize size, int *sgn, BSError **error) {
-    if (mpz_cmp_ui (size->bytes, UINT64_MAX) > 0) {
+    char *num_str = NULL;
+    mpz_t max;
+    uint64_t ret = 0;
+
+    mpz_init2 (max, (mp_bitcnt_t) 64);
+    asprintf (&num_str, "%"PRIu64, UINT64_MAX);
+    mpz_set_str (max, num_str, 10);
+    free (num_str);
+    if (mpz_cmp (size->bytes, max) > 0) {
         set_error (error, BS_ERROR_OVER, strdup("The size is too big, cannot be returned as a 64bit number of bytes"));
         return 0;
     }
+    mpz_clear (max);
     if (sgn)
         *sgn = mpz_sgn (size->bytes);
-    return (uint64_t) mpz_get_ui (size->bytes);
+    if (mpz_cmp_ui (size->bytes, UINT64_MAX) <= 0)
+        return (uint64_t) mpz_get_ui (size->bytes);
+    else {
+        num_str = bs_size_get_bytes_str (size);
+        ret = strtoull (num_str, NULL, 10);
+        free (num_str);
+        return ret;
+    }
 }
 
 /**
