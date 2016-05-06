@@ -17,11 +17,6 @@ TEST_PYTHON ?= $(PYTHON)
 ZANATA_PULL_ARGS = --transdir ./po/
 ZANATA_PUSH_ARGS = --srcdir ./po/ --push-type source --force
 
-# Run tests on the translations before tarring them up.
-# This will remove the .po/.mo files for any language that fails the checks
-dist-hook:
-	PYTHONPATH=$(srcdir)/translation-canary python3 -m translation_canary.translated --release $(distdir)
-
 all-local: po-empty
 
 run-ipython: all
@@ -44,9 +39,14 @@ po-empty:
 		exit 1 ; \
 	done
 
+# After pulling from zanata, use translation-canary to delete any bad
+# translations, and then run po-empty to replace them with empty .po files
 po-pull:
 	rpm -q zanata-python-client &>/dev/null || ( echo "need to run: yum install zanata-python-client"; exit 1 )
 	zanata pull $(ZANATA_PULL_ARGS)
+	PYTHONPATH=$(srcdir)/translation-canary python3 -m translation_canary.translated \
+		   --release --no-modify-linguas $(srcdir)
+	$(MAKE) po-empty
 
 tag:
 	@TAG="$(PACKAGE_NAME)-$(PACKAGE_VERSION)" ; \
