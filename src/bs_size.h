@@ -24,6 +24,7 @@ typedef enum {
     BS_ERROR_INVALID_SPEC,
     BS_ERROR_OVER,
     BS_ERROR_ZERO_DIV,
+    BS_ERROR_FAIL
 } BSErrorCode;
 
 /**
