@@ -31,7 +31,11 @@ test: check
 check: all
 	-git checkout HEAD po/libbytesize.pot
 
-ci: distcheck
+ci:
+	$(MAKE) distcheck; \
+	status="$$?" ; \
+	find . -name 'test-suite.log' -exec cat '{}' \; ; \
+	test "$$status" = "0"
 
 po-empty:
 	for lingua in $$(cat po/LINGUAS) ; do \
