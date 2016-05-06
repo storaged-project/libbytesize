@@ -332,8 +332,12 @@ BSSize bs_size_new (void) {
 BSSize bs_size_new_from_bytes (uint64_t bytes, int sgn) {
     char *num_str = NULL;
     BSSize ret = bs_size_new ();
+    int ok = 0;
 
-    asprintf (&num_str, "%"PRIu64, bytes);
+    ok = asprintf (&num_str, "%"PRIu64, bytes);
+    if (ok == -1)
+        /* probably cannot allocate memory, there's nothing more we can do */
+        return ret;
     mpz_set_str (ret->bytes, num_str, 10);
     free (num_str);
     if (sgn == -1)
@@ -483,9 +487,16 @@ uint64_t bs_size_get_bytes (const BSSize size, int *sgn, BSError **error) {
     char *num_str = NULL;
     mpz_t max;
     uint64_t ret = 0;
+    int ok = 0;
 
     mpz_init2 (max, (mp_bitcnt_t) 64);
-    asprintf (&num_str, "%"PRIu64, UINT64_MAX);
+    ok = asprintf (&num_str, "%"PRIu64, UINT64_MAX);
+    if (ok == -1) {
+        /* we probably cannot allocate memory so we are doomed */
+        set_error (error, BS_ERROR_FAIL, strdup("Failed to allocate memory"));
+        mpz_clear (max);
+        return 0;
+    }
     mpz_set_str (max, num_str, 10);
     free (num_str);
     if (mpz_cmp (size->bytes, max) > 0) {
