@@ -316,6 +316,14 @@ c_bytesize.bs_size_cmp_bytes.restype = ctypes.c_int
 c_bytesize.bs_size_cmp_bytes.argtypes = [POINTER(SizeStruct), ctypes.c_ulonglong, ctypes.c_bool]
 
 
+def _str_to_decimal(num_str):
+    radix = locale.nl_langinfo(locale.RADIXCHAR)
+    if radix != '.':
+        num_str = num_str.replace(radix, '.')
+
+    return Decimal(num_str)
+
+
 class Size(object):
     def __init__(self, spec=None):
         self._c_size = None
@@ -363,11 +371,7 @@ class Size(object):
         else:
             ret = self._c_size.convert_to(unit)
 
-        radix = locale.nl_langinfo(locale.RADIXCHAR)
-        if radix != '.':
-            ret = ret.replace(radix, '.')
-
-        return Decimal(ret)
+        return _str_to_decimal(ret)
 
     def human_readable(self, min_unit=B, max_places=2, xlate=True):
         if isinstance(min_unit, six.string_types):
@@ -493,12 +497,12 @@ class Size(object):
                 return Size(self._c_size.div_int(other))
             else:
                 other = SizeStruct.new_from_str(str(other))
-                return Size(Decimal(self._c_size.true_div(other)))
+                return Size(_str_to_decimal(self._c_size.true_div(other)))
         elif isinstance(other, (Decimal, float)):
             other = SizeStruct.new_from_str(str(other))
             return Size(self._c_size.true_div(other))
         else:
-            return Decimal(self._c_size.true_div(other._c_size))
+            return _str_to_decimal(self._c_size.true_div(other._c_size))
 
     def __truediv__(self, other):
         if isinstance(other, six.integer_types):
@@ -510,7 +514,7 @@ class Size(object):
         elif isinstance(other, (Decimal, float)):
             return Size(self._c_size.mul_float_str(str(Decimal(1)/Decimal(other))))
 
-        return Decimal(self._c_size.true_div(other._c_size))
+        return _str_to_decimal(self._c_size.true_div(other._c_size))
 
     def _safe_floordiv(self, other):
         try:
