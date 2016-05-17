@@ -134,7 +134,7 @@ static char *replace_char_with_str (const char *str, char orig, const char *new)
         return NULL;
 
     next = str;
-    for (next=strchr (next, orig); next; count++, next++);
+    for (next=strchr (next, orig); next; count++, next=strchr (++next, orig));
 
     /* allocate space for the string [strlen(str)] with the char replaced by the
        string [strlen(new) - 1] $count times and a \0 byte at the end [ + 1] */
