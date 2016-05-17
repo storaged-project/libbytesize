@@ -7,9 +7,18 @@ AC_INIT([libbytesize], [0.7], [vpodzime@redhat.com])
 AC_DISABLE_STATIC
 
 AM_INIT_AUTOMAKE([foreign -Wall -Werror -Wno-syntax -Wno-portability])
-AM_GNU_GETTEXT_VERSION([0.19.1])
-AM_GNU_GETTEXT([external])
 AC_CONFIG_MACRO_DIR([m4])
+
+# Check for the gettext programs
+AC_PATH_PROG([XGETTEXT], [xgettext])
+AC_PATH_PROG([MSGFMT], [msgfmt])
+AC_PATH_PROG([MSGMERGE], [msgmerge])
+AC_PATH_PROG([MSGCAT], [msgcat])
+AS_IF([test -z "$XGETTEXT" -o -z "$MSGFMT" -o -z "$MSGMERGE" -o -z "$MSGCAT"],
+      [AC_MSG_FAILURE([gettext not found])])
+
+# Define this so gettext.h works without requiring the whole gettext macro
+CFLAGS="${CFLAGS} -DENABLE_NLS"
 
 AM_PATH_PYTHON
 
@@ -19,7 +28,7 @@ AC_PROG_CC
 LT_INIT
 
 AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
-                 po/Makefile.in \
+                 po/Makefile \
                  src/python/Makefile \
                  dist/Makefile dist/libbytesize.spec \
                  docs/Makefile docs/libbytesize-docs.xml \
