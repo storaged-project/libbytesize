@@ -1,5 +1,5 @@
 Name:        libbytesize
-Version:     0.6
+Version:     0.7
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -87,6 +87,18 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{python3_sitearch}/bytesize/__pycache__/*
 
 %changelog
+* Tue May 17 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.7-1
+- Re-run autogen.sh and configure before updating the .pot file (vpodzime)
+- Change where tests on translated strings are run. (dshea)
+- Squashed 'translation-canary/' changes from d6c0708..840c2d6 (dshea)
+- Make sure we get the tests result report in 'make ci' (vpodzime)
+- Add a new generic error code/enum for failures (vpodzime)
+- Do not ignore the return value from asprintf() (vpodzime)
+- Beware of the radix char when converting to Decimal (#1325705) (vpodzime)
+
+* Fri May  6 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.6-2
+- Beware of unsigned long int on 32bit arches (#1333149) (vpodzime)
+
 * Tue May 03 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.6-1
 - Add support for the ROUND_HALF_UP rounding mode (vpodzime)
 - Make sure we return the right radix char in human_readable() (vpodzime)

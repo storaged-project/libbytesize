@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: libbytesize 0.6\n"
+"Project-Id-Version: libbytesize 0.7\n"
 "Report-Msgid-Bugs-To: vpodzime@redhat.com\n"
-"POT-Creation-Date: 2016-05-03 09:07+0200\n"
+"POT-Creation-Date: 2016-05-17 16:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,86 +18,86 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. TRANSLATORS: 'B' for bytes
-#: src/bs_size.c:43 src/bs_size.c:64
+#: src/bs_size.c:44 src/bs_size.c:65
 msgid "B"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for kibibyte, 2**10 bytes
-#: src/bs_size.c:45
+#: src/bs_size.c:46
 msgid "KiB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for mebibyte, 2**20 bytes
-#: src/bs_size.c:47
+#: src/bs_size.c:48
 msgid "MiB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for gibibyte, 2**30 bytes
-#: src/bs_size.c:49
+#: src/bs_size.c:50
 msgid "GiB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for tebibyte, 2**40 bytes
-#: src/bs_size.c:51
+#: src/bs_size.c:52
 msgid "TiB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for pebibyte, 2**50 bytes
-#: src/bs_size.c:53
+#: src/bs_size.c:54
 msgid "PiB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for exbibyte, 2**60 bytes
-#: src/bs_size.c:55
+#: src/bs_size.c:56
 msgid "EiB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for zebibyte, 2**70 bytes
-#: src/bs_size.c:57
+#: src/bs_size.c:58
 msgid "ZiB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for yobibyte, 2**80 bytes
-#: src/bs_size.c:59
+#: src/bs_size.c:60
 msgid "YiB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for kilobyte, 10**3 bytes
-#: src/bs_size.c:66
+#: src/bs_size.c:67
 msgid "KB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for megabyte, 10**6 bytes
-#: src/bs_size.c:68
+#: src/bs_size.c:69
 msgid "MB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for gigabyte, 10**9 bytes
-#: src/bs_size.c:70
+#: src/bs_size.c:71
 msgid "GB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for terabyte, 10**12 bytes
-#: src/bs_size.c:72
+#: src/bs_size.c:73
 msgid "TB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for petabyte, 10**15 bytes
-#: src/bs_size.c:74
+#: src/bs_size.c:75
 msgid "PB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for exabyte, 10**18 bytes
-#: src/bs_size.c:76
+#: src/bs_size.c:77
 msgid "EB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for zettabyte, 10**21 bytes
-#: src/bs_size.c:78
+#: src/bs_size.c:79
 msgid "ZB"
 msgstr ""
 
 #. TRANSLATORS: abbreviation for yottabyte, 10**24 bytes
-#: src/bs_size.c:80
+#: src/bs_size.c:81
 msgid "YB"
 msgstr ""
