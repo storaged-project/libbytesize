@@ -17,14 +17,22 @@ TEST_PYTHON ?= $(PYTHON)
 ZANATA_PULL_ARGS = --transdir ./po/
 ZANATA_PUSH_ARGS = --srcdir ./po/ --push-type source --force
 
-all-local: po-empty
+# If translations are present, run tests on the .po files before tarring them
+# up to remove any .po files with errors. Use a weird looking loop since shell
+# doesn't have a good way to test for a wildcard.
+dist-hook:
+	for p in $(distdir)/po/*.po ; do \
+	    if [ -e "$$p" ]; then \
+		PYTHONPATH=$(srcdir)/translation-canary python3 -m translation_canary.translated \
+		    --release $(distdir)/po ; \
+	    fi ; \
+	    break ; \
+	done
 
 run-ipython: all
 	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) ipython
 
 test: check
-check: all
-	-git checkout HEAD po/libbytesize.pot
 
 ci:
 	$(MAKE) distcheck; \
@@ -32,21 +40,9 @@ ci:
 	find . -name 'test-suite.log' -exec cat '{}' \; ; \
 	test "$$status" = "0"
 
-po-empty:
-	for lingua in $$(cat po/LINGUAS) ; do \
-		[ -f ./po/$$lingua.po ] || \
-		msginit -i ./po/$(PACKAGE_NAME).pot -o ./po/$$lingua.po --no-translator || \
-		exit 1 ; \
-	done
-
-# After pulling from zanata, use translation-canary to delete any bad
-# translations, and then run po-empty to replace them with empty .po files
 po-pull:
 	rpm -q zanata-python-client &>/dev/null || ( echo "need to run: yum install zanata-python-client"; exit 1 )
 	zanata pull $(ZANATA_PULL_ARGS)
-	PYTHONPATH=$(srcdir)/translation-canary python3 -m translation_canary.translated \
-		   --release --no-modify-linguas $(srcdir)
-	$(MAKE) po-empty
 
 tag:
 	@TAG="$(PACKAGE_NAME)-$(PACKAGE_VERSION)" ; \
@@ -73,8 +69,6 @@ bumpver:
 	mv dist/libbytesize.spec.in.new dist/libbytesize.spec.in ; rm -f speclog ; \
 	sed -ri "s/(AC_INIT\(\[$(PACKAGE_NAME)\], \[)[0-9]+\.[0-9]+(\],.*)/\1$$VERSION.$$NEWSUBVERSION\2/" configure.ac ; \
 	sed -ri "s/Version:(\\s+)[-0-9.]+/Version:\\1$$VERSION.$$NEWSUBVERSION/" dist/libbytesize.spec.in ;
-	$(srcdir)/autogen.sh && $(srcdir)/configure
-	$(MAKE) -C po/ $(PACKAGE_NAME).pot-update
 
 archive: po-pull
 	$(MAKE) distcheck
@@ -92,6 +86,7 @@ rpm: local
 
 release: tag
 	$(MAKE) archive
+	$(MAKE) -C po/ $(PACKAGE_NAME).pot-update
 	zanata push $(ZANATA_PUSH_ARGS)
 
 EXTRA_DIST = config.rpath
