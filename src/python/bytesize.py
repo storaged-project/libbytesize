@@ -97,7 +97,11 @@ class SizeStruct(ctypes.Structure):
         return c_bytesize.bs_size_new_from_size(sz).contents
 
     def __del__(self):
-        c_bytesize.bs_size_free(self)
+        # XXX: For some reason c_bytesize may be None here (probably when python
+        #      cleans up after itself) and loading it again doesn't work at that
+        #      stage. Let's just prevent ignored exceptions from happening.
+        if c_bytesize:
+            c_bytesize.bs_size_free(self)
 
     def get_bytes(self):
         sgn = ctypes.c_int(0)
