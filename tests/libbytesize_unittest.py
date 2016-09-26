@@ -337,7 +337,7 @@ class SizeTestCase(unittest.TestCase):
     #enddef
 
     def testHumanReadable(self):
-        strSizeStruct = SizeStruct.new_from_str("12 KiB").human_readable(KiB, 2, True)
+        strSizeStruct = SizeStruct.new_from_str("12 KiB").human_readable(KiB, 2, False)
         self.assertEqual(strSizeStruct, "12 KiB")
 
         strSizeStruct = SizeStruct.new_from_str("1 KB").human_readable(KiB, 2, False)
