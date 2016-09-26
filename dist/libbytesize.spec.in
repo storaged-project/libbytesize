@@ -80,9 +80,11 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{_datadir}/gtk-doc/html/libbytesize
 
 %files -n python-%{realname}
+%dir %{python2_sitearch}/bytesize
 %{python2_sitearch}/bytesize/*
 
 %files -n python3-%{realname}
+%dir %{python3_sitearch}/bytesize
 %{python3_sitearch}/bytesize/*
 %{python3_sitearch}/bytesize/__pycache__/*
 
