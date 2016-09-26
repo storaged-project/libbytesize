@@ -73,7 +73,8 @@ bumpver:
 archive: po-pull
 	$(MAKE) distcheck
 
-local: po-empty
+local: all
+	[ -f ./po/en_US.po ] || msginit -i ./po/$(PACKAGE_NAME).pot -o ./po/en_US.po --no-translator
 	$(MAKE) dist
 
 srpm: local
