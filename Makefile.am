@@ -17,6 +17,13 @@ TEST_PYTHON ?= $(PYTHON)
 ZANATA_PULL_ARGS = --transdir ./po/
 ZANATA_PUSH_ARGS = --srcdir ./po/ --push-type source --force
 
+TEST_DEPENDENCIES = $(shell rpm --specfile dist/libbytesize.spec.in --requires | cut -d' ' -f1 | grep -v ^libbytesize)
+TEST_DEPENDENCIES += gmp gmp-devel
+TEST_DEPENDENCIES += mpfr mpfr-devel
+TEST_DEPENDENCIES += pcre pcre-devel
+TEST_DEPENDENCIES += glibc-all-langpacks
+
+
 # If translations are present, run tests on the .po files before tarring them
 # up to remove any .po files with errors. Use a weird looking loop since shell
 # doesn't have a good way to test for a wildcard.
@@ -32,7 +39,24 @@ dist-hook:
 run-ipython: all
 	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) ipython
 
-test: check
+check-requires:
+	@echo "*** Checking if the dependencies required for testing and analysis are available ***"
+	@status=0 ; \
+	for pkg in $(TEST_DEPENDENCIES) ; do \
+		test_output="$$(rpm -q --whatprovides "$$pkg")" ; \
+		if [ $$? != 0 ]; then \
+			echo "$$test_output" ; \
+			status=1 ; \
+		fi ; \
+	done ; \
+	exit $$status
+
+install-requires:
+	@echo "*** Installing the dependencies required for testing and analysis ***"
+	dnf install -y $(TEST_DEPENDENCIES)
+
+test: check-requires
+	$(MAKE) check
 
 ci:
 	$(MAKE) distcheck; \
