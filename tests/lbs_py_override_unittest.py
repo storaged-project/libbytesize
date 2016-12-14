@@ -53,6 +53,9 @@ class SizeTestCase(unittest.TestCase):
         actual = int1.get_bytes()
         expected = 110
         self.assertEqual(actual, expected)
+
+        size1 = Size("100 B") + None
+        self.assertEqual(size1.get_bytes(), 100)
     #enddef
 
     def testOperatorMinus(self):
@@ -89,6 +92,9 @@ class SizeTestCase(unittest.TestCase):
         actual = int1.get_bytes()
         expected = 900
         self.assertEqual(actual, expected)
+
+        size1 = Size("100 B") - None
+        self.assertEqual(size1.get_bytes(), 100)
     #enddef
 
     def testOperatorMul(self):
