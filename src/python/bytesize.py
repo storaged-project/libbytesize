@@ -9,6 +9,17 @@ import locale
 import gettext
 _ = lambda x: gettext.translation("libbytesize", fallback=True).gettext(x) if x != "" else ""
 
+"""
+Python bindings for the libbytesize library and it's BSSize "class". These
+bindings provide a real Python class :class:`Size` which wraps the libbytesize
+functionality and provides all the features one would expect from a numeric type
+in Python.
+
+.. note::
+  ``None`` is treated as ``Size(0)`` in mathematical operations.
+
+"""
+
 c_bytesize = ctypes.CDLL("libbytesize.so.1")
 
 B = 0
