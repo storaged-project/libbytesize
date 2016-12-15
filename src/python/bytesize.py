@@ -9,6 +9,17 @@ import locale
 import gettext
 _ = lambda x: gettext.translation("libbytesize", fallback=True).gettext(x) if x != "" else ""
 
+"""
+Python bindings for the libbytesize library and it's BSSize "class". These
+bindings provide a real Python class :class:`Size` which wraps the libbytesize
+functionality and provides all the features one would expect from a numeric type
+in Python.
+
+.. note::
+  ``None`` is treated as ``Size(0)`` in mathematical operations.
+
+"""
+
 c_bytesize = ctypes.CDLL("libbytesize.so.1")
 
 B = 0
@@ -327,6 +338,10 @@ def _str_to_decimal(num_str):
 
     return Decimal(num_str)
 
+def neutralize_none_operand(fn):
+    def fn_with_neutralization(sz, other):
+        return fn(sz, Size(0) if other is None else other)
+    return fn_with_neutralization
 
 class Size(object):
     def __init__(self, spec=None):
@@ -450,6 +465,7 @@ class Size(object):
     def __neg__(self):
         return self.__mul__(-1)
 
+    @neutralize_none_operand
     def __add__(self, other):
         if isinstance(other, six.integer_types):
             if other <= MAXUINT64:
@@ -465,6 +481,7 @@ class Size(object):
     # needed to make sum() work with Size arguments
     __radd__ = __add__
 
+    @neutralize_none_operand
     def __sub__(self, other):
         if isinstance(other, six.integer_types):
             if other <= MAXUINT64:
@@ -477,10 +494,12 @@ class Size(object):
             other = other._c_size
         return Size(self._c_size.sub(other))
 
+    @neutralize_none_operand
     def __rsub__(self, other):
         other = SizeStruct.new_from_str(str(other))
         return Size(SizeStruct.sub(other, self._c_size))
 
+    @neutralize_none_operand
     def __mul__(self, other):
         if isinstance(other, (Size, SizeStruct)):
             raise ValueError("Cannot multiply Size by Size. It just doesn't make sense.")
@@ -492,6 +511,7 @@ class Size(object):
 
     __rmul__ = __mul__
 
+    @neutralize_none_operand
     def __div__(self, other):
         if not six.PY2:
             raise AttributeError
@@ -508,6 +528,7 @@ class Size(object):
         else:
             return _str_to_decimal(self._c_size.true_div(other._c_size))
 
+    @neutralize_none_operand
     def __truediv__(self, other):
         if isinstance(other, six.integer_types):
             if other <= MAXUINT64:
@@ -533,6 +554,7 @@ class Size(object):
         except OverflowError:
             return Size(float(self._c_size.true_div_int(other)))
 
+    @neutralize_none_operand
     def __floordiv__(self, other):
         if isinstance(other, six.integer_types):
             if other <= MAXUINT64:
@@ -542,9 +564,11 @@ class Size(object):
                 return Size(self._safe_floordiv(other))
         return self._safe_floordiv(other)
 
+    @neutralize_none_operand
     def __mod__(self, other):
         return Size(self._c_size.mod(other._c_size))
 
+    @neutralize_none_operand
     def __divmod__(self, other):
         rdiv = self.__floordiv__(other)
         if not isinstance(other, Size):
