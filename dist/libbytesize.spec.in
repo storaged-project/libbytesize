@@ -1,5 +1,5 @@
 Name:        libbytesize
-Version:     0.7
+Version:     0.8
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -89,6 +89,17 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{python3_sitearch}/bytesize/__pycache__/*
 
 %changelog
+* Fri Dec 16 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.8-1
+- Add a docstring to python bindings (vpodzime)
+- Neutralize None as an operand for math operations (vpodzime)
+- Add targets for checking and installing test requirements (vpodzime)
+- Fix 'make local' (vtrefny)
+- Make the python packages own their package directories (vpodzime)
+- Don't compare translated and untranslated representations (vpodzime)
+- Prevent ignored exceptions in __del__ from happening (vpodzime)
+- replace_char_with_str: Fix the character count. (dshea)
+- Ditch autopoint. (dshea)
+
 * Tue May 17 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.7-1
 - Re-run autogen.sh and configure before updating the .pot file (vpodzime)
 - Change where tests on translated strings are run. (dshea)
