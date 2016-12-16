@@ -96,9 +96,17 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 - Fix 'make local' (vtrefny)
 - Make the python packages own their package directories (vpodzime)
 - Don't compare translated and untranslated representations (vpodzime)
-- Prevent ignored exceptions in __del__ from happening (vpodzime)
 - replace_char_with_str: Fix the character count. (dshea)
 - Ditch autopoint. (dshea)
+
+* Mon Dec 12 2016 Charalampos Stratakis <cstratak@redhat.com> - 0.7-4
+- Rebuild for Python 3.6
+
+* Tue Sep 20 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.7-3
+- Prevent ignored exceptions in __del__ from happening (vpodzime)
+
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7-2
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
 * Tue May 17 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.7-1
 - Re-run autogen.sh and configure before updating the .pot file (vpodzime)
