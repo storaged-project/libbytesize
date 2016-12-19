@@ -36,22 +36,30 @@ AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
 
 LIBBYTESIZE_PKG_CHECK_MODULES([PCRE], [libpcre >= 8.32])
 
-AC_PATH_PROG([PYTHON3], [python3], [no])
-AS_IF([test "x$PYTHON3" == "xno"], [LIBBYTESIZE_SOFT_FAILURE([\
-      The python3 program was not found in the search path. Please ensure that it is installed and its directory is included in the search path.])],
-      [:])
-
-AC_SUBST([PYTHON3_EXEC_PREFIX], ['${exec_prefix}'])
-PYTHON3_EXECDIR=`$PYTHON3 -c "import distutils.sysconfig; \
-                          print(distutils.sysconfig.get_python_lib(1,0,prefix='$PYTHON3_EXEC_PREFIX'))"`
-AC_SUBST(py3execdir, $PYTHON3_EXECDIR)
-
 AC_CHECK_LIB(gmp, __gmpz_init)
 
 AC_CHECK_HEADERS([langinfo.h gmp.h mpfr.h stdint.h stdbool.h stdarg.h string.h stdio.h ctype.h],
                  [],
                  [LIBBYTESIZE_SOFT_FAILURE([Header file $ac_header not found.])],
                  [])
+
+AC_ARG_WITH([python3],
+    AS_HELP_STRING([--with-python3], [support python3 @<:@default=check@:>@]),
+    [],
+    [with_python3=check])
+
+if test "x$with_python3" != "xno"; then
+    AC_PATH_PROG([python3], [python3], [no])
+    AS_IF([test "x$python3" == "xno"],
+    [if test "x$with_python3" = "xyes"; then
+      LIBBYTESIZE_SOFT_FAILURE([Python3 support requested, but python3 is not available])
+      fi],
+    [AC_SUBST([PYTHON3_EXEC_PREFIX], ['${exec_prefix}'])
+      PYTHON3_EXECDIR=`$python3 -c "import distutils.sysconfig; \
+                                print(distutils.sysconfig.get_python_lib(1,0,prefix='${exec_prefix}'))"`
+      AC_SUBST(py3execdir, $PYTHON3_EXECDIR)])
+fi
+AM_CONDITIONAL(WITH_PYTHON3, test "x$with_python3" != "xno" -a "x$python3" != "xno")
 
 AC_OUTPUT
 LIBBYTESIZE_FAILURES
