@@ -34,7 +34,7 @@ AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
                  docs/Makefile docs/libbytesize-docs.xml \
                  tests/Makefile])
 
-LIBBYTESIZE_PKG_CHECK_MODULES([PCRE], [libpcre >= 8.38])
+LIBBYTESIZE_PKG_CHECK_MODULES([PCRE], [libpcre >= 8.32])
 
 AC_PATH_PROG([PYTHON3], [python3], [no])
 AS_IF([test "x$PYTHON3" == "xno"], [LIBBYTESIZE_SOFT_FAILURE([\
