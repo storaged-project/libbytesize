@@ -61,5 +61,21 @@ if test "x$with_python3" != "xno"; then
 fi
 AM_CONDITIONAL(WITH_PYTHON3, test "x$with_python3" != "xno" -a "x$python3" != "xno")
 
+
+AC_ARG_WITH([gtk-doc],
+    AS_HELP_STRING([--with-gtk-doc], [generate documentation with gtk-doc @<:@default=check@:>@]),
+    [],
+    [with_gtk_doc=check])
+
+if test "x$with_gtk_doc" != "xno"; then
+    AC_PATH_PROG([gtkdoc_scan], [gtkdoc-scan], [no])
+    AS_IF([test "x$gtkdoc_scan" == "xno"],
+    [if test "x$with_gtk_doc" = "xyes"; then
+      LIBBYTESIZE_SOFT_FAILURE([Building documentation with gtk-doc requested, but not available])
+      fi],
+      [])
+fi
+AM_CONDITIONAL(WITH_GTK_DOC, test "x$with_gtk_doc" != "xno" -a "x$gtkdoc_scan" != "xno")
+
 AC_OUTPUT
 LIBBYTESIZE_FAILURES

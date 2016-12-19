@@ -1,7 +1,10 @@
 ACLOCAL_AMFLAGS = -I m4
 DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
 
-SUBDIRS = . po src dist docs tests
+SUBDIRS = . po src dist tests
+if WITH_GTK_DOC
+SUBDIRS += docs
+endif
 
 dist_noinst_DATA = LICENSE README.rst
 
