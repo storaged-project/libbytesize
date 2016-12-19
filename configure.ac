@@ -48,6 +48,7 @@ AC_ARG_WITH([python3],
     [],
     [with_python3=check])
 
+AC_SUBST(WITH_PYTHON3, 0)
 if test "x$with_python3" != "xno"; then
     AC_PATH_PROG([python3], [python3], [no])
     AS_IF([test "x$python3" == "xno"],
@@ -57,7 +58,8 @@ if test "x$with_python3" != "xno"; then
     [AC_SUBST([PYTHON3_EXEC_PREFIX], ['${exec_prefix}'])
       PYTHON3_EXECDIR=`$python3 -c "import distutils.sysconfig; \
                                 print(distutils.sysconfig.get_python_lib(1,0,prefix='${exec_prefix}'))"`
-      AC_SUBST(py3execdir, $PYTHON3_EXECDIR)])
+      AC_SUBST(py3execdir, $PYTHON3_EXECDIR)
+      AC_SUBST(WITH_PYTHON3, 1)])
 fi
 AM_CONDITIONAL(WITH_PYTHON3, test "x$with_python3" != "xno" -a "x$python3" != "xno")
 
@@ -67,13 +69,14 @@ AC_ARG_WITH([gtk-doc],
     [],
     [with_gtk_doc=check])
 
+AC_SUBST(WITH_GTK_DOC, 0)
 if test "x$with_gtk_doc" != "xno"; then
     AC_PATH_PROG([gtkdoc_scan], [gtkdoc-scan], [no])
     AS_IF([test "x$gtkdoc_scan" == "xno"],
     [if test "x$with_gtk_doc" = "xyes"; then
       LIBBYTESIZE_SOFT_FAILURE([Building documentation with gtk-doc requested, but not available])
       fi],
-      [])
+      [AC_SUBST(WITH_GTK_DOC, 1)])
 fi
 AM_CONDITIONAL(WITH_GTK_DOC, test "x$with_gtk_doc" != "xno" -a "x$gtkdoc_scan" != "xno")
 

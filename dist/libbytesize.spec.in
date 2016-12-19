@@ -7,14 +7,20 @@ URL:         https://github.com/rhinstaller/libbytesize
 Source0:     https://github.com/rhinstaller/libbytesize/archive/%{name}-%{version}.tar.gz
 
 %define realname bytesize
+%define with_python3 @WITH_PYTHON3@
+%define with_gtk_doc @WITH_GTK_DOC@
 
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
 BuildRequires: pcre-devel
 BuildRequires: gettext-devel
 BuildRequires: python-devel
+%if %{with_python3}
 BuildRequires: python3-devel
+%endif
+%if %{with_gtk_doc}
 BuildRequires: gtk-doc
+%endif
 
 %description
 The libbytesize is a C library that facilitates work with sizes in
@@ -40,6 +46,7 @@ Requires: python-six
 This package contains Python 2 bindings for libbytesize making the use of
 the library from Python 2 easier and more convenient.
 
+%if %{with_python3}
 %package -n python3-%{realname}
 Summary: Python 3 bindings for libbytesize
 Requires: %{name}%{?_isa} = %{version}-%{release}
@@ -48,6 +55,7 @@ Requires: python3-six
 %description -n python3-%{realname}
 This package contains Python 3 bindings for libbytesize making the use of
 the library from Python 3 easier and more convenient.
+%endif
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -77,16 +85,20 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %dir %{_includedir}/bytesize
 %{_includedir}/bytesize/bs_size.h
 %{_libdir}/pkgconfig/bytesize.pc
+%if %{with_gtk_doc}
 %{_datadir}/gtk-doc/html/libbytesize
+%endif
 
 %files -n python-%{realname}
 %dir %{python2_sitearch}/bytesize
 %{python2_sitearch}/bytesize/*
 
+%if %{with_python3}
 %files -n python3-%{realname}
 %dir %{python3_sitearch}/bytesize
 %{python3_sitearch}/bytesize/*
 %{python3_sitearch}/bytesize/__pycache__/*
+%endif
 
 %changelog
 * Fri Dec 16 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.8-1
