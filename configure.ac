@@ -34,6 +34,13 @@ AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
                  docs/Makefile docs/libbytesize-docs.xml \
                  tests/Makefile])
 
+AC_CONFIG_FILES([tests/libbytesize_unittest.sh],
+                [chmod +x tests/libbytesize_unittest.sh])
+
+AC_CONFIG_FILES([tests/canary_tests.sh],
+                [chmod +x tests/canary_tests.sh])
+
+
 LIBBYTESIZE_PKG_CHECK_MODULES([PCRE], [libpcre >= 8.32])
 
 AC_CHECK_LIB(gmp, __gmpz_init)
