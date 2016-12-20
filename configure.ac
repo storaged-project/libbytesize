@@ -50,6 +50,11 @@ AC_CHECK_HEADERS([langinfo.h gmp.h mpfr.h stdint.h stdbool.h stdarg.h string.h s
                  [LIBBYTESIZE_SOFT_FAILURE([Header file $ac_header not found.])],
                  [])
 
+AC_SUBST([PYTHON_EXEC_PREFIX], ['${exec_prefix}'])
+      PYTHON_EXECDIR=`python -c "import distutils.sysconfig; \
+                                print(distutils.sysconfig.get_python_lib(1,0,prefix='${exec_prefix}'))"`
+      AC_SUBST(pyexecdir, $PYTHON_EXECDIR)
+
 AC_ARG_WITH([python3],
     AS_HELP_STRING([--with-python3], [support python3 @<:@default=check@:>@]),
     [],
