@@ -120,6 +120,9 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 - Require lower version of libpcre (vpodzime)
 - Sync the spec file with downstream (vpodzime)
 
+* Wed Dec 21 2016 Adam Williamson <awilliam@redhat.com> - 0.8-2
+- Rebuild for Python 3.6, again
+
 * Fri Dec 16 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.8-1
 - Add a docstring to python bindings (vpodzime)
 - Neutralize None as an operand for math operations (vpodzime)
