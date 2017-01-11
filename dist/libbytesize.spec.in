@@ -11,7 +11,7 @@
 %endif
 
 Name:        libbytesize
-Version:     0.8
+Version:     0.9
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -109,6 +109,17 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Wed Jan 11 2017 Vratislav Podzimek <vpodzime@redhat.com> - 0.9-1
+- Allow the Size python class to be easily imported (vpodzime)
+- Make sure pyexecdir is defined (vpodzime)
+- Do not run Python 3 tests without python3 (vpodzime)
+- Disable python3 on RHEL (vpodzime)
+- Reflect the configuration in the spec file template (vpodzime)
+- Make documentation generation conditional (vpodzime)
+- Make python3 support conditional (vpodzime)
+- Require lower version of libpcre (vpodzime)
+- Sync the spec file with downstream (vpodzime)
+
 * Fri Dec 16 2016 Vratislav Podzimek <vpodzime@redhat.com> - 0.8-1
 - Add a docstring to python bindings (vpodzime)
 - Neutralize None as an operand for math operations (vpodzime)
