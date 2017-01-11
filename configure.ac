@@ -34,17 +34,14 @@ AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
                  docs/Makefile docs/libbytesize-docs.xml \
                  tests/Makefile])
 
-LIBBYTESIZE_PKG_CHECK_MODULES([PCRE], [libpcre >= 8.38])
+AC_CONFIG_FILES([tests/libbytesize_unittest.sh],
+                [chmod +x tests/libbytesize_unittest.sh])
 
-AC_PATH_PROG([PYTHON3], [python3], [no])
-AS_IF([test "x$PYTHON3" == "xno"], [LIBBYTESIZE_SOFT_FAILURE([\
-      The python3 program was not found in the search path. Please ensure that it is installed and its directory is included in the search path.])],
-      [:])
+AC_CONFIG_FILES([tests/canary_tests.sh],
+                [chmod +x tests/canary_tests.sh])
 
-AC_SUBST([PYTHON3_EXEC_PREFIX], ['${exec_prefix}'])
-PYTHON3_EXECDIR=`$PYTHON3 -c "import distutils.sysconfig; \
-                          print(distutils.sysconfig.get_python_lib(1,0,prefix='$PYTHON3_EXEC_PREFIX'))"`
-AC_SUBST(py3execdir, $PYTHON3_EXECDIR)
+
+LIBBYTESIZE_PKG_CHECK_MODULES([PCRE], [libpcre >= 8.32])
 
 AC_CHECK_LIB(gmp, __gmpz_init)
 
@@ -52,6 +49,48 @@ AC_CHECK_HEADERS([langinfo.h gmp.h mpfr.h stdint.h stdbool.h stdarg.h string.h s
                  [],
                  [LIBBYTESIZE_SOFT_FAILURE([Header file $ac_header not found.])],
                  [])
+
+AC_SUBST([PYTHON_EXEC_PREFIX], ['${exec_prefix}'])
+      PYTHON_EXECDIR=`python -c "import distutils.sysconfig; \
+                                print(distutils.sysconfig.get_python_lib(1,0,prefix='${exec_prefix}'))"`
+      AC_SUBST(pyexecdir, $PYTHON_EXECDIR)
+
+AC_ARG_WITH([python3],
+    AS_HELP_STRING([--with-python3], [support python3 @<:@default=check@:>@]),
+    [],
+    [with_python3=check])
+
+AC_SUBST(WITH_PYTHON3, 0)
+if test "x$with_python3" != "xno"; then
+    AC_PATH_PROG([python3], [python3], [no])
+    AS_IF([test "x$python3" == "xno"],
+    [if test "x$with_python3" = "xyes"; then
+      LIBBYTESIZE_SOFT_FAILURE([Python3 support requested, but python3 is not available])
+      fi],
+    [AC_SUBST([PYTHON3_EXEC_PREFIX], ['${exec_prefix}'])
+      PYTHON3_EXECDIR=`$python3 -c "import distutils.sysconfig; \
+                                print(distutils.sysconfig.get_python_lib(1,0,prefix='${exec_prefix}'))"`
+      AC_SUBST(py3execdir, $PYTHON3_EXECDIR)
+      AC_SUBST(WITH_PYTHON3, 1)])
+fi
+AM_CONDITIONAL(WITH_PYTHON3, test "x$with_python3" != "xno" -a "x$python3" != "xno")
+
+
+AC_ARG_WITH([gtk-doc],
+    AS_HELP_STRING([--with-gtk-doc], [generate documentation with gtk-doc @<:@default=check@:>@]),
+    [],
+    [with_gtk_doc=check])
+
+AC_SUBST(WITH_GTK_DOC, 0)
+if test "x$with_gtk_doc" != "xno"; then
+    AC_PATH_PROG([gtkdoc_scan], [gtkdoc-scan], [no])
+    AS_IF([test "x$gtkdoc_scan" == "xno"],
+    [if test "x$with_gtk_doc" = "xyes"; then
+      LIBBYTESIZE_SOFT_FAILURE([Building documentation with gtk-doc requested, but not available])
+      fi],
+      [AC_SUBST(WITH_GTK_DOC, 1)])
+fi
+AM_CONDITIONAL(WITH_GTK_DOC, test "x$with_gtk_doc" != "xno" -a "x$gtkdoc_scan" != "xno")
 
 AC_OUTPUT
 LIBBYTESIZE_FAILURES

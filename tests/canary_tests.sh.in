@@ -1,6 +1,11 @@
 #!/bin/sh -e
 # Run the translation canary tests on the translatable strings
 
+if [ @WITH_PYTHON3@ != 1 ]; then
+    echo "Cannot run translations tests without python3, skipping."
+    exit 0
+fi
+
 # If not run from automake, fake it
 if [ -z "$top_srcdir" ]; then
     top_srcdir="$(dirname "$0")/.."
