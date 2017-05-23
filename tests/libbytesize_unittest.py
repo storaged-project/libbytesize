@@ -5,26 +5,33 @@ import locale
 import unittest
 import sys
 
+from locale_utils import get_avail_locales, requires_locales
+
 from bytesize import SizeStruct, KiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP
 
 DEFAULT_LOCALE = "en_US.utf8"
 
 class SizeTestCase(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        unittest.TestCase.setUpClass()
+        cls.avail_locales = get_avail_locales()
+
+    @requires_locales({DEFAULT_LOCALE})
+    def setUp(self):
+        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
+        self.addCleanup(self._clean_up)
+
+    def _clean_up(self):
+        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
+
     def testNew(self):
         actual = SizeStruct.new().get_bytes()
         expected = (0, 0)
         self.assertEqual(actual, expected)
-    #enddef
 
-    def setUp(self):
-        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
-    #enddef
-
-    def tearDown(self):
-        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
-    #enddef
-
+    @requires_locales({'cs_CZ.UTF-8', 'ps_AF.UTF-8', 'en_US.UTF-8'})
     def testNewFromStr(self):
         actual = SizeStruct.new_from_str('0 B').get_bytes()
         expected = (0, 0)
@@ -107,7 +114,7 @@ class SizeTestCase(unittest.TestCase):
         expected = (1536, -1)
         self.assertEqual(actual, expected)
 
-        locale.setlocale(locale.LC_ALL,'en_US.UTF-8')
+        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
 
     #enddef
 
@@ -336,6 +343,7 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(strSizeStruct, "-1024")
     #enddef
 
+    @requires_locales({'cs_CZ.UTF-8'})
     def testHumanReadable(self):
         strSizeStruct = SizeStruct.new_from_str("12 KiB").human_readable(KiB, 2, False)
         self.assertEqual(strSizeStruct, "12 KiB")
