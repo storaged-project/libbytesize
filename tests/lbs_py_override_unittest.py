@@ -6,11 +6,18 @@ import copy
 import locale
 
 from decimal import Decimal
+from locale_utils import get_avail_locales, requires_locales
 
 from bytesize import Size
 
 class SizeTestCase(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        unittest.TestCase.setUpClass()
+        cls.avail_locales = get_avail_locales()
+
+    @requires_locales({'en_US.utf8'})
     def setUp(self):
         locale.setlocale(locale.LC_ALL,'en_US.utf8')
         self.addCleanup(self._clean_up)
@@ -274,6 +281,7 @@ class SizeTestCase(unittest.TestCase):
         size_set = set((Size("1 KiB"), Size("1 KiB"), Size("1 KiB"), Size("2 KiB"), Size(0)))
         self.assertEqual(len(size_set), 3)
 
+    @requires_locales({'cs_CZ.UTF-8', 'ps_AF.UTF-8', 'en_US.UTF-8'})
     def testConvertTo(self):
         size = Size("1.5 KiB")
         conv = size.convert_to("KiB")
