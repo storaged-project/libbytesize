@@ -1,4 +1,4 @@
-dnl autoconf macros for libblockdev
+dnl autoconf macros for libbytesize
 dnl
 dnl Copyright (C) 2014  Red Hat, Inc.
 dnl
@@ -28,9 +28,9 @@ dnl
 dnl Any message sent to this macro will be stored, and they can all be
 dnl displayed at the end of configure using the LIBBYTESIZE_FAILURES macro.
 AC_DEFUN([LIBBYTESIZE_SOFT_FAILURE], [dnl
-AS_IF([test x"$libblockdev_failure_messages" = x],
-    [libblockdev_failure_messages="[$1]"],
-    [libblockdev_failure_messages="$libblockdev_failure_messages
+AS_IF([test x"$libbytesize_failure_messages" = x],
+    [libbytesize_failure_messages="[$1]"],
+    [libbytesize_failure_messages="$libbytesize_failure_messages
 [$1]"
 ])])dnl
 
@@ -63,10 +63,10 @@ dnl
 dnl Print the failure messages collected by LIBBYTESIZE_SOFT_FAILURE and
 dnl LIBBYTESIZE_PKG_CHECK_MODULES
 AC_DEFUN([LIBBYTESIZE_FAILURES], [dnl
-AS_IF([test x"$libblockdev_failure_messages" = x], [], [dnl
+AS_IF([test x"$libbytesize_failure_messages" = x], [], [dnl
 echo ""
-echo "*** Libblockdev encountered the following issues during configuration:"
-echo "$libblockdev_failure_messages"
+echo "*** Libbytesize encountered the following issues during configuration:"
+echo "$libbytesize_failure_messages"
 echo ""
-echo "*** Libblockdev will not successfully build without these missing dependencies"
+echo "*** Libbytesize will not successfully build without these missing dependencies"
 ])])dnl
