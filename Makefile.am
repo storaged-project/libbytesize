@@ -20,12 +20,10 @@ TEST_PYTHON ?= $(PYTHON)
 ZANATA_PULL_ARGS = --transdir ./po/
 ZANATA_PUSH_ARGS = --srcdir ./po/ --push-type source --force
 
-TEST_DEPENDENCIES = $(shell rpm --specfile dist/libbytesize.spec.in --requires | cut -d' ' -f1 | grep -v ^libbytesize)
+TEST_DEPENDENCIES = $(shell rpm --specfile dist/libbytesize.spec --requires | cut -d' ' -f1 | grep -v ^libbytesize)
 TEST_DEPENDENCIES += gmp gmp-devel
 TEST_DEPENDENCIES += mpfr mpfr-devel
 TEST_DEPENDENCIES += pcre pcre-devel
-TEST_DEPENDENCIES += glibc-all-langpacks
-
 
 # If translations are present, run tests on the .po files before tarring them
 # up to remove any .po files with errors. Use a weird looking loop since shell

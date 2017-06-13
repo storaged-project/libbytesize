@@ -6,6 +6,12 @@ if [ @WITH_PYTHON3@ != 1 ]; then
     exit 0
 fi
 
+DISTRO=`busctl get-property org.freedesktop.hostname1 /org/freedesktop/hostname1 org.freedesktop.hostname1 OperatingSystemCPEName | cut -d ":" -f 3`
+if [ $DISTRO == "centos" -o $DISTRO == "enterprise_linux" ]; then
+    echo "Cannot run translations tests on CentOS/RHEL 7, skipping."
+    exit 0
+fi
+
 # If not run from automake, fake it
 if [ -z "$top_srcdir" ]; then
     top_srcdir="$(dirname "$0")/.."
