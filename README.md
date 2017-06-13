@@ -1,3 +1,10 @@
+### CI status
+
+<img alt="CI status" src="https://fedorapeople.org/groups/storage_apis/statuses/libbytesize-master.svg" width="100%" height="200ex" />
+
+
+### Introduction
+
 The goal of this project is to provide a tiny library that would facilitate the
 common operations with sizes in bytes. Many projects need to work with sizes in
 bytes (be it sizes of storage space, memory,...) and all of them need to deal
