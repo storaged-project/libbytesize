@@ -24,8 +24,6 @@ TEST_DEPENDENCIES = $(shell rpm --specfile dist/libbytesize.spec --requires | cu
 TEST_DEPENDENCIES += gmp gmp-devel
 TEST_DEPENDENCIES += mpfr mpfr-devel
 TEST_DEPENDENCIES += pcre pcre-devel
-TEST_DEPENDENCIES += glibc-all-langpacks
-
 
 # If translations are present, run tests on the .po files before tarring them
 # up to remove any .po files with errors. Use a weird looking loop since shell
