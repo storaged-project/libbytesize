@@ -11,7 +11,7 @@
 %endif
 
 Name:        libbytesize
-Version:     0.10
+Version:     0.11
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -109,6 +109,16 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Wed Jun 14 2017 Vratislav Podzimek <vpodzime@redhat.com> - 0.11-1
+- Fix README file name (vtrefny)
+- Add a build status image to the README.md (vpodzime)
+- Remove "glibc-all-langpacks" from test dependencies (vtrefny)
+- Check for requires in generated spec file, not in the template (vtrefny)
+- Fix checking for available locales (vtrefny)
+- Fix library name in acinclude.m4 (vtrefny)
+- Do not try to run translation tests on CentOS/RHEL 7 (vtrefny)
+- Skip tests if they require unavailable locales (vpodzime)
+
 * Wed Apr 19 2017 Vratislav Podzimek <vpodzime@redhat.com> - 0.10-1
 - Fix installation without specifying --exec-prefix (martin)
 - Sync the spec file with downstream (vpodzime)
