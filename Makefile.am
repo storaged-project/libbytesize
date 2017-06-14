@@ -6,7 +6,7 @@ if WITH_GTK_DOC
 SUBDIRS += docs
 endif
 
-dist_noinst_DATA = LICENSE README.rst
+dist_noinst_DATA = LICENSE README.md
 
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 config.guess config.sub \
     configure depcomp install-sh ltmain.sh missing py-compile compile ar-lib \
