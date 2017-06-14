@@ -83,7 +83,7 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 
 
 %files -f %{name}.lang
-%doc README.rst
+%doc README.md
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
 %{_libdir}/libbytesize.so.*
