@@ -232,15 +232,12 @@ class SizeTestCase(unittest.TestCase):
         self.assertTrue(size1 <= size1)
 
         self.assertTrue(size1 > None)
-        self.assertTrue(size1 >= None)
-        self.assertFalse(size1 < None)
         self.assertFalse(size1 <= None)
         self.assertFalse(size1 == None)
         self.assertTrue(size1 != None)
 
         size3 = Size(0)
         self.assertTrue(size3 > None)
-        self.assertFalse(size3 < None)
         self.assertTrue(size3 != None)
     #enddef
 
