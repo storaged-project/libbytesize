@@ -208,7 +208,7 @@ class SizeTestCase(unittest.TestCase):
         self.assertFalse(size1 == size2)
         self.assertFalse(size2 == size1)
 
-        self.assertFalse(size1 == None)
+        self.assertFalse(size1 is None)
         self.assertFalse(size1 == 0)
 
         size3 = Size(0)
@@ -233,12 +233,12 @@ class SizeTestCase(unittest.TestCase):
 
         self.assertTrue(size1 > None)
         self.assertFalse(size1 <= None)
-        self.assertFalse(size1 == None)
-        self.assertTrue(size1 != None)
+        self.assertFalse(size1 is None)
+        self.assertTrue(size1 is not None)
 
         size3 = Size(0)
         self.assertTrue(size3 > None)
-        self.assertTrue(size3 != None)
+        self.assertTrue(size3 is not None)
     #enddef
 
     def testBool(self):
