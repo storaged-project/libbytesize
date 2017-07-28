@@ -4,6 +4,7 @@ from ctypes import POINTER, byref
 import six
 from decimal import Decimal
 
+import sys
 import locale
 
 import gettext
@@ -44,7 +45,7 @@ ROUND_UP = 0
 ROUND_DOWN = 1
 ROUND_HALF_UP = 2
 
-MAXUINT64 = 2**64 - 1
+MAX_ULONG = sys.maxint * 2 + 1
 
 unit_strs = {
     "B": B, "KiB": KiB, "MiB": MiB, "GiB": GiB, "TiB": TiB, "PiB": PiB, "EiB": EiB, "ZiB": ZiB, "YiB": YiB,
@@ -355,7 +356,7 @@ class Size(object):
                     sgn = 1
                 else:
                     sgn = -1
-                if abs_val <= MAXUINT64:
+                if abs_val <= MAX_ULONG:
                     self._c_size = SizeStruct.new_from_bytes(abs_val, sgn)
                 else:
                     self._c_size = SizeStruct.new_from_str(str(spec))
@@ -421,7 +422,7 @@ class Size(object):
         if isinstance(other, six.integer_types):
             if (other < 0 and abs_vals):
                 other = abs(other)
-            if 0 <= other <= MAXUINT64:
+            if 0 <= other <= MAX_ULONG:
                 return self._c_size.cmp_bytes(other, abs_vals)
             else:
                 other = SizeStruct.new_from_str(str(other))
@@ -468,7 +469,7 @@ class Size(object):
     @neutralize_none_operand
     def __add__(self, other):
         if isinstance(other, six.integer_types):
-            if other <= MAXUINT64:
+            if other <= MAX_ULONG:
                 return Size(self._c_size.add_bytes(other))
             else:
                 other = SizeStruct.new_from_str(str(other))
@@ -484,7 +485,7 @@ class Size(object):
     @neutralize_none_operand
     def __sub__(self, other):
         if isinstance(other, six.integer_types):
-            if other <= MAXUINT64:
+            if other <= MAX_ULONG:
                 return Size(self._c_size.sub_bytes(other))
             else:
                 other = SizeStruct.new_from_str(str(other))
@@ -504,7 +505,7 @@ class Size(object):
         if isinstance(other, (Size, SizeStruct)):
             raise ValueError("Cannot multiply Size by Size. It just doesn't make sense.")
         elif isinstance(other, (Decimal, float)) or (isinstance(other, six.integer_types)
-                                                     and other > MAXUINT64 or other < 0):
+                                                     and other > MAX_ULONG or other < 0):
             return Size(self._c_size.mul_float_str(str(other)))
         else:
             return Size(self._c_size.mul_int(other))
@@ -517,7 +518,7 @@ class Size(object):
             raise AttributeError
 
         if isinstance(other, six.integer_types):
-            if other <= MAXUINT64:
+            if other <= MAX_ULONG:
                 return Size(self._c_size.div_int(other))
             else:
                 other = SizeStruct.new_from_str(str(other))
@@ -531,7 +532,7 @@ class Size(object):
     @neutralize_none_operand
     def __truediv__(self, other):
         if isinstance(other, six.integer_types):
-            if other <= MAXUINT64:
+            if other <= MAX_ULONG:
                 return Size(self._c_size.true_div_int(other))
             else:
                 other = SizeStruct.new_from_str(str(other))
@@ -557,7 +558,7 @@ class Size(object):
     @neutralize_none_operand
     def __floordiv__(self, other):
         if isinstance(other, six.integer_types):
-            if other <= MAXUINT64:
+            if other <= MAX_ULONG:
                 return self._safe_floordiv_int(other)
             else:
                 other = SizeStruct.new_from_str(str(other))

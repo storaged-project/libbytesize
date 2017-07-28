@@ -123,12 +123,12 @@ static char *strdup_printf (const char *fmt, ...) {
  * Replaces all apperances of @char in @str with @new.
  */
 static char *replace_char_with_str (const char *str, char orig, const char *new) {
-    uint64_t offset = 0;
-    uint64_t i = 0;
-    uint64_t j = 0;
+    size_t offset = 0;
+    size_t i = 0;
+    size_t j = 0;
     char *ret = NULL;
     const char *next = NULL;
-    uint64_t count = 0;
+    size_t count = 0;
 
     if (!str)
         return NULL;
@@ -215,7 +215,7 @@ static void strstrip(char *str) {
 static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
     BSBunit bunit = BS_BUNIT_UNDEF;
     BSDunit dunit = BS_DUNIT_UNDEF;
-    uint64_t pwr = 0;
+    unsigned long pwr = 0;
     mpfr_t dec_mul;
     size_t unit_str_len = 0;
 
@@ -223,7 +223,7 @@ static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
 
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
         if (strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
-            pwr = (uint64_t) bunit - BS_BUNIT_B;
+            pwr = bunit - BS_BUNIT_B;
             mpfr_mul_2exp (size, size, 10 * pwr, MPFR_RNDN);
             return true;
         }
@@ -232,7 +232,7 @@ static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
     mpfr_set_ui (dec_mul, 1000, MPFR_RNDN);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
         if (strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
-            pwr = (uint64_t) (dunit - BS_DUNIT_B);
+            pwr = dunit - BS_DUNIT_B;
             mpfr_pow_ui (dec_mul, dec_mul, pwr, MPFR_RNDN);
             mpfr_mul (size, size, dec_mul, MPFR_RNDN);
             mpfr_clear (dec_mul);
@@ -243,7 +243,7 @@ static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
        verions */
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
         if (strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
-            pwr = (uint64_t) bunit - BS_BUNIT_B;
+            pwr = bunit - BS_BUNIT_B;
             mpfr_mul_2exp (size, size, 10 * pwr, MPFR_RNDN);
             return true;
         }
@@ -252,7 +252,7 @@ static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
     mpfr_set_ui (dec_mul, 1000, MPFR_RNDN);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
         if (strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
-            pwr = (uint64_t) (dunit - BS_DUNIT_B);
+            pwr = dunit - BS_DUNIT_B;
             mpfr_pow_ui (dec_mul, dec_mul, pwr, MPFR_RNDN);
             mpfr_mul (size, size, dec_mul, MPFR_RNDN);
             mpfr_clear (dec_mul);
@@ -329,12 +329,12 @@ BSSize bs_size_new (void) {
  *
  * Returns: a new #BSSize
  */
-BSSize bs_size_new_from_bytes (uint64_t bytes, int sgn) {
+BSSize bs_size_new_from_bytes (unsigned long bytes, int sgn) {
     char *num_str = NULL;
     BSSize ret = bs_size_new ();
     int ok = 0;
 
-    ok = asprintf (&num_str, "%"PRIu64, bytes);
+    ok = asprintf (&num_str, "%lu", bytes);
     if (ok == -1)
         /* probably cannot allocate memory, there's nothing more we can do */
         return ret;
@@ -483,14 +483,14 @@ BSSize bs_size_new_from_size (const BSSize size) {
  *
  * Returns: the @size in a number of bytes
  */
-uint64_t bs_size_get_bytes (const BSSize size, int *sgn, BSError **error) {
+unsigned long bs_size_get_bytes (const BSSize size, int *sgn, BSError **error) {
     char *num_str = NULL;
     mpz_t max;
-    uint64_t ret = 0;
+    unsigned long ret = 0;
     int ok = 0;
 
-    mpz_init2 (max, (mp_bitcnt_t) 64);
-    ok = asprintf (&num_str, "%"PRIu64, UINT64_MAX);
+    mpz_init2 (max, (mp_bitcnt_t) 32);
+    ok = asprintf (&num_str, "%lu", ULONG_MAX);
     if (ok == -1) {
         /* we probably cannot allocate memory so we are doomed */
         set_error (error, BS_ERROR_FAIL, strdup("Failed to allocate memory"));
@@ -500,17 +500,17 @@ uint64_t bs_size_get_bytes (const BSSize size, int *sgn, BSError **error) {
     mpz_set_str (max, num_str, 10);
     free (num_str);
     if (mpz_cmp (size->bytes, max) > 0) {
-        set_error (error, BS_ERROR_OVER, strdup("The size is too big, cannot be returned as a 64bit number of bytes"));
+        set_error (error, BS_ERROR_OVER, strdup("The size is too big, cannot be returned as a long of bytes"));
         return 0;
     }
     mpz_clear (max);
     if (sgn)
         *sgn = mpz_sgn (size->bytes);
-    if (mpz_cmp_ui (size->bytes, UINT64_MAX) <= 0)
-        return (uint64_t) mpz_get_ui (size->bytes);
+    if (mpz_cmp_ui (size->bytes, ULONG_MAX) <= 0)
+        return mpz_get_ui (size->bytes);
     else {
         num_str = bs_size_get_bytes_str (size);
-        ret = strtoull (num_str, NULL, 10);
+        ret = strtoul (num_str, NULL, 10);
         free (num_str);
         return ret;
     }
@@ -704,7 +704,7 @@ BSSize bs_size_grow (BSSize size1, const BSSize size2) {
  *
  * Returns: (transfer full): a new instance of #BSSize which is a sum of @size and @bytes
  */
-BSSize bs_size_add_bytes (const BSSize size, uint64_t bytes) {
+BSSize bs_size_add_bytes (const BSSize size, unsigned long bytes) {
     BSSize ret = bs_size_new ();
     mpz_add_ui (ret->bytes, size->bytes, bytes);
 
@@ -720,7 +720,7 @@ BSSize bs_size_add_bytes (const BSSize size, uint64_t bytes) {
  *
  * Returns: (transfer none): @size modified by adding @bytes to it
  */
-BSSize bs_size_grow_bytes (BSSize size, const uint64_t bytes) {
+BSSize bs_size_grow_bytes (BSSize size, const unsigned long bytes) {
     mpz_add_ui (size->bytes, size->bytes, bytes);
 
     return size;
@@ -764,7 +764,7 @@ BSSize bs_size_shrink (BSSize size1, const BSSize size2) {
  *
  * Returns: (transfer full): a new instance of #BSSize which is equals to @size - @bytes
  */
-BSSize bs_size_sub_bytes (const BSSize size, uint64_t bytes) {
+BSSize bs_size_sub_bytes (const BSSize size, unsigned long bytes) {
     BSSize ret = bs_size_new ();
     mpz_sub_ui (ret->bytes, size->bytes, bytes);
 
@@ -782,7 +782,7 @@ BSSize bs_size_sub_bytes (const BSSize size, uint64_t bytes) {
  *
  * Returns: (transfer none): @size modified by subtracting @bytes from it
  */
-BSSize bs_size_shrink_bytes (BSSize size, uint64_t bytes) {
+BSSize bs_size_shrink_bytes (BSSize size, unsigned long bytes) {
     mpz_sub_ui (size->bytes, size->bytes, bytes);
 
     return size;
@@ -795,7 +795,7 @@ BSSize bs_size_shrink_bytes (BSSize size, uint64_t bytes) {
  *
  * Returns: (transfer full): a new instance of #BSSize which is equals to @size * @times
  */
-BSSize bs_size_mul_int (const BSSize size, uint64_t times) {
+BSSize bs_size_mul_int (const BSSize size, unsigned long times) {
     BSSize ret = bs_size_new ();
     mpz_mul_ui (ret->bytes, size->bytes, times);
 
@@ -811,7 +811,7 @@ BSSize bs_size_mul_int (const BSSize size, uint64_t times) {
  *
  * Returns: (transfer none): @size modified by growing it @times times
  */
-BSSize bs_size_grow_mul_int (BSSize size, uint64_t times) {
+BSSize bs_size_grow_mul_int (BSSize size, unsigned long times) {
     mpz_mul_ui (size->bytes, size->bytes, times);
 
     return size;
@@ -908,9 +908,9 @@ BSSize bs_size_grow_mul_float_str (BSSize size, const char *float_str, BSError *
  * Returns: integer number x so that x * @size1 < @size2 and (x+1) * @size1 > @size2
  *          (IOW, @size1 / @size2 using integer division)
  */
-uint64_t bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError **error) {
+unsigned long bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError **error) {
     mpz_t result;
-    uint64_t ret = 0;
+    unsigned long ret = 0;
 
     if (mpz_cmp_ui (size2->bytes, 0) == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
@@ -922,12 +922,12 @@ uint64_t bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError 
     mpz_init (result);
     mpz_tdiv_q (result, size1->bytes, size2->bytes);
 
-    if (mpz_cmp_ui (result, UINT64_MAX) > 0) {
-        set_error (error, BS_ERROR_OVER, strdup_printf ("The size is too big, cannot be returned as a 64bit number"));
+    if (mpz_cmp_ui (result, ULONG_MAX) > 0) {
+        set_error (error, BS_ERROR_OVER, strdup_printf ("The size is too big, cannot be returned as a long"));
         mpz_clear (result);
         return 0;
     }
-    ret = (uint64_t) mpz_get_ui (result);
+    ret = mpz_get_ui (result);
 
     mpz_clear (result);
     return ret;
@@ -942,7 +942,7 @@ uint64_t bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError 
  * Returns: (transfer full): a #BSSize instance x so that x * @divisor = @size,
  *                           rounded to a number of bytes
  */
-BSSize bs_size_div_int (const BSSize size, uint64_t divisor, BSError **error) {
+BSSize bs_size_div_int (const BSSize size, unsigned long divisor, BSError **error) {
     BSSize ret = NULL;
 
     if (divisor == 0) {
@@ -965,7 +965,7 @@ BSSize bs_size_div_int (const BSSize size, uint64_t divisor, BSError **error) {
  *
  * Returns: (transfer none): @size modified by division by @divisor
  */
-BSSize bs_size_shrink_div_int (BSSize size, uint64_t divisor, BSError **error) {
+BSSize bs_size_shrink_div_int (BSSize size, unsigned long divisor, BSError **error) {
     if (divisor == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
         return NULL;
@@ -1016,7 +1016,7 @@ char* bs_size_true_div (const BSSize size1, const BSSize size2, BSError **error)
  * Returns: (transfer full): a string representing the floating-point number
  *                           that equals to @size / @divisor
  */
-char* bs_size_true_div_int (const BSSize size, uint64_t divisor, BSError **error) {
+char* bs_size_true_div_int (const BSSize size, unsigned long divisor, BSError **error) {
     mpf_t op1;
     char *ret = NULL;
 
@@ -1152,7 +1152,7 @@ int bs_size_cmp (const BSSize size1, const BSSize size2, bool abs) {
  * Returns: -1, 0, or 1 if @size is smaller, equal to or bigger than
  *          @bytes respectively comparing absolute values if @abs is %true
  */
-int bs_size_cmp_bytes (const BSSize size, uint64_t bytes, bool abs) {
+int bs_size_cmp_bytes (const BSSize size, unsigned long bytes, bool abs) {
     int ret = 0;
     if (abs)
         ret = mpz_cmpabs_ui (size->bytes, bytes);
