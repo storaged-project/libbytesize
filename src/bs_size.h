@@ -92,7 +92,7 @@ typedef union {
 
 /* Constructors */
 BSSize bs_size_new (void);
-BSSize bs_size_new_from_bytes (uint64_t bytes, int sgn);
+BSSize bs_size_new_from_bytes (unsigned long bytes, int sgn);
 BSSize bs_size_new_from_str (const char *size_str, BSError **error);
 BSSize bs_size_new_from_size (const BSSize size);
 
@@ -101,7 +101,7 @@ void bs_size_free (BSSize size);
 void bs_clear_error (BSError **error);
 
 /* Query functions */
-uint64_t bs_size_get_bytes (const BSSize size, int *sgn, BSError **error);
+unsigned long bs_size_get_bytes (const BSSize size, int *sgn, BSError **error);
 int bs_size_sgn (const BSSize size);
 char* bs_size_get_bytes_str (const BSSize size);
 char* bs_size_convert_to (const BSSize size, BSUnit unit, BSError **error);
@@ -110,26 +110,26 @@ char* bs_size_human_readable (const BSSize size, BSBunit min_unit, int max_place
 /* Arithmetic */
 BSSize bs_size_add (const BSSize size1, const BSSize size2);
 BSSize bs_size_grow (BSSize size1, const BSSize size2);
-BSSize bs_size_add_bytes (const BSSize size, uint64_t bytes);
-BSSize bs_size_grow_bytes (BSSize size, uint64_t bytes);
+BSSize bs_size_add_bytes (const BSSize size, unsigned long bytes);
+BSSize bs_size_grow_bytes (BSSize size, unsigned long bytes);
 BSSize bs_size_sub (const BSSize size1, const BSSize size2);
 BSSize bs_size_shrink (BSSize size1, const BSSize size2);
-BSSize bs_size_sub_bytes (const BSSize size, uint64_t bytes);
-BSSize bs_size_shrink_bytes (BSSize size, uint64_t bytes);
-BSSize bs_size_mul_int (const BSSize size, uint64_t times);
-BSSize bs_size_grow_mul_int (BSSize size, uint64_t times);
+BSSize bs_size_sub_bytes (const BSSize size, unsigned long bytes);
+BSSize bs_size_shrink_bytes (BSSize size, unsigned long bytes);
+BSSize bs_size_mul_int (const BSSize size, unsigned long times);
+BSSize bs_size_grow_mul_int (BSSize size, unsigned long times);
 BSSize bs_size_mul_float_str (const BSSize size, const char *float_str, BSError **error);
 BSSize bs_size_grow_mul_float_str (BSSize size, const char *float_str, BSError **error);
-uint64_t bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError **error);
-BSSize bs_size_div_int (const BSSize size, uint64_t divisor, BSError **error);
-BSSize bs_size_shrink_div_int (BSSize size, uint64_t shrink_divisor, BSError **error);
+unsigned long bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError **error);
+BSSize bs_size_div_int (const BSSize size, unsigned long divisor, BSError **error);
+BSSize bs_size_shrink_div_int (BSSize size, unsigned long shrink_divisor, BSError **error);
 char* bs_size_true_div (const BSSize size1, const BSSize size2, BSError **error);
-char* bs_size_true_div_int (const BSSize size, uint64_t divisor, BSError **error);
+char* bs_size_true_div_int (const BSSize size, unsigned long divisor, BSError **error);
 BSSize bs_size_mod (const BSSize size1, const BSSize size2, BSError **error);
 BSSize bs_size_round_to_nearest (const BSSize size, const BSSize round_to, BSRoundDir dir, BSError **error);
 
 /* Comparisons */
 int bs_size_cmp (const BSSize size1, const BSSize size2, bool abs);
-int bs_size_cmp_bytes (const BSSize size1, uint64_t bytes, bool abs);
+int bs_size_cmp_bytes (const BSSize size1, unsigned long bytes, bool abs);
 
 #endif  /* _BS_SIZE_H */
