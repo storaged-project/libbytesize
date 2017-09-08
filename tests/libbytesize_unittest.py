@@ -4,10 +4,11 @@
 import locale
 import unittest
 import sys
+import ctypes
 
 from locale_utils import get_avail_locales, requires_locales
 
-from bytesize import SizeStruct, KiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP
+from bytesize import SizeStruct, KiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError
 
 DEFAULT_LOCALE = "en_US.utf8"
 
@@ -193,6 +194,12 @@ class SizeTestCase(unittest.TestCase):
         actual = x.add_bytes(0).get_bytes()
         expected = (8, -1)
         self.assertEqual(actual, expected)
+
+        # try some big value (bigger than ULONG_MAX on 32bit arches)
+        x = SizeStruct.new_from_bytes(0, 0)
+        actual = x.add_bytes(2**36).get_bytes()
+        expected = (2**36, 1)
+        self.assertEqual(actual, expected)
     #enddef
 
     def testSub(self):
@@ -241,6 +248,12 @@ class SizeTestCase(unittest.TestCase):
         x = SizeStruct.new_from_bytes(8, -1)
         actual = x.sub_bytes(0).get_bytes()
         expected = (8, -1)
+        self.assertEqual(actual, expected)
+
+        # try some big value (bigger than ULONG_MAX on 32bit arches)
+        x = SizeStruct.new_from_bytes(2**36 + 10, 1)
+        actual = x.sub_bytes(2**36).get_bytes()
+        expected = (10, 1)
         self.assertEqual(actual, expected)
     #enddef
 
@@ -336,6 +349,17 @@ class SizeTestCase(unittest.TestCase):
         y = 1077
         divResult = x.div_int(y).get_bytes()
         self.assertEqual(divResult, (973, -1))
+
+        try:
+            x = SizeStruct.new_from_bytes(2 * 2**36, 1)
+            y = 2**36
+            res = x.div_int(y).get_bytes()
+            self.assertEqual(res, (2, 1))
+        except OverflowError:
+            # ULONG_MAX is the real limit for division, if it's smaller than
+            # UINT64_MAX, an error is expected, otherwise it is a bug
+            if ctypes.sizeof(ctypes.c_ulong) == 4:
+                pass
     #enddef
 
     def testGetBytesStr(self):
@@ -455,6 +479,12 @@ class SizeTestCase(unittest.TestCase):
         actual = x.mul_int(y).get_bytes()
         expected = (0, 0)
         self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_bytes(4, 1)
+        y = 2**36
+        actual = x.mul_int(y).get_bytes()
+        expected = (4 * 2**36, 1)
+        self.assertEqual(actual, expected)
     #enddef
 
     def testRoundToNearest(self):
@@ -561,6 +591,12 @@ class SizeTestCase(unittest.TestCase):
         actual = x.get_bytes()
         expected = (24, 1)
         self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_bytes(16, 1)
+        x.grow_bytes(2**36)
+        actual = x.get_bytes()
+        expected = (16 + 2**36, 1)
+        self.assertEqual(actual, expected)
     #enddef
 
     def testGrowMulFloatStr(self):
@@ -598,6 +634,12 @@ class SizeTestCase(unittest.TestCase):
         actual = x.get_bytes()
         expected = (0, 0)
         self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_bytes(4, 1)
+        x.grow_mul_int(2**36)
+        actual = x.get_bytes()
+        expected = (4 * 2**36, 1)
+        self.assertEqual(actual, expected)
     #enddef
 
     def testShrink(self):
@@ -634,6 +676,12 @@ class SizeTestCase(unittest.TestCase):
         actual = x.get_bytes()
         expected = (16, -1)
         self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_bytes(2 * 2**36, 1)
+        x.shrink_bytes(2**36)
+        actual = x.get_bytes()
+        expected = (2**36, 1)
+        self.assertEqual(actual, expected)
     #enddef
 
     def testShrinkDivInt(self):
@@ -650,6 +698,17 @@ class SizeTestCase(unittest.TestCase):
         actual = x.get_bytes()
         expected = (8, 1)
         self.assertEqual(actual, expected)
+
+        x = SizeStruct.new_from_bytes(2 * 2**36, 1)
+        y = 2**36
+        try:
+            res = x.shrink_div_int(y).get_bytes()
+            self.assertEqual(res, (2, 1))
+        except OverflowError:
+            # ULONG_MAX is the real limit for division, if it's smaller than
+            # UINT64_MAX, an error is expected, otherwise it is a bug
+            if ctypes.sizeof(ctypes.c_ulong) == 4:
+                pass
     #enddef
 
     def testTrueDivInt(self):
@@ -667,6 +726,17 @@ class SizeTestCase(unittest.TestCase):
         y = 1024
         divResult = float(x.true_div_int(y)[:15]) # just some number to cover accuracy and not cross max float range
         self.assertAlmostEqual(divResult, 0.0)
+
+        x = SizeStruct.new_from_bytes(10 * 2**36, 1)
+        y = 2**36
+        try:
+            res = float(x.true_div_int(y)[:15])
+            self.assertAlmostEqual(res, 10.0)
+        except OverflowError:
+            # ULONG_MAX is the real limit for division, if it's smaller than
+            # UINT64_MAX, an error is expected, otherwise it is a bug
+            if ctypes.sizeof(ctypes.c_ulong) == 4:
+                pass
     #enddef
 
 #endclass

@@ -274,6 +274,58 @@ static void set_error (BSError **error, BSErrorCode code, char *msg) {
     return;
 }
 
+typedef void (*MpzOp) (mpz_t ROP, const mpz_t OP1, unsigned long int OP2);
+static void do_64bit_add_sub (MpzOp op, mpz_t rop, const mpz_t op1, uint64_t op2) {
+    uint64_t i = 0;
+    uint64_t div = 0;
+    uint64_t mod = 0;
+
+    /* small enough to just work */
+    if (op2 < (uint64_t) ULONG_MAX) {
+        op (rop, op1, (unsigned long int) op2);
+        return;
+    }
+
+    mpz_set (rop, op1);
+    div = op2 / (uint64_t) ULONG_MAX;
+    mod = op2 % (uint64_t) ULONG_MAX;
+    for (i=0; i < div; i++)
+        op (rop, rop, (unsigned long int) ULONG_MAX);
+    op (rop, rop, (unsigned long int) mod);
+}
+
+static void mul_64bit (mpz_t rop, const mpz_t op1, uint64_t op2) {
+    uint64_t i = 0;
+    uint64_t div = 0;
+    uint64_t mod = 0;
+    mpz_t aux;
+    mpz_t res;
+
+    /* small enough to just work */
+    if (op2 < (uint64_t) ULONG_MAX) {
+        mpz_mul_ui (rop, op1, (unsigned long int) op2);
+        return;
+    }
+
+    mpz_init2 (aux, (mp_bitcnt_t) 64);
+    mpz_init2 (res, (mp_bitcnt_t) 64);
+
+    mpz_set_ui (res, 0);
+    div = op2 / (uint64_t) ULONG_MAX;
+    mod = op2 % (uint64_t) ULONG_MAX;
+    for (i=0; i < div; i++) {
+        mpz_mul_ui (aux, op1, (unsigned long int) ULONG_MAX);
+        mpz_add (res, res, aux);
+    }
+    mpz_mul_ui (aux, op1, (unsigned long int) mod);
+    mpz_add (res, res, aux);
+
+    mpz_set (rop, res);
+    mpz_clear (aux);
+    mpz_clear (res);
+}
+
+
 
 /***************
  * DESTRUCTORS *
@@ -706,7 +758,7 @@ BSSize bs_size_grow (BSSize size1, const BSSize size2) {
  */
 BSSize bs_size_add_bytes (const BSSize size, uint64_t bytes) {
     BSSize ret = bs_size_new ();
-    mpz_add_ui (ret->bytes, size->bytes, bytes);
+    do_64bit_add_sub (mpz_add_ui, ret->bytes, size->bytes, bytes);
 
     return ret;
 }
@@ -721,7 +773,7 @@ BSSize bs_size_add_bytes (const BSSize size, uint64_t bytes) {
  * Returns: (transfer none): @size modified by adding @bytes to it
  */
 BSSize bs_size_grow_bytes (BSSize size, const uint64_t bytes) {
-    mpz_add_ui (size->bytes, size->bytes, bytes);
+    do_64bit_add_sub (mpz_add_ui, size->bytes, size->bytes, bytes);
 
     return size;
 }
@@ -762,11 +814,11 @@ BSSize bs_size_shrink (BSSize size1, const BSSize size2) {
  * Subtract @bytes from the @size. To subtract a negative number of bytes use
  * bs_size_add_bytes().
  *
- * Returns: (transfer full): a new instance of #BSSize which is equals to @size - @bytes
+ * Returns: (transfer full): a new instance of #BSSize which equals to @size - @bytes
  */
 BSSize bs_size_sub_bytes (const BSSize size, uint64_t bytes) {
     BSSize ret = bs_size_new ();
-    mpz_sub_ui (ret->bytes, size->bytes, bytes);
+    do_64bit_add_sub (mpz_sub_ui, ret->bytes, size->bytes, bytes);
 
     return ret;
 }
@@ -783,7 +835,7 @@ BSSize bs_size_sub_bytes (const BSSize size, uint64_t bytes) {
  * Returns: (transfer none): @size modified by subtracting @bytes from it
  */
 BSSize bs_size_shrink_bytes (BSSize size, uint64_t bytes) {
-    mpz_sub_ui (size->bytes, size->bytes, bytes);
+    do_64bit_add_sub (mpz_sub_ui, size->bytes, size->bytes, bytes);
 
     return size;
 }
@@ -793,11 +845,11 @@ BSSize bs_size_shrink_bytes (BSSize size, uint64_t bytes) {
  *
  * Multiply @size by @times.
  *
- * Returns: (transfer full): a new instance of #BSSize which is equals to @size * @times
+ * Returns: (transfer full): a new instance of #BSSize which equals to @size * @times
  */
 BSSize bs_size_mul_int (const BSSize size, uint64_t times) {
     BSSize ret = bs_size_new ();
-    mpz_mul_ui (ret->bytes, size->bytes, times);
+    mul_64bit (ret->bytes, size->bytes, times);
 
     return ret;
 }
@@ -812,7 +864,7 @@ BSSize bs_size_mul_int (const BSSize size, uint64_t times) {
  * Returns: (transfer none): @size modified by growing it @times times
  */
 BSSize bs_size_grow_mul_int (BSSize size, uint64_t times) {
-    mpz_mul_ui (size->bytes, size->bytes, times);
+    mul_64bit (size->bytes, size->bytes, times);
 
     return size;
 }
@@ -939,6 +991,10 @@ uint64_t bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError 
  * Divide @size by @divisor. Gives the answer to the question "What is the size
  * of each chunk if @size is split into a @divisor number of pieces?"
  *
+ * Note: Due to the limitations of the current implementation the maximum value
+ * @divisor is ULONG_MAX (which can differ from UINT64_MAX). An error
+ * (BS_ERROR_OVER) is returned if overflow happens.
+ *
  * Returns: (transfer full): a #BSSize instance x so that x * @divisor = @size,
  *                           rounded to a number of bytes
  */
@@ -948,8 +1004,10 @@ BSSize bs_size_div_int (const BSSize size, uint64_t divisor, BSError **error) {
     if (divisor == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
         return NULL;
+    } else if (divisor > ULONG_MAX) {
+        set_error (error, BS_ERROR_OVER, strdup_printf ("Divisor too big, must be less or equal to %lu", ULONG_MAX));
+        return NULL;
     }
-
     ret = bs_size_new ();
     mpz_tdiv_q_ui (ret->bytes, size->bytes, divisor);
 
@@ -963,11 +1021,18 @@ BSSize bs_size_div_int (const BSSize size, uint64_t divisor, BSError **error) {
  *
  * Basically an in-place variant of bs_size_div_int().
  *
+ * Note: Due to the limitations of the current implementation the maximum value
+ * @divisor is ULONG_MAX (which can differ from UINT64_MAX). An error
+ * (BS_ERROR_OVER) is returned if overflow happens.
+ *
  * Returns: (transfer none): @size modified by division by @divisor
  */
 BSSize bs_size_shrink_div_int (BSSize size, uint64_t divisor, BSError **error) {
     if (divisor == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
+        return NULL;
+    } else if (divisor > ULONG_MAX) {
+        set_error (error, BS_ERROR_OVER, strdup_printf ("Divisor too big, must be less or equal to %lu", ULONG_MAX));
         return NULL;
     }
 
@@ -1013,6 +1078,10 @@ char* bs_size_true_div (const BSSize size1, const BSSize size2, BSError **error)
  *
  * Divides @size by @divisor.
  *
+ * Note: Due to the limitations of the current implementation the maximum value
+ * @divisor is ULONG_MAX (which can differ from UINT64_MAX). An error
+ * (BS_ERROR_OVER) is returned if overflow happens.
+ *
  * Returns: (transfer full): a string representing the floating-point number
  *                           that equals to @size / @divisor
  */
@@ -1023,6 +1092,9 @@ char* bs_size_true_div_int (const BSSize size, uint64_t divisor, BSError **error
     if (divisor == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
         return 0;
+    } else if (divisor > ULONG_MAX) {
+        set_error (error, BS_ERROR_OVER, strdup_printf ("Divisor too big, must be less or equal to %lu", ULONG_MAX));
+        return NULL;
     }
 
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
