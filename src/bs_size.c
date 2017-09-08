@@ -814,7 +814,7 @@ BSSize bs_size_shrink (BSSize size1, const BSSize size2) {
  * Subtract @bytes from the @size. To subtract a negative number of bytes use
  * bs_size_add_bytes().
  *
- * Returns: (transfer full): a new instance of #BSSize which is equals to @size - @bytes
+ * Returns: (transfer full): a new instance of #BSSize which equals to @size - @bytes
  */
 BSSize bs_size_sub_bytes (const BSSize size, uint64_t bytes) {
     BSSize ret = bs_size_new ();
@@ -845,7 +845,7 @@ BSSize bs_size_shrink_bytes (BSSize size, uint64_t bytes) {
  *
  * Multiply @size by @times.
  *
- * Returns: (transfer full): a new instance of #BSSize which is equals @size * @times
+ * Returns: (transfer full): a new instance of #BSSize which equals to @size * @times
  */
 BSSize bs_size_mul_int (const BSSize size, uint64_t times) {
     BSSize ret = bs_size_new ();
