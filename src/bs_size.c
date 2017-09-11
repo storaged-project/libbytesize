@@ -6,6 +6,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 #include <pcre.h>
 
 #include "bs_size.h"
