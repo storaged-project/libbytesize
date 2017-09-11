@@ -2,7 +2,7 @@
 
 <img alt="CI status" src="https://fedorapeople.org/groups/storage_apis/statuses/libbytesize-master.svg" width="100%" height="250ex" />
 
-
+ 
 ### Introduction
 
 The goal of this project is to provide a tiny library that would facilitate the
