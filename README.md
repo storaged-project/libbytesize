@@ -1,6 +1,6 @@
 ### CI status
 
-<img alt="CI status" src="https://fedorapeople.org/groups/storage_apis/statuses/libbytesize-master.svg" width="100%" height="250ex" />
+<img alt="CI status" src="https://fedorapeople.org/groups/storage_apis/statuses/libbytesize-master.svg" width="100%" height="275ex" />
 
 
 ### Introduction
