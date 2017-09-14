@@ -52,3 +52,5 @@ dist/libbytesize.spec
 tests/*.log
 tests/*.trs
 test-driver
+tests/canary_tests.sh
+tests/libbytesize_unittest.sh
