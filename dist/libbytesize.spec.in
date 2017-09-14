@@ -11,7 +11,7 @@
 %endif
 
 Name:        libbytesize
-Version:     0.11
+Version:     1.0
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -109,6 +109,12 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Thu Sep 14 2017 Vratislav Podzimek <vpodzime@redhat.com> - 1.0-1
+- Make more space for CI status image (vtrefny)
+- Include limits.h to make sure ULONG_MAX is defined (vpodzime)
+- Remove extra 'is' in two docstrings (vpodzime)
+- Properly support 64bit operands (vpodzime)
+
 * Wed Jun 14 2017 Vratislav Podzimek <vpodzime@redhat.com> - 0.11-1
 - Fix README file name (vtrefny)
 - Add a build status image to the README.md (vpodzime)
