@@ -243,7 +243,7 @@ static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
     /* not found among the binary and decimal units, let's try their translated
        verions */
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
-        if (strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
+        if (strncasecmp (unit_str, _(b_units[bunit-BS_BUNIT_B]), unit_str_len) == 0) {
             pwr = (uint64_t) bunit - BS_BUNIT_B;
             mpfr_mul_2exp (size, size, 10 * pwr, MPFR_RNDN);
             return true;
@@ -252,7 +252,7 @@ static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
     mpfr_init2 (dec_mul, BS_FLOAT_PREC_BITS);
     mpfr_set_ui (dec_mul, 1000, MPFR_RNDN);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
-        if (strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
+        if (strncasecmp (unit_str, _(d_units[dunit-BS_DUNIT_B]), unit_str_len) == 0) {
             pwr = (uint64_t) (dunit - BS_DUNIT_B);
             mpfr_pow_ui (dec_mul, dec_mul, pwr, MPFR_RNDN);
             mpfr_mul (size, size, dec_mul, MPFR_RNDN);

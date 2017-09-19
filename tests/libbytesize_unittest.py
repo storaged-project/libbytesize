@@ -8,7 +8,7 @@ import ctypes
 
 from locale_utils import get_avail_locales, requires_locales
 
-from bytesize import SizeStruct, KiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError
+from bytesize import SizeStruct, KiB, GiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError
 
 DEFAULT_LOCALE = "en_US.utf8"
 
@@ -388,6 +388,14 @@ class SizeTestCase(unittest.TestCase):
 
         strSizeStruct = SizeStruct.new_from_str("100 GiB").human_readable(KiB, 0, False)
         self.assertEqual(strSizeStruct, "100 GiB")
+
+        # test that the result of human_readable() can be parsed back
+        strSizeStruct = SizeStruct.new_from_str("100 GiB").human_readable(GiB, 0, False)
+        self.assertEqual(SizeStruct.new_from_str(strSizeStruct).get_bytes(), (100 * 1024**3, 1))
+
+        # even if translated
+        strSizeStruct = SizeStruct.new_from_str("100 GiB").human_readable(GiB, 0, True)
+        self.assertEqual(SizeStruct.new_from_str(strSizeStruct).get_bytes(), (100 * 1024**3, 1))
     #enddef
 
     def testSgn(self):
