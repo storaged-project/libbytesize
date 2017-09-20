@@ -70,9 +70,6 @@ po-pull:
 	zanata pull $(ZANATA_PULL_ARGS)
 
 tag:
-	@TAG="$(PACKAGE_NAME)-$(PACKAGE_VERSION)" ; \
-	git tag -a -s -m "Tag as $$TAG" -f "$$TAG" ; \
-	echo "Tagged as $$TAG"
 	@TAG="$(PACKAGE_VERSION)" ; \
 	git tag -a -s -m "Tag as $$TAG" -f "$$TAG" ; \
 	echo "Tagged as $$TAG"
