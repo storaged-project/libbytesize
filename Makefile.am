@@ -70,9 +70,6 @@ po-pull:
 	zanata pull $(ZANATA_PULL_ARGS)
 
 tag:
-	@TAG="$(PACKAGE_NAME)-$(PACKAGE_VERSION)" ; \
-	git tag -a -s -m "Tag as $$TAG" -f "$$TAG" ; \
-	echo "Tagged as $$TAG"
 	@TAG="$(PACKAGE_VERSION)" ; \
 	git tag -a -s -m "Tag as $$TAG" -f "$$TAG" ; \
 	echo "Tagged as $$TAG"
@@ -82,6 +79,9 @@ rpmlog:
 	version_release=`tail --lines=+$$(($$cl + 1)) dist/libbytesize.spec.in|head -1|cut -d- -f2-3|sed 's/ //g'|sed -r 's/-[0-9]+//'` ; \
 	git log --no-merges --pretty="format:- %s (%ae)" "$(PACKAGE_NAME)-$$version_release.." |sed -e 's/@.*)/)/' ; \
 	echo
+
+shortlog:
+	git shortlog -r --no-merges --format="- %s" -w76,0,2 $$(git tag -l | tail -n 1)..HEAD | sed s/"):$"/"):\n"/g
 
 bumpver:
 	@VERSION=`echo $(PACKAGE_VERSION)|sed -r 's/(.*)\.([0-9]+)/\1/'` ; \
