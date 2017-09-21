@@ -71,7 +71,7 @@ po-pull:
 
 tag:
 	@TAG="$(PACKAGE_VERSION)" ; \
-	git tag -a -s -m "Tag as $$TAG" -f "$$TAG" ; \
+	git tag -a -s -m "Tag as $$TAG" -f "$$TAG" && \
 	echo "Tagged as $$TAG"
 
 rpmlog:
