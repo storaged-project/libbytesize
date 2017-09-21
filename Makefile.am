@@ -81,7 +81,7 @@ rpmlog:
 	echo
 
 shortlog:
-	git shortlog -r --no-merges --format="- %s" -w76,0,2 $$(git tag -l | tail -n 1)..HEAD | sed s/"):$"/"):\n"/g
+	git shortlog -r --no-merges --format="- %s" -w76,0,2 $$(git tag -l | tail -n 1)..HEAD | sed 's/"):$"/"):\n"/g'
 
 bumpver:
 	@VERSION=`echo $(PACKAGE_VERSION)|sed -r 's/(.*)\.([0-9]+)/\1/'` ; \
