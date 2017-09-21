@@ -1,3 +1,32 @@
+Libbytesize 1.1
+---------------
+
+New minor release of the libbytesize library. There are only small changes in
+this release and one important bug fix.
+
+**Notable changes**
+
+- Fixed parsing size strings with translated units (e.g. "10 Gio" in French).
+
+
+**Full list of changes**
+
+Vojtech Trefny (3):
+- Use only one git tag for new releases
+- Fix source and url in spec file
+- Add NEWS.rst file
+
+Vratislav Podzimek (4):
+- Add two temporary test files to .gitignore
+- Actually translate the units when expected
+- Fix the shortlog target
+- Sync spec with downstream
+
+Thanks to all our contributors.
+
+Vratislav Podzimek, 2017-09-21
+
+
 Libbytesize 1.0
 ---------------
 
