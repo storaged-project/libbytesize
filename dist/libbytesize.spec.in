@@ -11,7 +11,7 @@
 %endif
 
 Name:        libbytesize
-Version:     1.1
+Version:     1.2
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -110,6 +110,11 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Fri Sep 29 2017 Vratislav Podzimek <vpodzime@redhat.com> - 1.2-1
+- Use only version as a tag of the last release (vpodzime)
+- Do not require the glib-2.0 pkgconfig package (vpodzime)
+- Do not lie about tag creation (vpodzime)
+
 * Thu Sep 21 2017 Vratislav Podzimek <vpodzime@redhat.com> - 1.1-1
 - Add NEWS.rst file (vtrefny)
 - Fix source and url in spec file (vtrefny)

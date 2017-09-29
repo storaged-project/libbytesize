@@ -1,3 +1,22 @@
+Libbytesize 1.2
+---------------
+
+New minor release of the libbytesize library. There are only small changes in
+this release.
+
+
+**Full list of changes**
+
+Vratislav Podzimek (4):
+- Do not lie about tag creation
+- Do not require the glib-2.0 pkgconfig package
+- Use only version as a tag of the last release
+
+Thanks to all our contributors.
+
+Vratislav Podzimek, 2017-09-29
+
+
 Libbytesize 1.1
 ---------------
 
