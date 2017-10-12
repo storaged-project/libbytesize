@@ -337,8 +337,11 @@ static void mul_64bit (mpz_t rop, const mpz_t op1, uint64_t op2) {
  * Clears @size and frees the allocated resources.
  */
 void bs_size_free (BSSize size) {
-    mpz_clear (size->bytes);
-    free (size);
+    if (size) {
+        mpz_clear (size->bytes);
+        free (size);
+    }
+    return;
 }
 
 /**
