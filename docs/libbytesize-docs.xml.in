@@ -10,7 +10,7 @@
     <releaseinfo>
       for libbytesize @VERSION@.
       The latest version of this documentation can be found on-line at
-      <ulink role="online-location" url="http://rhinstaller.github.io/libbytesize/index.html">http://rhinstaller.github.io/libbytesize/</ulink>.
+      <ulink role="online-location" url="http://storaged.org/libbytesize">http://storaged.org/libbytesize</ulink>.
     </releaseinfo>
   </bookinfo>
 
