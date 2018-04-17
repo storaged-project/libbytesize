@@ -2,10 +2,8 @@
 %define with_python3 @WITH_PYTHON3@
 %define with_gtk_doc @WITH_GTK_DOC@
 
-%define is_rhel 0%{?rhel} != 0
-
-# python3 is not available on RHEL
-%if %{is_rhel}
+# python3 is not available on RHEL <= 7
+%if ! 0%{?fedora} && 0%{?rhel} <= 7
 %define with_python3 0
 %define configure_opts --without-python3
 %endif
@@ -23,7 +21,7 @@ BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
 BuildRequires: pcre-devel
 BuildRequires: gettext-devel
-BuildRequires: python-devel
+BuildRequires: python2-devel
 %if %{with_python3}
 BuildRequires: python3-devel
 %endif
@@ -50,7 +48,7 @@ Summary: Python 2 bindings for libbytesize
 %{?python_provide:%python_provide python2-%{realname}}
 %{?python_provide:%python_provide python2-libbytesize}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: python-six
+Requires: python2-six
 
 %description -n python2-%{realname}
 This package contains Python 2 bindings for libbytesize making the use of
@@ -111,10 +109,23 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Wed Feb 21 2018 Vojtech Trefny <vtrefny@redhat.com> - 1.2-4
+- Add gcc to BuildRequires (vtrefny)
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Fri Jan 05 2018 Iryna Shcherbina <ishcherb@redhat.com> - 1.2-2
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Fri Sep 29 2017 Vratislav Podzimek <vpodzime@redhat.com> - 1.2-1
 - Use only version as a tag of the last release (vpodzime)
 - Do not require the glib-2.0 pkgconfig package (vpodzime)
 - Do not lie about tag creation (vpodzime)
+
+* Thu Sep 28 2017 Troy Dawson <tdawson@redhat.com> - 1.1-2
+- Cleanup spec file conditionals
 
 * Thu Sep 21 2017 Vratislav Podzimek <vpodzime@redhat.com> - 1.1-1
 - Add NEWS.rst file (vtrefny)
