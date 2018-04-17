@@ -1,12 +1,20 @@
 %define realname bytesize
+%define with_python2 @WITH_PYTHON2@
 %define with_python3 @WITH_PYTHON3@
 %define with_gtk_doc @WITH_GTK_DOC@
 
-# python3 is not available on RHEL <= 7
-%if ! 0%{?fedora} && 0%{?rhel} <= 7
+%if (! 0%{?fedora} && 0%{?rhel} <= 7) || %{with_python3} == 0
 %define with_python3 0
-%define configure_opts --without-python3
+%define python3_opts --without-python3
 %endif
+
+# python2 is not available on RHEL > 7 and not needed on Fedora > 28
+%if 0%{?rhel} > 7 || 0%{?fedora} > 28 || %{with_python2} == 0
+%define with_python2 0
+%define python2_opts --without-python2
+%endif
+
+%define configure_opts %{?python3_opts} %{?python2_opts}
 
 Name:        libbytesize
 Version:     1.2
@@ -21,7 +29,9 @@ BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
 BuildRequires: pcre-devel
 BuildRequires: gettext-devel
+%if %{with_python2}
 BuildRequires: python2-devel
+%endif
 %if %{with_python3}
 BuildRequires: python3-devel
 %endif
@@ -43,6 +53,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 This package contains header files and pkg-config files needed for development
 with the libbytesize library.
 
+%if %{with_python2}
 %package -n python2-%{realname}
 Summary: Python 2 bindings for libbytesize
 %{?python_provide:%python_provide python2-%{realname}}
@@ -53,6 +64,7 @@ Requires: python2-six
 %description -n python2-%{realname}
 This package contains Python 2 bindings for libbytesize making the use of
 the library from Python 2 easier and more convenient.
+%endif
 
 %if %{with_python3}
 %package -n python3-%{realname}
@@ -97,9 +109,11 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %{_datadir}/gtk-doc/html/libbytesize
 %endif
 
+%if %{with_python2}
 %files -n python2-%{realname}
 %dir %{python2_sitearch}/bytesize
 %{python2_sitearch}/bytesize/*
+%endif
 
 %if %{with_python3}
 %files -n python3-%{realname}
