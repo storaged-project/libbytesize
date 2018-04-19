@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<book xmlns="http://www.devhelp.net/book" title="libbytesize Reference Manual" link="index.html" author="" name="libbytesize" version="2" language="c">
+<book xmlns="http://www.devhelp.net/book" title="libbytesize Reference Manual" link="index.html" author="" name="libbytesize" version="2" language="c" online="http://storaged.org/libbytesize">
   <chapters>
     <sub name="libbytesize Reference Manual" link="ch01.html">
       <sub name="BSSize" link="libbytesize-BSSize.html"/>
@@ -53,6 +53,7 @@
     <keyword type="constant" name="BS_ERROR_INVALID_SPEC" link="libbytesize-BSSize.html#BS-ERROR-INVALID-SPEC:CAPS"/>
     <keyword type="constant" name="BS_ERROR_OVER" link="libbytesize-BSSize.html#BS-ERROR-OVER:CAPS"/>
     <keyword type="constant" name="BS_ERROR_ZERO_DIV" link="libbytesize-BSSize.html#BS-ERROR-ZERO-DIV:CAPS"/>
+    <keyword type="constant" name="BS_ERROR_FAIL" link="libbytesize-BSSize.html#BS-ERROR-FAIL:CAPS"/>
     <keyword type="constant" name="BS_BUNIT_B" link="libbytesize-BSSize.html#BS-BUNIT-B:CAPS"/>
     <keyword type="constant" name="BS_BUNIT_KiB" link="libbytesize-BSSize.html#BS-BUNIT-KiB"/>
     <keyword type="constant" name="BS_BUNIT_MiB" link="libbytesize-BSSize.html#BS-BUNIT-MiB"/>
