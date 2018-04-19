@@ -1,3 +1,29 @@
+Libbytesize 1.3
+---------------
+
+New minor release of the libbytesize library. There are only small changes in
+this release. Most notable change is new configure option `--without-python2`
+that allows building libbytesize without Python 2 support.
+
+
+**Full list of changes**
+
+Vojtech Trefny (5):
+
+- Do not segfault when trying to bs_size_free NULL
+- Fix links for documentation and GH project
+- Add gcc to BuildRequires
+- Sync spec with downstream
+- Allow building libbytesize without Python 2 support
+
+Vratislav Podzimek (1):
+
+- Add a HACKING.rst file
+
+Thanks to all our contributors.
+
+Vojtech Trefny, 2018-04-19
+
 Libbytesize 1.2
 ---------------
 
@@ -8,6 +34,7 @@ this release.
 **Full list of changes**
 
 Vratislav Podzimek (4):
+
 - Do not lie about tag creation
 - Do not require the glib-2.0 pkgconfig package
 - Use only version as a tag of the last release
@@ -31,11 +58,13 @@ this release and one important bug fix.
 **Full list of changes**
 
 Vojtech Trefny (3):
+
 - Use only one git tag for new releases
 - Fix source and url in spec file
 - Add NEWS.rst file
 
 Vratislav Podzimek (4):
+
 - Add two temporary test files to .gitignore
 - Actually translate the units when expected
 - Fix the shortlog target
