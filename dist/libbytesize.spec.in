@@ -90,8 +90,7 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %find_lang %{name}
 
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets
 
 
 %files -f %{name}.lang

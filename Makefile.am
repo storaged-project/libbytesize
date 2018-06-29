@@ -66,7 +66,7 @@ ci:
 	test "$$status" = "0"
 
 po-pull:
-	rpm -q zanata-python-client &>/dev/null || ( echo "need to run: yum install zanata-python-client"; exit 1 )
+	@which zanata >/dev/null 2>&1 || ( echo "You need to install Zanata client to download translation files"; exit 1 )
 	zanata pull $(ZANATA_PULL_ARGS)
 
 tag:
