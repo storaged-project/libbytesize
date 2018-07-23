@@ -1,22 +1,26 @@
 #!/bin/bash
 
+status=0
+
 # If not run from automake, fake it
 if [ -z "$srcdir" ]; then
     srcdir="$(dirname "$0")"
 fi
 
 if [ @WITH_PYTHON2@ = 1 ]; then
-    python2 ${srcdir}/libbytesize_unittest.py
+    python2 ${srcdir}/libbytesize_unittest.py || status=1
 fi
 
 if [ @WITH_PYTHON3@ = 1 ]; then
-    python3 ${srcdir}/libbytesize_unittest.py
+    python3 ${srcdir}/libbytesize_unittest.py || status=1
 fi
 
 if [ @WITH_PYTHON2@ = 1 ]; then
-    python2 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8
+    python2 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8 || status=1
 fi
 
 if [ @WITH_PYTHON3@ = 1 ]; then
-    python3 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8
+    python3 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8 || status=1
 fi
+
+exit $status
