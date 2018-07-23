@@ -5,12 +5,17 @@ if [ -z "$srcdir" ]; then
     srcdir="$(dirname "$0")"
 fi
 
-python2 ${srcdir}/libbytesize_unittest.py
+if [ @WITH_PYTHON2@ = 1 ]; then
+    python2 ${srcdir}/libbytesize_unittest.py
+fi
+
 if [ @WITH_PYTHON3@ = 1 ]; then
     python3 ${srcdir}/libbytesize_unittest.py
 fi
 
-python2 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8
+if [ @WITH_PYTHON2@ = 1 ]; then
+    python2 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8
+fi
 
 if [ @WITH_PYTHON3@ = 1 ]; then
     python3 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8
