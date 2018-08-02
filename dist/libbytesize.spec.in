@@ -17,7 +17,7 @@
 %define configure_opts %{?python3_opts} %{?python2_opts}
 
 Name:        libbytesize
-Version:     1.3
+Version:     1.4
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -122,6 +122,14 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Thu Aug 02 2018 Vojtech Trefny <vtrefny@redhat.com> - 1.4-1
+- Squashed 'translation-canary/' changes from 840c2d6..fccbb1b (vtrefny)
+- Make sure the test script fails if one of the test runs fail (vtrefny)
+- Do not try to run python2 tests without python2 support (vtrefny)
+- Fix licence header for "gettext.h" (vtrefny)
+- Do not use rpm to check for Zanata client (vtrefny)
+- Use new ldconfig_scriptlets macro in spec (vtrefny)
+
 * Thu Apr 19 2018 Vojtech Trefny <vtrefny@redhat.com> - 1.3-1
 - Allow building libbytesize without Python 2 support (vtrefny)
 - Sync spec with downstream (vtrefny)

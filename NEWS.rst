@@ -1,3 +1,23 @@
+Libbytesize 1.4
+---------------
+
+New minor release of the libbytesize library. There are only small changes in
+this release.
+
+**Full list of changes**
+
+Vojtech Trefny (6):
+- Use new ldconfig_scriptlets macro in spec
+- Do not use rpm to check for Zanata client
+- Fix licence header for "gettext.h"
+- Do not try to run python2 tests without python2 support
+- Make sure the test script fails if one of the test runs fail
+- Squashed 'translation-canary/' changes from 840c2d6..fccbb1b
+
+Thanks to all our contributors.
+
+Vojtech Trefny, 2018-08-02
+
 Libbytesize 1.3
 ---------------
 
