@@ -7,18 +7,9 @@ if [ -z "$srcdir" ]; then
     srcdir="$(dirname "$0")"
 fi
 
-if [ @WITH_PYTHON2@ = 1 ]; then
-    python2 ${srcdir}/libbytesize_unittest.py || status=1
-    python2 ${srcdir}/lbs_py_override_unittest.py || status=1
-fi
-
 if [ @WITH_PYTHON3@ = 1 ]; then
     python3 ${srcdir}/libbytesize_unittest.py || status=1
     python3 ${srcdir}/lbs_py_override_unittest.py || status=1
-fi
-
-if [ @WITH_PYTHON2@ = 1 ]; then
-    python2 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8 || status=1
 fi
 
 if [ @WITH_PYTHON3@ = 1 ]; then

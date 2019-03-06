@@ -50,22 +50,6 @@ AC_CHECK_HEADERS([langinfo.h gmp.h mpfr.h stdint.h stdbool.h stdarg.h string.h s
                  [LIBBYTESIZE_SOFT_FAILURE([Header file $ac_header not found.])],
                  [])
 
-AC_ARG_WITH([python2],
-    AS_HELP_STRING([--with-python2], [support python2 @<:@default=check@:>@]),
-    [],
-    [with_python2=check])
-
-AC_SUBST(WITH_PYTHON2, 0)
-if test "x$with_python2" != "xno"; then
-    AC_PATH_PROG([python2], [python2], [no])
-    AS_IF([test "x$python2" == "xno"],
-    [if test "x$with_python2" = "xyes"; then
-      LIBBYTESIZE_SOFT_FAILURE([Python2 support requested, but python2 is not available])
-      fi],
-    [AC_SUBST(WITH_PYTHON2, 1)])
-fi
-AM_CONDITIONAL(WITH_PYTHON2, test "x$with_python2" != "xno" -a "x$python2" != "xno")
-
 AC_ARG_WITH([python3],
     AS_HELP_STRING([--with-python3], [support python3 @<:@default=check@:>@]),
     [],
