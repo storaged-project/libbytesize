@@ -7,13 +7,20 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
-#include <pcre.h>
+
+/* set code unit width to 8 so we can use generic macros like 'pcre2_compile'
+ * instead of 'pcre2_compile_8'
+ */
+#define PCRE2_CODE_UNIT_WIDTH 8
+#include <pcre2.h>
 
 #include "bs_size.h"
 #include "gettext.h"
 
 #define  _(String) gettext (String)
 #define N_(String) String
+
+#define ERROR_BUFFER_LEN 256
 
 /**
  * SECTION: bs_size
@@ -420,11 +427,11 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
                                   "\\s*               # white space \n" \
                                   "(?P<rest>[^\\s]*)\\s*$ # unit specification";
     char *real_pattern = NULL;
-    pcre *regex = NULL;
-    const char *error_msg = NULL;
-    int erroffset;
+    pcre2_code *regex = NULL;
+    int errorcode = 0;
+    PCRE2_SIZE erroffset;
     int str_len = 0;
-    int ovector[30];            /* should be a multiple of 3 */
+    pcre2_match_data *match_data = NULL;
     int str_count = 0;
     char *num_str = NULL;
     const char *radix_char = NULL;
@@ -434,6 +441,9 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     int status = 0;
     char *unit_str = NULL;
     BSSize ret = NULL;
+    PCRE2_UCHAR *substring = NULL;
+    PCRE2_SIZE substring_len = 0;
+    PCRE2_UCHAR error_buffer[ERROR_BUFFER_LEN];
 
     radix_char = nl_langinfo (RADIXCHAR);
     if (strncmp (radix_char, ".", 1) != 0)
@@ -441,32 +451,55 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     else
         real_pattern = strdup_printf (pattern, "");
 
-    regex = pcre_compile (real_pattern, PCRE_EXTENDED, &error_msg, &erroffset, NULL);
+    regex = pcre2_compile ((PCRE2_SPTR) real_pattern, PCRE2_ZERO_TERMINATED, PCRE2_EXTENDED, &errorcode, &erroffset, NULL);
     free (real_pattern);
     if (!regex) {
-        /* TODO: populate error */
+        status = pcre2_get_error_message (errorcode, error_buffer, ERROR_BUFFER_LEN);
+        switch (status) {
+            case PCRE2_ERROR_BADDATA:
+                // unknown/invalid error code
+                set_error (error, BS_ERROR_INVALID_SPEC,
+                           strdup_printf ("Failed to compile pattern at offset %d: Unknown error.", erroffset));
+                break;
+            case PCRE2_ERROR_NOMEMORY:
+                // error buffer is too short
+                set_error (error, BS_ERROR_INVALID_SPEC,
+                           strdup_printf ("Failed to compile pattern at offset %d: %s (truncated)", erroffset, error_buffer));
+                break;
+
+            default:
+                set_error (error, BS_ERROR_INVALID_SPEC,
+                           strdup_printf ("Failed to compile pattern at offset %d: %s", erroffset, error_buffer));
+                break;
+        }
         return NULL;
     }
 
     loc_size_str = replace_char_with_str (size_str, '.', radix_char);
     str_len = strlen (loc_size_str);
 
-    str_count = pcre_exec (regex, NULL, loc_size_str, str_len,
-                           0, 0, ovector, 30);
+    match_data = pcre2_match_data_create_from_pattern (regex, NULL);
+
+    str_count = pcre2_match (regex, (PCRE2_SPTR) loc_size_str, str_len,
+                             0, 0, match_data, NULL);
     if (str_count < 0) {
         set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
-        pcre_free (regex);
+        pcre2_match_data_free (match_data);
+        pcre2_code_free (regex);
         free (loc_size_str);
         return NULL;
     }
 
-    status = pcre_get_named_substring (regex, loc_size_str, ovector, str_count, "numeric", (const char **)&num_str);
+    status = pcre2_substring_get_byname (match_data, (PCRE2_SPTR) "numeric", &substring, &substring_len);
     if (status < 0) {
         set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
-        pcre_free (regex);
+        pcre2_match_data_free (match_data);
+        pcre2_code_free (regex);
         free (loc_size_str);
         return NULL;
     }
+
+    num_str = strndup ((const char*) substring, substring_len);
 
     /* parse the number using GMP because it knows how to handle localization
        much better than MPFR */
@@ -475,7 +508,8 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     free (num_str);
     if (status != 0) {
         set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
-        pcre_free (regex);
+        pcre2_match_data_free (match_data);
+        pcre2_code_free (regex);
         free (loc_size_str);
         mpf_clear (parsed_size);
         return NULL;
@@ -485,20 +519,23 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     mpfr_set_f (size, parsed_size, MPFR_RNDN);
     mpf_clear (parsed_size);
 
-    status = pcre_get_named_substring (regex, loc_size_str, ovector, str_count, "rest", (const char **)&unit_str);
+    status = pcre2_substring_get_byname (match_data, (PCRE2_SPTR) "rest", &substring, &substring_len);
+    unit_str = strndup ((const char*) substring, substring_len);
     if ((status >= 0) && strncmp (unit_str, "", 1) != 0) {
         strstrip (unit_str);
         if (!multiply_size_by_unit (size, unit_str)) {
             set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to recognize unit from the spec: %s", size_str));
             free (unit_str);
-            pcre_free (regex);
+            pcre2_match_data_free (match_data);
+            pcre2_code_free (regex);
             free (loc_size_str);
             mpfr_clear (size);
             return NULL;
         }
     }
     free (unit_str);
-    pcre_free (regex);
+    pcre2_match_data_free (match_data);
+    pcre2_code_free (regex);
 
     ret = bs_size_new ();
     mpfr_get_z (ret->bytes, size, MPFR_RNDZ);
