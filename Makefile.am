@@ -38,7 +38,7 @@ dist-hook:
 	done
 
 run-ipython: all
-	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) ipython
+	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) ipython3
 
 check-requires:
 	@echo "*** Checking if the dependencies required for testing and analysis are available ***"
