@@ -41,7 +41,7 @@ AC_CONFIG_FILES([tests/canary_tests.sh],
                 [chmod +x tests/canary_tests.sh])
 
 
-LIBBYTESIZE_PKG_CHECK_MODULES([PCRE], [libpcre >= 8.32])
+LIBBYTESIZE_PKG_CHECK_MODULES([PCRE2], [libpcre2-8])
 
 AC_CHECK_LIB(gmp, __gmpz_init)
 
