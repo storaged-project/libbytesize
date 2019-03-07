@@ -8,7 +8,14 @@ import ctypes
 
 from locale_utils import get_avail_locales, requires_locales
 
-from bytesize import SizeStruct, KiB, GiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError
+from bytesize import KiB, GiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError
+
+# SizeStruct is part of the 'private' API and needs to be imported differently
+# when running from locally build tree and when using installed library
+try:
+    from bytesize import SizeStruct
+except ImportError:
+    from bytesize.bytesize import SizeStruct
 
 DEFAULT_LOCALE = "en_US.utf8"
 
