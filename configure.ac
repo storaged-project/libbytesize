@@ -99,4 +99,29 @@ AS_IF([test "x$with_tools" != "xno" && test "x$with_python3" != "xyes"],
       [])
 
 AC_OUTPUT
+
+dnl ==========================================================================
+echo "
+               libbytesize $VERSION
+             ====================
+
+        prefix:                     ${prefix}
+        libdir:                     ${libdir}
+        libexecdir:                 ${libexecdir}
+        bindir:                     ${bindir}
+        sbindir:                    ${sbindir}
+        datadir:                    ${datadir}
+        sysconfdir:                 ${sysconfdir}
+        localstatedir:              ${localstatedir}
+        docdir:                     ${docdir}
+
+        compiler:                   ${CC}
+        cflags:                     ${CFLAGS}
+        cppflags:                   ${CPPFLAGS}
+        ldflags:                    ${LDFLAGS}
+
+        Python 3 bindings:          ${with_python3}
+        tools:                      ${with_tools}
+"
+
 LIBBYTESIZE_FAILURES
