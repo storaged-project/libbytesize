@@ -1,13 +1,19 @@
 %define realname bytesize
 %define with_python3 @WITH_PYTHON3@
 %define with_gtk_doc @WITH_GTK_DOC@
+%define with_tools @WITH_TOOLS@
 
 %if (! 0%{?fedora} && 0%{?rhel} <= 7) || %{with_python3} == 0
 %define with_python3 0
 %define python3_opts --without-python3
+%define with_tools 0
 %endif
 
-%define configure_opts %{?python3_opts}
+%if %{with_tools} != 1
+%define tools_opts --without-tools
+%endif
+
+%define configure_opts %{?python3_opts} %{?tools_opts}
 
 Name:        libbytesize
 Version:     1.4
@@ -54,6 +60,16 @@ This package contains Python 3 bindings for libbytesize making the use of
 the library from Python 3 easier and more convenient.
 %endif
 
+%if %{with_tools}
+%package tools
+Summary: Various nice tools based on libbytesize
+Requires: python3-%{realname}
+
+%description tools
+Various nice tools based on libbytesize, in particular the calculator
+for doing calculations with storage sizes.
+%endif
+
 %prep
 %setup -q -n %{name}-%{version}
 
@@ -90,6 +106,11 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %dir %{python3_sitearch}/bytesize
 %{python3_sitearch}/bytesize/*
 %{python3_sitearch}/bytesize/__pycache__/*
+%endif
+
+%if %{with_tools}
+%files tools
+%{_bindir}/bscalc
 %endif
 
 %changelog

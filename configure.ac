@@ -32,7 +32,8 @@ AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
                  src/python/Makefile \
                  dist/Makefile dist/libbytesize.spec \
                  docs/Makefile docs/libbytesize-docs.xml \
-                 tests/Makefile])
+                 tests/Makefile \
+                 tools/Makefile])
 
 AC_CONFIG_FILES([tests/libbytesize_unittest.sh],
                 [chmod +x tests/libbytesize_unittest.sh])
@@ -62,7 +63,8 @@ if test "x$with_python3" != "xno"; then
     [if test "x$with_python3" = "xyes"; then
       LIBBYTESIZE_SOFT_FAILURE([Python3 support requested, but python3 is not available])
       fi],
-    [AC_SUBST(WITH_PYTHON3, 1)])
+    [AC_SUBST(WITH_PYTHON3, 1)
+     with_python3=yes])
 fi
 AM_CONDITIONAL(WITH_PYTHON3, test "x$with_python3" != "xno" -a "x$python3" != "xno")
 
@@ -82,6 +84,19 @@ if test "x$with_gtk_doc" != "xno"; then
       [AC_SUBST(WITH_GTK_DOC, 1)])
 fi
 AM_CONDITIONAL(WITH_GTK_DOC, test "x$with_gtk_doc" != "xno" -a "x$gtkdoc_scan" != "xno")
+
+AC_ARG_WITH([tools],
+    AS_HELP_STRING([--with-tools], [build tools @<:@default=yes@:>@ (requires python3 bindings)]),
+    [],
+    [with_tools=yes])
+AC_SUBST([WITH_TOOLS], [0])
+AM_CONDITIONAL(WITH_TOOLS, test "x$with_tools" != "xno")
+AS_IF([test "x$with_tools" != "xno"],
+      [AC_SUBST([WITH_TOOLS], [1])],
+      [])
+AS_IF([test "x$with_tools" != "xno" && test "x$with_python3" != "xyes"],
+      [LIBBYTESIZE_SOFT_FAILURE([Tools require Python3 bindings])],
+      [])
 
 AC_OUTPUT
 LIBBYTESIZE_FAILURES
