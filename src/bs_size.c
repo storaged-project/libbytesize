@@ -423,7 +423,7 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
                                   "(?P<numeric>  # the numeric part consists of three parts, below \n" \
                                   " (-|\\+)?     # optional sign character \n" \
                                   " (?P<base>([0-9\\.%s]+))       # base \n" \
-                                  " (?P<exp>(e|E)(-|\\+)[0-9]+)?) # exponent \n" \
+                                  " (?P<exp>(e|E)(-|\\+)?[0-9]+)?) # exponent \n" \
                                   "\\s*               # white space \n" \
                                   "(?P<rest>[^\\s]*)\\s*$ # unit specification";
     char *real_pattern = NULL;
