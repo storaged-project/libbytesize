@@ -18,6 +18,9 @@ MAKING RELEASES
  - [ ] Add a new entry to the *NEWS.rst* file (full list of changes should be
        generated with ``make shortlog``).
 
+ - [ ] Regenerate the bscalc.man manpage by installing bscalc and then running
+       ``help2man -N bscalc > PATH_TO_LIBBYTESIZE/tools/bscalc.man``.
+
  - [ ] Commit all the changes as *New version - $VERSION*.
 
  - [ ] ``make release`` (requires a GPG key to sign the tag)

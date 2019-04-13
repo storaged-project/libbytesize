@@ -111,6 +111,7 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %if %{with_tools}
 %files tools
 %{_bindir}/bscalc
+%{_mandir}/man1/bscalc.1*
 %endif
 
 %changelog
