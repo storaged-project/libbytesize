@@ -568,6 +568,8 @@ class Size(object):
 
     @neutralize_none_operand
     def __mod__(self, other):
+        if not isinstance(other, Size):
+            raise ValueError("modulo operation only supported between two Size instances")
         return Size(self._c_size.mod(other._c_size))
 
     @neutralize_none_operand
