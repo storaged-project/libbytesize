@@ -90,6 +90,7 @@ def _print_result(result, args):
 
 def _main():
     ap = ArgumentParser(epilog="Report issues at https://github.com/storaged-project/libbytesize/issues")
+    ap.add_argument("--version", action="version", version="@VERSION@")
     ap.add_argument("-u", "--unit", choices=(b_units + d_units),
                     help="Unit to show the result in")
     ap.add_argument("-b", "-B", dest="unit", const="B",

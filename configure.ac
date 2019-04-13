@@ -33,7 +33,8 @@ AC_CONFIG_FILES([Makefile src/Makefile src/bytesize.pc \
                  dist/Makefile dist/libbytesize.spec \
                  docs/Makefile docs/libbytesize-docs.xml \
                  tests/Makefile \
-                 tools/Makefile])
+                 tools/Makefile \
+                 tools/bs_calc.py])
 
 AC_CONFIG_FILES([tests/libbytesize_unittest.sh],
                 [chmod +x tests/libbytesize_unittest.sh])
