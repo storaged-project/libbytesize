@@ -113,6 +113,8 @@ def _main():
         print("Error while parsing expression: %s" % e)
         return 1
 
+    any_size = any(isinstance(token, Size) for token in tokens)
+
     eval_str = _tokens_to_eval_str(tokens)
     try:
         result = eval(eval_str)
@@ -124,6 +126,12 @@ def _main():
         print(eval_str)
         print(" " * (e.offset - 1) + "^")
         return 1
+
+    # The given expression contained no Size, just numbers. By default we just
+    # assume the whole expression was in bytes so let's convert the result
+    # before printing it.
+    if not any_size:
+        result = Size(result)
 
     _print_result(result, args)
 
