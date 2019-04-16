@@ -5,6 +5,9 @@ SUBDIRS = . po src dist tests
 if WITH_GTK_DOC
 SUBDIRS += docs
 endif
+if WITH_TOOLS
+SUBDIRS += tools
+endif
 
 dist_noinst_DATA = LICENSE README.md
 

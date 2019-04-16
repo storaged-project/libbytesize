@@ -556,7 +556,9 @@ class Size(object):
 
     @neutralize_none_operand
     def __floordiv__(self, other):
-        if isinstance(other, six.integer_types):
+        if isinstance(other, (Decimal, float)):
+            return Size(self._c_size.mul_float_str(str(Decimal(1)/Decimal(other))))
+        elif isinstance(other, six.integer_types):
             if other <= MAXUINT64:
                 return self._safe_floordiv_int(other)
             else:
@@ -566,6 +568,8 @@ class Size(object):
 
     @neutralize_none_operand
     def __mod__(self, other):
+        if not isinstance(other, Size):
+            raise ValueError("modulo operation only supported between two Size instances")
         return Size(self._c_size.mod(other._c_size))
 
     @neutralize_none_operand

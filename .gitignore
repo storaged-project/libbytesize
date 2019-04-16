@@ -6,6 +6,7 @@ aclocal.m4
 ar-lib
 compile
 py-compile
+config.cache
 config.guess
 config.log
 config.status
@@ -54,3 +55,4 @@ tests/*.trs
 test-driver
 tests/canary_tests.sh
 tests/libbytesize_unittest.sh
+tools/bs_calc.py
