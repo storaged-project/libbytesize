@@ -1,3 +1,39 @@
+Libbytesize 2.0
+---------------
+
+New major release of the libbytesize library. There are no API or ABI changes
+but we made some changes in dependencies and behavior.
+
+**Notable changes**
+
+- New bytesize calculator `bssize` has been added.
+- Code has been ported from PCRE to PCRE2.
+- Python 2 support has been removed.
+
+**Full list of changes**
+
+Vojtech Trefny (5):
+
+- Run all libbytesize tests from one script
+- Add all "public" python API  symbols to __init__.py
+- Allow running tests using installed library
+- Remove Python 2 support
+- Port to pcre2
+
+Vratislav Podzimek (10):
+
+- Add support for floor division by a non-integer number in Python
+- Add a simple bytesize calculator tool
+- Add tools to autotools and packaging
+- Exit with 1 from configure if there were failures
+- Add a summary to the end of ./configure output
+- Only support modulo between two Size instances
+- Fix parsing of exponential representations of real numbers
+- Add the '--version' option to bs_calc.py
+- Add a man page for the bscalc tool
+- Assume the given expression is in bytes if no unit is given
+
+
 Libbytesize 1.4
 ---------------
 
@@ -7,6 +43,7 @@ this release.
 **Full list of changes**
 
 Vojtech Trefny (6):
+
 - Use new ldconfig_scriptlets macro in spec
 - Do not use rpm to check for Zanata client
 - Fix licence header for "gettext.h"
