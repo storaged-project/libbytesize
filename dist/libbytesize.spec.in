@@ -16,7 +16,7 @@
 %define configure_opts %{?python3_opts} %{?tools_opts}
 
 Name:        libbytesize
-Version:     1.4
+Version:     2.0
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -115,6 +115,23 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Thu Apr 25 2019 Vojtech Trefny <vtrefny@redhat.com> - 2.0-1
+- Assume the given expression is in bytes if no unit is given (v.podzimek)
+- Add a man page for the bscalc tool (v.podzimek)
+- Add the '--version' option to bs_calc.py (v.podzimek)
+- Fix parsing of exponential representations of real numbers (v.podzimek)
+- Only support modulo between two Size instances (v.podzimek)
+- Add a summary to the end of ./configure output (v.podzimek)
+- Exit with 1 from configure if there were failures (v.podzimek)
+- Add tools to autotools and packaging (v.podzimek)
+- Add a simple bytesize calculator tool (v.podzimek)
+- Add support for floor division by a non-integer number in Python (v.podzimek)
+- Port to pcre2 (vtrefny)
+- Remove Python 2 support (vtrefny)
+- Allow running tests using installed library (vtrefny)
+- Add all "public" python API  symbols to __init__.py (vtrefny)
+- Run all libbytesize tests from one script (vtrefny)
+
 * Thu Aug 02 2018 Vojtech Trefny <vtrefny@redhat.com> - 1.4-1
 - Squashed 'translation-canary/' changes from 840c2d6..fccbb1b (vtrefny)
 - Make sure the test script fails if one of the test runs fail (vtrefny)
