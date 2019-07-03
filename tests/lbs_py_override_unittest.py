@@ -8,7 +8,7 @@ import locale
 from decimal import Decimal
 from locale_utils import get_avail_locales, requires_locales
 
-from bytesize import Size
+from bytesize import Size, ROUND_UP, ROUND_DOWN, KiB
 
 class SizeTestCase(unittest.TestCase):
 
@@ -299,6 +299,17 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(conv, Decimal("1.5"))
 
         locale.setlocale(locale.LC_ALL,'en_US.UTF-8')
+
+    def testRoundToNearest(self):
+        size = Size("1.5 KiB")
+        conv = size.round_to_nearest(Size("1 KiB"), rounding=ROUND_UP)
+        self.assertEqual(conv, Size("2 KiB"))
+
+        conv = size.round_to_nearest(KiB, rounding=ROUND_DOWN)
+        self.assertEqual(conv, Size("1 KiB"))
+
+        with self.assertRaises(ValueError):
+            size.round_to_nearest(-1, rounding=ROUND_UP)
 
 #endclass
 

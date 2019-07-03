@@ -404,7 +404,7 @@ class Size(object):
 
     def round_to_nearest(self, round_to, rounding):
         if isinstance(round_to, Size):
-            return self._c_size.round_to_nearest(round_to._c_size, rounding)
+            return Size(self._c_size.round_to_nearest(round_to._c_size, rounding))
 
         size = None
         # else try to create a SizeStruct instance from it
