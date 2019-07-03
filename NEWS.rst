@@ -1,3 +1,19 @@
+Libbytesize 2.1
+---------------
+
+New minor release of the libbytesize library. There are only two bugfixes in
+this release.
+
+**Full list of changes**
+
+Hongxu Jia (1):
+
+- fix out of tree build failure
+
+Vojtech Trefny (1):
+
+- Fix return value for round_to_nearest when using Size
+
 Libbytesize 2.0
 ---------------
 
