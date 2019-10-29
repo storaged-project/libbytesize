@@ -68,7 +68,7 @@
 
 # Variables used in xgettext arguments
 COPYRIGHT_HOLDER = Red Hat, Inc.
-MSGID_BUGS_ADDRESS = anaconda-devel-list@redhat.com
+MSGID_BUGS_ADDRESS = vtrefny@redhat.com
 
 # What kind of files are we looking for?
 POTFILE_SUFFIXES = c
@@ -161,12 +161,12 @@ MSGMERGE_V_OPTIONS_1 = $(MSGMERGE_OPTIONS) --verbose
 
 # Actually do stuff:
 # .po files get distributed but not installed
-dist_noinst_DATA = $(POFILES)
+dist_noinst_DATA = $(POFILES) $(POTFILE)
 
 # Build the .mo files but don't actually do anything with them. The real
 # install part is in the install-data-local target below. Build the .pot file
 # as well, even if there are no .mo files to build, so it can be tested.
-nodist_noinst_DATA = $(MOFILES) $(POTFILE)
+nodist_noinst_DATA = $(MOFILES)
 
 # How to build the .pot file. This needs to be regenerated if anything that
 # goes into it has changed.
@@ -181,13 +181,13 @@ $(PACKAGE).pot-update:
 	@$(MAKE) $(POTFILE)
 
 # How to build the merged .mpo files from the .po files
-$(MERGED_POFILES): $(POFILES) $(POTFILE)
+$(MERGED_POFILES): $(POFILES)
 
 .po.mpo:
-	$(GETTEXT_V_MERGE)$(MSGMERGE) $(MSGMERGE_V_OPTIONS) -o $@ $< $(POTFILE)
+	$(GETTEXT_V_MERGE)$(MSGMERGE) $(MSGMERGE_V_OPTIONS) -o $@ $< $(top_srcdir)/po/$(POTFILE)
 
 # How to build the .mo files from the .mpo files
-$(MOFILES): $(MERGED_POFILES)
+$(MOFILES): $(MERGED_POFILES) $(POTFILE)
 
 .mpo.mo:
 	$(GETTEXT_V_FORMAT)$(MSGFMT) $(MSGFMT_V_OPTIONS) -o $@ $<
@@ -210,4 +210,4 @@ uninstall-local:
 		rm -f $(DESTDIR)$(localedir)/$$lang/LC_MESSAGES/$(PACKAGE).mo ; \
 	done
 
-CLEANFILES = $(MERGED_POFILES) $(MOFILES) $(POTFILE)
+CLEANFILES = $(MERGED_POFILES) $(MOFILES)
