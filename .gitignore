@@ -20,7 +20,6 @@ m4/
 autom4te.cache/
 missing
 po/*.po
-po/*.pot
 po/*.mpo
 po/*.mo
 dist/libbytesize.spec
