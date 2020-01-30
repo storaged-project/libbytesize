@@ -105,6 +105,7 @@
    and other string expressions won't work.
    The macro's expansion is not parenthesized, so that it is suitable as
    initializer for static 'char[]' or 'const char[]' variables.  */
+#undef gettext_noop
 #define gettext_noop(String) String
 
 /* The separator between msgctxt and msgid in a .mo file.  */
