@@ -63,7 +63,7 @@ the library from Python 3 easier and more convenient.
 %if %{with_tools}
 %package tools
 Summary: Various nice tools based on libbytesize
-Requires: python3-%{realname}
+Requires: python3-%{realname} = %{version}-%{release}
 
 %description tools
 Various nice tools based on libbytesize, in particular the calculator
