@@ -16,7 +16,7 @@
 %define configure_opts %{?python3_opts} %{?tools_opts}
 
 Name:        libbytesize
-Version:     2.1
+Version:     2.2
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -115,6 +115,13 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Thu Jan 30 2020 Vojtech Trefny <vtrefny@redhat.com> - 2.2-1
+- Require the same version of python3-bytesize in libbytesize-tools (v.podzimek)
+- src/gettext: fix warning if gettext is already present (giulio.benetti)
+- Update README.md (vpodzime)
+- fix build on shells where test == fails (tbier)
+- Add POT file to git and do not rebuild it during every build (vtrefny)
+
 * Wed Jul 03 2019 Vojtech Trefny <vtrefny@redhat.com> - 2.1-1
 - fix out of tree build failure (hongxu.jia)
 - Fix return value for round_to_nearest when using Size (vtrefny)
