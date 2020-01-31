@@ -1,3 +1,20 @@
+Libbytesize 2.2
+---------------
+
+Giulio Benetti (1):
+- src/gettext: fix warning if gettext is already present
+
+Tim Biermann (1):
+- fix build on shells where test == fails
+
+Vojtech Trefny (2):
+- Add POT file to git and do not rebuild it during every build
+- New version - 2.2
+
+Vratislav Podzimek (2):
+- Update README.md
+- Require the same version of python3-bytesize in libbytesize-tools
+
 Libbytesize 2.1
 ---------------
 
