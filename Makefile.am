@@ -108,7 +108,6 @@ rpm: local
 
 release: tag
 	$(MAKE) archive
-	$(MAKE) -C po/ $(PACKAGE_NAME).pot-update
 
 EXTRA_DIST = config.rpath
 
