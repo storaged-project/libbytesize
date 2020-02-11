@@ -19,7 +19,6 @@ ltmain.sh
 m4/
 autom4te.cache/
 missing
-po/*.po
 po/*.mpo
 po/*.mo
 dist/libbytesize.spec
@@ -46,7 +45,6 @@ dist/libbytesize.spec
 **/Makefile.in
 **/*.stamp
 *.tar.gz
-**/*.po
 **/*.gmo
 **/*.po~
 tests/*.log

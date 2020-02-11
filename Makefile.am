@@ -20,9 +20,6 @@ PYTHONDIR = src/python
 
 TEST_PYTHON ?= $(PYTHON)
 
-ZANATA_PULL_ARGS = --transdir ./po/
-ZANATA_PUSH_ARGS = --srcdir ./po/ --push-type source --force
-
 TEST_DEPENDENCIES = $(shell rpm --specfile dist/libbytesize.spec --requires | cut -d' ' -f1 | grep -v ^libbytesize)
 TEST_DEPENDENCIES += gmp gmp-devel
 TEST_DEPENDENCIES += mpfr mpfr-devel
@@ -68,10 +65,6 @@ ci:
 	find . -name 'test-suite.log' -exec cat '{}' \; ; \
 	test "$$status" = "0"
 
-po-pull:
-	@which zanata >/dev/null 2>&1 || ( echo "You need to install Zanata client to download translation files"; exit 1 )
-	zanata pull $(ZANATA_PULL_ARGS)
-
 tag:
 	@TAG="$(PACKAGE_VERSION)" ; \
 	git tag -a -s -m "Tag as $$TAG" -f "$$TAG" && \
@@ -99,11 +92,10 @@ bumpver:
 	sed -ri "s/Version:(\\s+)[-0-9.]+/Version:\\1$$VERSION.$$NEWSUBVERSION/" dist/libbytesize.spec.in ;
 	$(MAKE) -C po/ $(PACKAGE_NAME).pot-update
 
-archive: po-pull
+archive:
 	$(MAKE) distcheck
 
 local: all
-	[ -f ./po/en_US.po ] || msginit -i ./po/$(PACKAGE_NAME).pot -o ./po/en_US.po --no-translator
 	$(MAKE) dist
 
 srpm: local
@@ -116,8 +108,6 @@ rpm: local
 
 release: tag
 	$(MAKE) archive
-	$(MAKE) -C po/ $(PACKAGE_NAME).pot-update
-	zanata push $(ZANATA_PUSH_ARGS)
 
 EXTRA_DIST = config.rpath
 
