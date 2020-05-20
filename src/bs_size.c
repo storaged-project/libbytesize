@@ -433,13 +433,11 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     int str_len = 0;
     pcre2_match_data *match_data = NULL;
     int str_count = 0;
-    char *num_str = NULL;
     const char *radix_char = NULL;
     char *loc_size_str = NULL;
     mpf_t parsed_size;
     mpfr_t size;
     int status = 0;
-    char *unit_str = NULL;
     BSSize ret = NULL;
     PCRE2_UCHAR *substring = NULL;
     PCRE2_SIZE substring_len = 0;
@@ -491,7 +489,7 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     }
 
     status = pcre2_substring_get_byname (match_data, (PCRE2_SPTR) "numeric", &substring, &substring_len);
-    if (status < 0) {
+    if (status < 0 || substring_len < 1) {
         set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
         pcre2_match_data_free (match_data);
         pcre2_code_free (regex);
@@ -499,13 +497,11 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
         return NULL;
     }
 
-    num_str = strndup ((const char*) substring, substring_len);
-
     /* parse the number using GMP because it knows how to handle localization
        much better than MPFR */
     mpf_init2 (parsed_size, BS_FLOAT_PREC_BITS);
-    status = mpf_set_str (parsed_size, *num_str == '+' ? num_str+1 : num_str, 10);
-    free (num_str);
+    status = mpf_set_str (parsed_size, *substring == '+' ? (const char *) substring+1 : (const char *) substring, 10);
+    pcre2_substring_free (substring);
     if (status != 0) {
         set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
         pcre2_match_data_free (match_data);
@@ -520,12 +516,11 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     mpf_clear (parsed_size);
 
     status = pcre2_substring_get_byname (match_data, (PCRE2_SPTR) "rest", &substring, &substring_len);
-    unit_str = strndup ((const char*) substring, substring_len);
-    if ((status >= 0) && strncmp (unit_str, "", 1) != 0) {
-        strstrip (unit_str);
-        if (!multiply_size_by_unit (size, unit_str)) {
+    if ((status >= 0) && strncmp ((const char *) substring, "", 1) != 0) {
+        strstrip ((char *) substring);
+        if (!multiply_size_by_unit (size, (char *) substring)) {
             set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to recognize unit from the spec: %s", size_str));
-            free (unit_str);
+            pcre2_substring_free (substring);
             pcre2_match_data_free (match_data);
             pcre2_code_free (regex);
             free (loc_size_str);
@@ -533,7 +528,7 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
             return NULL;
         }
     }
-    free (unit_str);
+    pcre2_substring_free (substring);
     pcre2_match_data_free (match_data);
     pcre2_code_free (regex);
 
