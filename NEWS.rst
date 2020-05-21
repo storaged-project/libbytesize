@@ -1,3 +1,23 @@
+Libbytesize 2.3
+---------------
+
+Jean-Baptiste (1):
+- add translation platform widget
+
+Oğuz Ersen (1):
+- Translated using Weblate (Turkish)
+
+Vojtech Trefny (5):
+- Sync spec with downstream
+- Add PO files to git
+- Remove Zanata from our build and release processes
+- Do not regenerate POT file during 'make release'
+- Fix memory leak in bs_size_new_from_str
+
+Weblate (1):
+- Update translation files
+
+
 Libbytesize 2.2
 ---------------
 

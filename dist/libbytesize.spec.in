@@ -16,7 +16,7 @@
 %define configure_opts %{?python3_opts} %{?tools_opts}
 
 Name:        libbytesize
-Version:     2.2
+Version:     2.3
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -114,6 +114,16 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Thu May 21 2020 Vojtech Trefny <vtrefny@redhat.com> - 2.3-1
+- Fix memory leak in bs_size_new_from_str (vtrefny)
+- Translated using Weblate (Turkish) (oguzersen)
+- add translation platform widget (jean-baptiste)
+- Update translation files (noreply)
+- Do not regenerate POT file during 'make release' (vtrefny)
+- Remove Zanata from our build and release processes (vtrefny)
+- Add PO files to git (vtrefny)
+- Sync spec with downstream (vtrefny)
+
 * Thu Jan 30 2020 Vojtech Trefny <vtrefny@redhat.com> - 2.2-1
 - Require the same version of python3-bytesize in libbytesize-tools (v.podzimek)
 - src/gettext: fix warning if gettext is already present (giulio.benetti)
