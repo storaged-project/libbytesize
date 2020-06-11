@@ -6,7 +6,7 @@ libdir=@libdir@
 Name: ByteSize
 Description: Library for working with sizes in bytes
 URL: https://github.com/storaged-project/libbytesize
-Version: 0.1.0
+Version: @VERSION@
 Cflags: -I${includedir}/bytesize
 Libs: -lbytesize
 Libs.private: -lgmp -lmpfr
