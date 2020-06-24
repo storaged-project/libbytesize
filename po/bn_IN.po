@@ -1,104 +1,101 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Red Hat, Inc.
 # This file is distributed under the same license as the libbytesize package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Jiri Grönroos <jiri.gronroos@iki.fi>, 2018. #zanata
+# Akarshan Biswas <akarshan.biswas@gmail.com>, 2020.
 msgid ""
 msgstr ""
-"Project-Id-Version: libbytesize 0.3\n"
+"Project-Id-Version: libbytesize 2.2\n"
 "Report-Msgid-Bugs-To: vtrefny@redhat.com\n"
 "POT-Creation-Date: 2020-05-21 09:15+0200\n"
-"PO-Revision-Date: 2018-08-19 12:33+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
-"Language-Team: Finnish\n"
-"Language: fi\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: bn_IN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Zanata 4.6.2\n"
 
 #. TRANSLATORS: 'B' for bytes
 #: src/bs_size.c:52 src/bs_size.c:73
 msgid "B"
-msgstr "t"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for kibibyte, 2**10 bytes
 #: src/bs_size.c:54
 msgid "KiB"
-msgstr "KiB"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for mebibyte, 2**20 bytes
 #: src/bs_size.c:56
 msgid "MiB"
-msgstr "MiB"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for gibibyte, 2**30 bytes
 #: src/bs_size.c:58
 msgid "GiB"
-msgstr "GiB"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for tebibyte, 2**40 bytes
 #: src/bs_size.c:60
 msgid "TiB"
-msgstr "TiB"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for pebibyte, 2**50 bytes
 #: src/bs_size.c:62
 msgid "PiB"
-msgstr "PiB"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for exbibyte, 2**60 bytes
 #: src/bs_size.c:64
 msgid "EiB"
-msgstr "EiB"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for zebibyte, 2**70 bytes
 #: src/bs_size.c:66
 msgid "ZiB"
-msgstr "ZiB"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for yobibyte, 2**80 bytes
 #: src/bs_size.c:68
 msgid "YiB"
-msgstr "YiB"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for kilobyte, 10**3 bytes
 #: src/bs_size.c:75
 msgid "KB"
-msgstr "Kt"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for megabyte, 10**6 bytes
 #: src/bs_size.c:77
 msgid "MB"
-msgstr "Mt"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for gigabyte, 10**9 bytes
 #: src/bs_size.c:79
 msgid "GB"
-msgstr "Gt"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for terabyte, 10**12 bytes
 #: src/bs_size.c:81
 msgid "TB"
-msgstr "Tt"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for petabyte, 10**15 bytes
 #: src/bs_size.c:83
 msgid "PB"
-msgstr "Pt"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for exabyte, 10**18 bytes
 #: src/bs_size.c:85
 msgid "EB"
-msgstr "Et"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for zettabyte, 10**21 bytes
 #: src/bs_size.c:87
 msgid "ZB"
-msgstr "Zt"
+msgstr ""
 
 #. TRANSLATORS: abbreviation for yottabyte, 10**24 bytes
 #: src/bs_size.c:89
 msgid "YB"
-msgstr "Yt"
+msgstr ""
