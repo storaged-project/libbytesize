@@ -13,8 +13,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_PATH_PROG([XGETTEXT], [xgettext])
 AC_PATH_PROG([MSGFMT], [msgfmt])
 AC_PATH_PROG([MSGMERGE], [msgmerge])
-AC_PATH_PROG([MSGCAT], [msgcat])
-AS_IF([test -z "$XGETTEXT" -o -z "$MSGFMT" -o -z "$MSGMERGE" -o -z "$MSGCAT"],
+AS_IF([test -z "$XGETTEXT" -o -z "$MSGFMT" -o -z "$MSGMERGE"],
       [AC_MSG_FAILURE([gettext not found])])
 
 # Define this so gettext.h works without requiring the whole gettext macro
