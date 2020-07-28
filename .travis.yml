@@ -1,0 +1,30 @@
+language: minimal
+services: docker
+sudo: required
+
+env:
+  - DOCKER_FILE=".travis/Dockerfile.fedora-rawhide"
+  - DOCKER_FILE=".travis/Dockerfile.debian-testing"
+
+before_install:
+  # Create a docker image called "myimage".
+  - docker build -t myimage -f "$DOCKER_FILE" .
+
+before_script:
+  # Create a docker container from the image, mount the current working
+  # directory to /app inside the container and let the container running
+  # in the background. The resulting container ID will be saved to
+  # container_id so we can reference it later on.
+  - docker run --privileged --volume "$(pwd):/app" --workdir "/app" --tty --detach myimage bash > container_id
+  - docker exec "$(cat container_id)" ansible-playbook -i "localhost," -c local misc/install-test-dependencies.yml
+
+script:
+  # Run tests in the running container.
+  - docker exec "$(cat container_id)" ./autogen.sh
+  - docker exec "$(cat container_id)" ./configure
+  - docker exec "$(cat container_id)" make
+  - docker exec "$(cat container_id)" make check
+
+after_script:
+  # Stop the container.
+  - docker stop "$(cat container_id)"
