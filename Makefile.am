@@ -40,21 +40,10 @@ dist-hook:
 run-ipython: all
 	LD_LIBRARY_PATH=${LIBDIRS} PYTHONPATH=$(PYTHONDIR) ipython3
 
-check-requires:
-	@echo "*** Checking if the dependencies required for testing and analysis are available ***"
-	@status=0 ; \
-	for pkg in $(TEST_DEPENDENCIES) ; do \
-		test_output="$$(rpm -q --whatprovides "$$pkg")" ; \
-		if [ $$? != 0 ]; then \
-			echo "$$test_output" ; \
-			status=1 ; \
-		fi ; \
-	done ; \
-	exit $$status
-
 install-requires:
 	@echo "*** Installing the dependencies required for testing and analysis ***"
-	dnf install -y $(TEST_DEPENDENCIES)
+	@which ansible-playbook >/dev/null 2>&1 || ( echo "Please install Ansible to install testing dependencies"; exit 1 )
+	@ansible-playbook -K -i "localhost," -c local misc/install-test-dependencies.yml
 
 test:
 	$(MAKE) check
