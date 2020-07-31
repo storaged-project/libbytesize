@@ -75,7 +75,7 @@ for doing calculations with storage sizes.
 
 %build
 %configure %{?configure_opts}
-%{__make} %{?_smp_mflags}
+%make_build
 
 %install
 %{make_install}
@@ -123,6 +123,16 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 - Update translation files (noreply)
 - Added translation using Weblate (Bengali (India)) (akarshan.biswas)
 - Fix library version in pkgconfig file (vtrefny)
+
+* Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.3-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Mon Jul 13 2020 Tom Stellard <tstellar@redhat.com> - 2.3-3
+- Use make macros
+- https://fedoraproject.org/wiki/Changes/UseMakeBuildInstallMacro
+
+* Sat May 23 2020 Miro Hrončok <mhroncok@redhat.com> - 2.3-2
+- Rebuilt for Python 3.9
 
 * Thu May 21 2020 Vojtech Trefny <vtrefny@redhat.com> - 2.3-1
 - Fix memory leak in bs_size_new_from_str (vtrefny)
