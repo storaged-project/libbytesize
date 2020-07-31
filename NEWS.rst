@@ -1,3 +1,23 @@
+Libbytesize 2.4
+---------------
+
+Adam Duskett (1):
+- remove msgcat dependency
+
+Akarshan Biswas (2):
+- Added translation using Weblate (Bengali (India))
+- Translated using Weblate (Bengali (India))
+
+Vojtech Trefny (4):
+- Fix library version in pkgconfig file
+- Add ansible playbook for installing test dependencies
+- Add Travis CI config and Dockerfiles for running tests
+- Add Travis build status badge
+
+Weblate (1):
+- Update translation files
+
+
 Libbytesize 2.3
 ---------------
 

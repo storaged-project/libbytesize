@@ -16,7 +16,7 @@
 %define configure_opts %{?python3_opts} %{?tools_opts}
 
 Name:        libbytesize
-Version:     2.3
+Version:     2.4
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -114,6 +114,16 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Fri Jul 31 2020 Vojtech Trefny <vtrefny@redhat.com> - 2.4-1
+- Add Travis build status badge (vtrefny)
+- Add Travis CI config and Dockerfiles for running tests (vtrefny)
+- Add ansible playbook for installing test dependencies (vtrefny)
+- remove msgcat dependency (Aduskett)
+- Translated using Weblate (Bengali (India)) (akarshan.biswas)
+- Update translation files (noreply)
+- Added translation using Weblate (Bengali (India)) (akarshan.biswas)
+- Fix library version in pkgconfig file (vtrefny)
+
 * Thu May 21 2020 Vojtech Trefny <vtrefny@redhat.com> - 2.3-1
 - Fix memory leak in bs_size_new_from_str (vtrefny)
 - Translated using Weblate (Turkish) (oguzersen)
