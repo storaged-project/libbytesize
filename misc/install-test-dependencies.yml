@@ -24,7 +24,7 @@
     when: ansible_distribution == 'Fedora'
 
   - name: Install build dependencies (Fedora)
-    command: "dnf -y builddep libbytesize"
+    command: "dnf -y builddep libbytesize --nogpgcheck"
     args:
       warn: false
     when: ansible_distribution == 'Fedora'
