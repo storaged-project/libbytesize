@@ -13,6 +13,7 @@ _OPERATORS = {"+", "-", "*", "/", "%", "(", ")"}  # TODO: add divmod
 _DOUBLE_OPERATORS = {"/", "*"}  # // and ** are valid operators too
 _EXP_OPERATORS = {"-", "+"}     # 1e+2, 1e-2
 
+
 def _get_operand(op_str):
     try:
         return int(op_str)

@@ -45,8 +45,37 @@ install-requires:
 	@which ansible-playbook >/dev/null 2>&1 || ( echo "Please install Ansible to install testing dependencies"; exit 1 )
 	@ansible-playbook -K -i "localhost," -c local misc/install-test-dependencies.yml
 
+pylint:
+	@echo "*** Running pylint ***"
+	@if test `which pylint-3` ; then \
+		pylint='pylint-3' ; \
+	elif test `which pylint` ; then \
+		pylint='pylint' ; \
+	else \
+		echo "You need to install pylint to run this check."; exit 1; \
+	fi ; \
+	PYTHONPATH=src/python:$(PYTHONPATH) $$pylint -E tools/bs_calc.py.in
+
+pep8:
+	@echo "*** Running pep8 compliance check ***"
+	@if test `which pycodestyle-3` ; then \
+		pep8='pycodestyle-3' ; \
+	elif test `which pycodestyle` ; then \
+		pep8='pycodestyle' ; \
+	elif test `which pep8` ; then \
+		pep8='pep8' ; \
+	else \
+		echo "You need to install pycodestyle/pep8 to run this check."; exit 1; \
+	fi ; \
+	$$pep8 --ignore=E501,E402,E731,W504 tools/bs_calc.py.in
+
+
 test:
-	$(MAKE) check
+	@status=0; \
+	$(MAKE) check || status=1; \
+	$(MAKE) pep8 || status=1; \
+	$(MAKE) pylint || status=1; \
+	exit $$status
 
 ci:
 	$(MAKE) distcheck; \
