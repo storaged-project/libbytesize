@@ -7,7 +7,7 @@ usage: bscalc [\-h] [\-\-version]
 .IP
 [\-u {B,KiB,MiB,GiB,TiB,PiB,EiB,KB,MB,GB,TB,PB,EB}] [\-b] [\-k]
 [\-m] [\-g] [\-t] [\-p] [\-e] [\-\-KB] [\-\-MB] [\-\-GB] [\-\-TB] [\-\-PB]
-[\-\-EB]
+[\-\-EB] [\-H]
 EXPRESSION_PART [EXPRESSION_PART ...]
 .SS "positional arguments:"
 .IP
@@ -61,5 +61,8 @@ Show result in PB
 .TP
 \fB\-\-EB\fR
 Show result in EB
+.TP
+\fB\-H\fR, \fB\-\-human\-readable\fR
+Show only single 'best' result
 .PP
 Report issues at https://github.com/storaged\-project/libbytesize/issues
