@@ -110,7 +110,11 @@ def _main():
                     help="Show only single 'best' result", action="store_true")
     ap.add_argument(metavar="EXPRESSION_PART", dest="expressions", nargs="+")
 
-    args = ap.parse_args()
+    if not sys.stdin.isatty():
+        stdin = sys.stdin.read().splitlines()
+        args = ap.parse_args(sys.argv[1:] + stdin)
+    else:
+        args = ap.parse_args()
 
     try:
         tokens = _tokenize(" ".join(args.expressions))
