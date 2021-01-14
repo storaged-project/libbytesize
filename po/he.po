@@ -7,95 +7,99 @@ msgstr ""
 "Project-Id-Version: libbytesize 2.4\n"
 "Report-Msgid-Bugs-To: vtrefny@redhat.com\n"
 "POT-Creation-Date: 2020-07-31 08:11+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-01-13 19:36+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: Hebrew <https://translate.fedoraproject.org/projects/blivet/"
+"libbytesize/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
+"X-Generator: Weblate 4.4.1\n"
 
 #. TRANSLATORS: 'B' for bytes
 #: src/bs_size.c:52 src/bs_size.c:73
 msgid "B"
-msgstr ""
+msgstr "ב׳"
 
 #. TRANSLATORS: abbreviation for kibibyte, 2**10 bytes
 #: src/bs_size.c:54
 msgid "KiB"
-msgstr ""
+msgstr "KiB"
 
 #. TRANSLATORS: abbreviation for mebibyte, 2**20 bytes
 #: src/bs_size.c:56
 msgid "MiB"
-msgstr ""
+msgstr "MiB"
 
 #. TRANSLATORS: abbreviation for gibibyte, 2**30 bytes
 #: src/bs_size.c:58
 msgid "GiB"
-msgstr ""
+msgstr "GiB"
 
 #. TRANSLATORS: abbreviation for tebibyte, 2**40 bytes
 #: src/bs_size.c:60
 msgid "TiB"
-msgstr ""
+msgstr "TiB"
 
 #. TRANSLATORS: abbreviation for pebibyte, 2**50 bytes
 #: src/bs_size.c:62
 msgid "PiB"
-msgstr ""
+msgstr "PiB"
 
 #. TRANSLATORS: abbreviation for exbibyte, 2**60 bytes
 #: src/bs_size.c:64
 msgid "EiB"
-msgstr ""
+msgstr "EiB"
 
 #. TRANSLATORS: abbreviation for zebibyte, 2**70 bytes
 #: src/bs_size.c:66
 msgid "ZiB"
-msgstr ""
+msgstr "ZiB"
 
 #. TRANSLATORS: abbreviation for yobibyte, 2**80 bytes
 #: src/bs_size.c:68
 msgid "YiB"
-msgstr ""
+msgstr "YiB"
 
 #. TRANSLATORS: abbreviation for kilobyte, 10**3 bytes
 #: src/bs_size.c:75
 msgid "KB"
-msgstr ""
+msgstr "ק״ב"
 
 #. TRANSLATORS: abbreviation for megabyte, 10**6 bytes
 #: src/bs_size.c:77
 msgid "MB"
-msgstr ""
+msgstr "מ״ב"
 
 #. TRANSLATORS: abbreviation for gigabyte, 10**9 bytes
 #: src/bs_size.c:79
 msgid "GB"
-msgstr ""
+msgstr "ג״ב"
 
 #. TRANSLATORS: abbreviation for terabyte, 10**12 bytes
 #: src/bs_size.c:81
 msgid "TB"
-msgstr ""
+msgstr "ט״ב"
 
 #. TRANSLATORS: abbreviation for petabyte, 10**15 bytes
 #: src/bs_size.c:83
 msgid "PB"
-msgstr ""
+msgstr "פ״ב"
 
 #. TRANSLATORS: abbreviation for exabyte, 10**18 bytes
 #: src/bs_size.c:85
 msgid "EB"
-msgstr ""
+msgstr "EB"
 
 #. TRANSLATORS: abbreviation for zettabyte, 10**21 bytes
 #: src/bs_size.c:87
 msgid "ZB"
-msgstr ""
+msgstr "ZB"
 
 #. TRANSLATORS: abbreviation for yottabyte, 10**24 bytes
 #: src/bs_size.c:89
 msgid "YB"
-msgstr ""
+msgstr "YB"
