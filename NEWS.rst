@@ -1,3 +1,31 @@
+Libbytesize 2.5
+---------------
+
+Adolfo Jayme Barrientos (2):
+- Translated using Weblate (Spanish)
+- Translated using Weblate (Asturian)
+
+Ricky Tigg (1):
+- Translated using Weblate (Finnish)
+
+Vojtech Trefny (6):
+- Sync spec with downstream
+- travis: Add --nogpgcheck when using dnf on Fedora
+- bscalc: Add option to print only single "human readable" result
+- tests: Run pylint and pycodestyle on bscalc
+- travis: Print logs after failed tests
+- tools: Read input from stdin when not running in a tty
+
+Weblate (1):
+- Update translation files
+
+Yaron Shahrabani (2):
+- Added translation using Weblate (Hebrew)
+- Translated using Weblate (Hebrew)
+
+gururajrkatti (1):
+- Add support to ppc64le for debian build
+
 Libbytesize 2.4
 ---------------
 

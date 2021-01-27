@@ -16,7 +16,7 @@
 %define configure_opts %{?python3_opts} %{?tools_opts}
 
 Name:        libbytesize
-Version:     2.4
+Version:     2.5
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -114,6 +114,21 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Wed Jan 27 2021 Vojtech Trefny <vtrefny@redhat.com> - 2.5-1
+- Translated using Weblate (Hebrew) (sh.yaron)
+- Added translation using Weblate (Hebrew) (sh.yaron)
+- Add support to ppc64le for debian build (74309971+gururajrkatti)
+- Translated using Weblate (Finnish) (ricky.tigg)
+- tools: Read input from stdin when not running in a tty (vtrefny)
+- travis: Print logs after failed tests (vtrefny)
+- tests: Run pylint and pycodestyle on bscalc (vtrefny)
+- bscalc: Add option to print only single "human readable" result (vtrefny)
+- travis: Add --nogpgcheck when using dnf on Fedora (vtrefny)
+- Translated using Weblate (Asturian) (fitoschido)
+- Update translation files (noreply)
+- Translated using Weblate (Spanish) (fitoschido)
+- Sync spec with downstream (vtrefny)
+
 * Fri Jul 31 2020 Vojtech Trefny <vtrefny@redhat.com> - 2.4-1
 - Add Travis build status badge (vtrefny)
 - Add Travis CI config and Dockerfiles for running tests (vtrefny)
