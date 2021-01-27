@@ -23,6 +23,7 @@ License:     LGPLv2+
 URL:         https://github.com/storaged-project/libbytesize
 Source0:     https://github.com/storaged-project/libbytesize/releases/download/%{version}-%{release}/%{name}-%{version}.tar.gz
 
+BuildRequires: make
 BuildRequires: gcc
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
@@ -128,6 +129,9 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 - Update translation files (noreply)
 - Translated using Weblate (Spanish) (fitoschido)
 - Sync spec with downstream (vtrefny)
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
 * Fri Jul 31 2020 Vojtech Trefny <vtrefny@redhat.com> - 2.4-1
 - Add Travis build status badge (vtrefny)
