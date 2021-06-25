@@ -4,6 +4,7 @@
 import unittest
 import copy
 import locale
+import ctypes
 
 from decimal import Decimal
 from locale_utils import get_avail_locales, requires_locales
@@ -251,6 +252,10 @@ class SizeTestCase(unittest.TestCase):
         self.assertTrue(size1)
         self.assertFalse(size2)
     #enddef
+
+    def testInt(self):
+        # just to make sure Size can be correctly interpreted as int in python 3.10
+        ctypes.c_int(Size("1 GiB"))
 
     def testAbs(self):
         size1 = Size("1 GiB")
