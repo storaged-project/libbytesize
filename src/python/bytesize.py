@@ -591,6 +591,9 @@ class Size(object):
     def __int__(self):
         return self.get_bytes()
 
+    def __index__(self):
+        return self.get_bytes()
+
     def __float__(self):
         return float(self.get_bytes())
 
