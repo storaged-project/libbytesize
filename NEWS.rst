@@ -1,3 +1,29 @@
+Libbytesize 2.6
+---------------
+
+Hela Basa (1):
+
+- Added translation using Weblate (Sinhala)
+
+Ricky Tigg (1):
+
+- Translated using Weblate (Finnish)
+
+Vojtech Trefny (3):
+
+- Sync spec with downstream
+- Squashed 'translation-canary/' changes from fccbb1b..4d4e65b
+- Make sure Size can be interpreted as integer in Python 3.10
+
+Weblate (1):
+
+- Update translation files
+
+simmon (2):
+
+- Added translation using Weblate (Korean)
+- Translated using Weblate (Korean)
+
 Libbytesize 2.5
 ---------------
 

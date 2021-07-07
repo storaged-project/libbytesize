@@ -16,7 +16,7 @@
 %define configure_opts %{?python3_opts} %{?tools_opts}
 
 Name:        libbytesize
-Version:     2.5
+Version:     2.6
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPLv2+
@@ -115,6 +115,16 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Wed Jul 07 2021 Vojtech Trefny <vtrefny@redhat.com> - 2.6-1
+- Make sure Size can be interpreted as integer in Python 3.10 (vtrefny)
+- Translated using Weblate (Finnish) (ricky.tigg)
+- Squashed 'translation-canary/' changes from fccbb1b..4d4e65b (vtrefny)
+- Translated using Weblate (Korean) (simmon)
+- Added translation using Weblate (Korean) (simmon)
+- Update translation files (noreply)
+- Added translation using Weblate (Sinhala) (r45xveza)
+- Sync spec with downstream (vtrefny)
+
 * Wed Jan 27 2021 Vojtech Trefny <vtrefny@redhat.com> - 2.5-1
 - Translated using Weblate (Hebrew) (sh.yaron)
 - Added translation using Weblate (Hebrew) (sh.yaron)
