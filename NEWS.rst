@@ -2,13 +2,16 @@ Libbytesize 2.5
 ---------------
 
 Adolfo Jayme Barrientos (2):
+
 - Translated using Weblate (Spanish)
 - Translated using Weblate (Asturian)
 
 Ricky Tigg (1):
+
 - Translated using Weblate (Finnish)
 
 Vojtech Trefny (6):
+
 - Sync spec with downstream
 - travis: Add --nogpgcheck when using dnf on Fedora
 - bscalc: Add option to print only single "human readable" result
@@ -17,32 +20,39 @@ Vojtech Trefny (6):
 - tools: Read input from stdin when not running in a tty
 
 Weblate (1):
+
 - Update translation files
 
 Yaron Shahrabani (2):
+
 - Added translation using Weblate (Hebrew)
 - Translated using Weblate (Hebrew)
 
 gururajrkatti (1):
+
 - Add support to ppc64le for debian build
 
 Libbytesize 2.4
 ---------------
 
 Adam Duskett (1):
+
 - remove msgcat dependency
 
 Akarshan Biswas (2):
+
 - Added translation using Weblate (Bengali (India))
 - Translated using Weblate (Bengali (India))
 
 Vojtech Trefny (4):
+
 - Fix library version in pkgconfig file
 - Add ansible playbook for installing test dependencies
 - Add Travis CI config and Dockerfiles for running tests
 - Add Travis build status badge
 
 Weblate (1):
+
 - Update translation files
 
 
@@ -50,12 +60,15 @@ Libbytesize 2.3
 ---------------
 
 Jean-Baptiste (1):
+
 - add translation platform widget
 
 Oğuz Ersen (1):
+
 - Translated using Weblate (Turkish)
 
 Vojtech Trefny (5):
+
 - Sync spec with downstream
 - Add PO files to git
 - Remove Zanata from our build and release processes
@@ -63,6 +76,7 @@ Vojtech Trefny (5):
 - Fix memory leak in bs_size_new_from_str
 
 Weblate (1):
+
 - Update translation files
 
 
@@ -70,16 +84,20 @@ Libbytesize 2.2
 ---------------
 
 Giulio Benetti (1):
+
 - src/gettext: fix warning if gettext is already present
 
 Tim Biermann (1):
+
 - fix build on shells where test == fails
 
 Vojtech Trefny (2):
+
 - Add POT file to git and do not rebuild it during every build
 - New version - 2.2
 
 Vratislav Podzimek (2):
+
 - Update README.md
 - Require the same version of python3-bytesize in libbytesize-tools
 
