@@ -1,4 +1,4 @@
-[![Translation](https://translate.fedoraproject.org/widgets/blivet/-/libbytesize/svg-badge.svg)](https://translate.fedoraproject.org/engage/blivet/) [![Build Status](https://travis-ci.com/storaged-project/libbytesize.svg?branch=master)](https://travis-ci.com/storaged-project/libbytesize)
+ [![Translation](https://translate.fedoraproject.org/widgets/blivet/-/libbytesize/svg-badge.svg)](https://translate.fedoraproject.org/engage/blivet/) [![Build Status](https://travis-ci.com/storaged-project/libbytesize.svg?branch=master)](https://travis-ci.com/storaged-project/libbytesize)
 ### CI status
 
 <img alt="CI status" src="https://fedorapeople.org/groups/storage_apis/statuses/libbytesize-master.svg" width="100%" height="400ex" />
