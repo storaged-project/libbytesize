@@ -147,6 +147,8 @@ static char *replace_char_with_str (const char *str, char orig, const char *new)
     /* allocate space for the string [strlen(str)] with the char replaced by the
        string [strlen(new) - 1] $count times and a \0 byte at the end [ + 1] */
     ret = malloc (sizeof(char) * (strlen(str) + (strlen(new) - 1) * count + 1));
+    if (!ret)
+        return NULL;
 
     for (i=0; str[i]; i++) {
         if (str[i] == orig)
@@ -189,6 +191,8 @@ static char *replace_str_with_str (const char *str, const char *orig, const char
     new_len = strlen (new);
     ret_size = str_len + new_len - orig_len + 1;
     ret = malloc (sizeof(char) * ret_size);
+    if (!ret)
+        return NULL;
     memset (ret, 0, ret_size);
     memcpy (ret, str, pos - str);
     dest = ret + (pos - str);
@@ -277,6 +281,10 @@ static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
  */
 static void set_error (BSError **error, BSErrorCode code, char *msg) {
     *error = (BSError *) malloc (sizeof(BSError));
+    if (*error == NULL) {
+        free (msg);
+        return;
+    }
     (*error)->code = code;
     (*error)->msg = msg;
     return;
@@ -474,6 +482,11 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     }
 
     loc_size_str = replace_char_with_str (size_str, '.', radix_char);
+    if (!loc_size_str) {
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
+        pcre2_code_free (regex);
+        return NULL;
+    }
     str_len = strlen (loc_size_str);
 
     match_data = pcre2_match_data_create_from_pattern (regex, NULL);
@@ -663,7 +676,7 @@ char* bs_size_convert_to (const BSSize size, BSUnit unit, BSError **error) {
     }
 
     if (!found_match) {
-        set_error (error, BS_ERROR_INVALID_SPEC, "Invalid unit spec given");
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup ("Invalid unit spec given"));
         mpf_clear (divisor);
         return NULL;
     }
