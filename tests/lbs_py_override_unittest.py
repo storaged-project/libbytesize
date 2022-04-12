@@ -18,13 +18,13 @@ class SizeTestCase(unittest.TestCase):
         unittest.TestCase.setUpClass()
         cls.avail_locales = get_avail_locales()
 
-    @requires_locales({'en_US.utf8'})
+    @requires_locales({'en_US.UTF-8'})
     def setUp(self):
-        locale.setlocale(locale.LC_ALL,'en_US.utf8')
+        locale.setlocale(locale.LC_ALL,'en_US.UTF-8')
         self.addCleanup(self._clean_up)
 
     def _clean_up(self):
-        locale.setlocale(locale.LC_ALL,'en_US.utf8')
+        locale.setlocale(locale.LC_ALL,'en_US.UTF-8')
 
     # test operator functions
     def testOperatorPlus(self):
