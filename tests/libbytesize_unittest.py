@@ -6,7 +6,7 @@ import unittest
 import sys
 import ctypes
 
-from locale_utils import get_avail_locales, requires_locales
+from locale_utils import get_avail_locales, missing_locales, requires_locales
 
 from bytesize import KiB, GiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError
 
@@ -26,8 +26,10 @@ class SizeTestCase(unittest.TestCase):
         unittest.TestCase.setUpClass()
         cls.avail_locales = get_avail_locales()
 
-    @requires_locales({DEFAULT_LOCALE})
     def setUp(self):
+        missing = missing_locales({DEFAULT_LOCALE}, self.avail_locales)
+        if missing:
+            self.skipTest("requires missing locales: %s" % missing)
         locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
         self.addCleanup(self._clean_up)
 

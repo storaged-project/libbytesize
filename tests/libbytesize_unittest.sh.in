@@ -13,7 +13,7 @@ if [ @WITH_PYTHON3@ = 1 ]; then
 fi
 
 if [ @WITH_PYTHON3@ = 1 ]; then
-    python3 ${srcdir}/libbytesize_unittest.py fr_FR.UTF8 || status=1
+    python3 ${srcdir}/libbytesize_unittest.py fr_FR.UTF-8 || status=1
 fi
 
 exit $status

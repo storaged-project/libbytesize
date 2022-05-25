@@ -6,6 +6,12 @@ import subprocess
 def get_avail_locales():
     return {loc.decode(errors="replace").strip() for loc in subprocess.check_output(["locale", "-a"]).split()}
 
+
+def missing_locales(required, available):
+    canon_locales = {loc.replace("UTF-8", "utf8") for loc in required}
+    return canon_locales - set(available)
+
+
 def requires_locales(locales):
     """A decorator factory to skip tests that require unavailable locales
 
@@ -16,10 +22,9 @@ def requires_locales(locales):
 
     """
 
-    canon_locales = {loc.replace("UTF-8", "utf8") for loc in locales}
     def decorator(test_method):
         def decorated(test, *args):
-            missing = canon_locales - set(test.avail_locales)
+            missing = missing_locales(locales, test.avail_locales)
             if missing:
                 test.skipTest("requires missing locales: %s" % missing)
             else:
