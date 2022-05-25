@@ -1,3 +1,29 @@
+Libbytesize 2.7
+---------------
+
+Gogo Gogsi (2):
+
+- Added translation using Weblate (Croatian)
+- Translated using Weblate (Croatian)
+
+Sam James (1):
+
+- build: avoid bashisms in configure
+
+Vojtech Trefny (6):
+
+- Do not use distutils to get Python library path
+- Revert "Translations update from Weblate"
+- Fix warnings dicovered by the GCC analyzer
+- Fix some warnings and typos in docstrings and comments
+- Remove Travis CI configuration
+- Fix skipping tests when required locale is missing
+
+Weblate (2):
+
+- Update translation files
+- Update translation files
+
 Libbytesize 2.6
 ---------------
 
