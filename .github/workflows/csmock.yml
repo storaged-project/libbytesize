@@ -26,7 +26,7 @@ jobs:
 
       - name: Build the container
         run: |
-          podman build --no-cache -t ${{ env.CI_CONTAINER }} -f misc/csmock.Dockerfile .
+          podman build --no-cache -t ${{ env.CI_CONTAINER }} -f misc/ci.Dockerfile .
 
       - name: Start the container
         run: |
