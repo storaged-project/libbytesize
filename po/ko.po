@@ -2,13 +2,14 @@
 # Copyright (C) YEAR Red Hat, Inc.
 # This file is distributed under the same license as the libbytesize package.
 # simmon <simmon@nplob.com>, 2021.
+# 김인수 <simmon@nplob.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: libbytesize 2.5\n"
 "Report-Msgid-Bugs-To: vtrefny@redhat.com\n"
 "POT-Creation-Date: 2021-07-07 12:15+0200\n"
-"PO-Revision-Date: 2021-03-08 20:01+0000\n"
-"Last-Translator: simmon <simmon@nplob.com>\n"
+"PO-Revision-Date: 2022-11-02 14:19+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/blivet/"
 "libbytesize/ko/>\n"
 "Language: ko\n"
@@ -16,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.1\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. TRANSLATORS: 'B' for bytes
 #: src/bs_size.c:52 src/bs_size.c:73
 msgid "B"
-msgstr "B"
+msgstr "바이트"
 
 #. TRANSLATORS: abbreviation for kibibyte, 2**10 bytes
 #: src/bs_size.c:54
