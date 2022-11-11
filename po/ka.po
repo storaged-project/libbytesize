@@ -18,84 +18,84 @@ msgstr ""
 #. TRANSLATORS: 'B' for bytes
 #: src/bs_size.c:52 src/bs_size.c:73
 msgid "B"
-msgstr ""
+msgstr "ბ"
 
 #. TRANSLATORS: abbreviation for kibibyte, 2**10 bytes
 #: src/bs_size.c:54
 msgid "KiB"
-msgstr ""
+msgstr "კიბ"
 
 #. TRANSLATORS: abbreviation for mebibyte, 2**20 bytes
 #: src/bs_size.c:56
 msgid "MiB"
-msgstr ""
+msgstr "მიბ"
 
 #. TRANSLATORS: abbreviation for gibibyte, 2**30 bytes
 #: src/bs_size.c:58
 msgid "GiB"
-msgstr ""
+msgstr "გიბ"
 
 #. TRANSLATORS: abbreviation for tebibyte, 2**40 bytes
 #: src/bs_size.c:60
 msgid "TiB"
-msgstr ""
+msgstr "ტიბ"
 
 #. TRANSLATORS: abbreviation for pebibyte, 2**50 bytes
 #: src/bs_size.c:62
 msgid "PiB"
-msgstr ""
+msgstr "პიბ"
 
 #. TRANSLATORS: abbreviation for exbibyte, 2**60 bytes
 #: src/bs_size.c:64
 msgid "EiB"
-msgstr ""
+msgstr "ეიბ"
 
 #. TRANSLATORS: abbreviation for zebibyte, 2**70 bytes
 #: src/bs_size.c:66
 msgid "ZiB"
-msgstr ""
+msgstr "ზიბ"
 
 #. TRANSLATORS: abbreviation for yobibyte, 2**80 bytes
 #: src/bs_size.c:68
 msgid "YiB"
-msgstr ""
+msgstr "იიბ"
 
 #. TRANSLATORS: abbreviation for kilobyte, 10**3 bytes
 #: src/bs_size.c:75
 msgid "KB"
-msgstr ""
+msgstr "კბ"
 
 #. TRANSLATORS: abbreviation for megabyte, 10**6 bytes
 #: src/bs_size.c:77
 msgid "MB"
-msgstr ""
+msgstr "მბ"
 
 #. TRANSLATORS: abbreviation for gigabyte, 10**9 bytes
 #: src/bs_size.c:79
 msgid "GB"
-msgstr ""
+msgstr "გბ"
 
 #. TRANSLATORS: abbreviation for terabyte, 10**12 bytes
 #: src/bs_size.c:81
 msgid "TB"
-msgstr ""
+msgstr "ტბ"
 
 #. TRANSLATORS: abbreviation for petabyte, 10**15 bytes
 #: src/bs_size.c:83
 msgid "PB"
-msgstr ""
+msgstr "პბ"
 
 #. TRANSLATORS: abbreviation for exabyte, 10**18 bytes
 #: src/bs_size.c:85
 msgid "EB"
-msgstr ""
+msgstr "ებ"
 
 #. TRANSLATORS: abbreviation for zettabyte, 10**21 bytes
 #: src/bs_size.c:87
 msgid "ZB"
-msgstr ""
+msgstr "ზბ"
 
 #. TRANSLATORS: abbreviation for yottabyte, 10**24 bytes
 #: src/bs_size.c:89
 msgid "YB"
-msgstr ""
+msgstr "იბ"
