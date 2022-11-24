@@ -25,8 +25,6 @@
 
   - name: Install build dependencies (Fedora)
     command: "dnf -y builddep libbytesize --nogpgcheck"
-    args:
-      warn: false
     when: ansible_distribution == 'Fedora'
 
   - name: Install test dependencies (Fedora)
