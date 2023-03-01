@@ -469,12 +469,12 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
         status = pcre2_get_error_message (errorcode, error_buffer, ERROR_BUFFER_LEN);
         switch (status) {
             case PCRE2_ERROR_BADDATA:
-                // unknown/invalid error code
+                /* unknown/invalid error code */
                 set_error (error, BS_ERROR_INVALID_SPEC,
                            strdup_printf ("Failed to compile pattern at offset %d: Unknown error.", erroffset));
                 break;
             case PCRE2_ERROR_NOMEMORY:
-                // error buffer is too short
+                /* error buffer is too short */
                 set_error (error, BS_ERROR_INVALID_SPEC,
                            strdup_printf ("Failed to compile pattern at offset %d: %s (truncated)", erroffset, error_buffer));
                 break;
