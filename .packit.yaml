@@ -1,0 +1,69 @@
+actions:
+  post-upstream-clone:
+    - './autogen.sh'
+    - './configure'
+  create-archive:
+    - 'make'
+    - 'make local'
+    - 'bash -c "ls *.tar*"'
+
+jobs:
+- job: copr_build
+  metadata:
+    targets:
+    - fedora-all-aarch64
+    - fedora-all-ppc64le
+    - fedora-all-x86_64
+    - epel-8-aarch64
+    - epel-8-ppc64le
+    - epel-8-x86_64
+    - epel-9-aarch64
+    - epel-9-ppc64le
+    - epel-9-x86_64
+  trigger: pull_request
+
+- job: copr_build
+  trigger: commit
+  owner: "@storage"
+  project: blivet-daily
+  branch: master
+  preserve_project: true
+
+- job: copr_build
+  trigger: commit
+  owner: "@storage"
+  project: udisks-daily
+  branch: master
+  preserve_project: true
+
+- job: propose_downstream
+  trigger: release
+  dist_git_branches:
+    - fedora-all
+
+- job: koji_build
+  trigger: commit
+  dist_git_branches:
+    - fedora-all
+
+- job: bodhi_update
+  trigger: commit
+  dist_git_branches:
+    - fedora-branched
+
+srpm_build_deps:
+ - make
+ - gcc
+ - libtool
+ - autoconf
+ - automake
+ - gmp-devel
+ - mpfr-devel
+ - pcre2-devel
+ - gettext-devel
+ - python3-devel
+ - gtk-doc
+
+downstream_package_name: libbytesize
+specfile_path: dist/libbytesize.spec
+copy_upstream_release_description: true
