@@ -21,11 +21,10 @@
   <chapter>
     <title>Bindings</title>
     <para>
-      Currently there are only Python bindings (working with both Python 2 and
-      Python 3). The bindings are not documented here (yet), but it should be
-      easy to directly check the sources. The bindings are located in the
-      <filename class="directory">src/python</filename> directory in the source
-      tree.
+      Currently there are only Python bindings. The bindings are not documented
+      here (yet), but it should be easy to directly check the sources.
+      The bindings are located in the <filename class="directory">src/python</filename>
+      directory in the source tree.
     </para>
   </chapter>
   <index id="api-index-full">

@@ -280,6 +280,11 @@ static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
  * Sets @error to @code and @msg (if not %NULL). **TAKES OVER @msg.**
  */
 static void set_error (BSError **error, BSErrorCode code, char *msg) {
+    if (error == NULL) {
+        free (msg);
+        return;
+    }
+
     *error = (BSError *) malloc (sizeof(BSError));
     if (*error == NULL) {
         free (msg);
@@ -348,6 +353,7 @@ static void mul_64bit (mpz_t rop, const mpz_t op1, uint64_t op2) {
  * *************/
 /**
  * bs_size_free:
+ * @size: (nullable): %BSSize to free
  *
  * Clears @size and frees the allocated resources.
  */
@@ -361,6 +367,7 @@ void bs_size_free (BSSize size) {
 
 /**
  * bs_clear_error:
+ * @error: (nullable): %BSError to clear
  *
  * Clears @error and frees the allocated resources.
  */
@@ -421,6 +428,7 @@ BSSize bs_size_new_from_bytes (uint64_t bytes, int sgn) {
  * bs_size_new_from_str: (constructor)
  * @size_str: string representing the size as a number and an optional unit
  *            (e.g. "1 GiB")
+ * @error: (out) (optional): place to store error (if any)
  *
  * Creates a new #BSSize instance.
  *
@@ -463,12 +471,12 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
         status = pcre2_get_error_message (errorcode, error_buffer, ERROR_BUFFER_LEN);
         switch (status) {
             case PCRE2_ERROR_BADDATA:
-                // unknown/invalid error code
+                /* unknown/invalid error code */
                 set_error (error, BS_ERROR_INVALID_SPEC,
                            strdup_printf ("Failed to compile pattern at offset %d: Unknown error.", erroffset));
                 break;
             case PCRE2_ERROR_NOMEMORY:
-                // error buffer is too short
+                /* error buffer is too short */
                 set_error (error, BS_ERROR_INVALID_SPEC,
                            strdup_printf ("Failed to compile pattern at offset %d: %s (truncated)", erroffset, error_buffer));
                 break;
@@ -577,8 +585,9 @@ BSSize bs_size_new_from_size (const BSSize size) {
  *****************/
 /**
  * bs_size_get_bytes:
- * @sgn: (allow-none) (out): sign of the @size - -1, 0 or 1 for negative, zero or positive
- *                           size respectively
+ * @sgn: (out) (optional): sign of the @size - -1, 0 or 1 for negative, zero or positive
+ *                         size respectively
+ * @error: (out) (optional): place to store error (if any)
  *
  * Get the number of bytes of the @size.
  *
@@ -643,6 +652,7 @@ char* bs_size_get_bytes_str (const BSSize size) {
 /**
  * bs_size_convert_to:
  * @unit: the unit to convert @size to
+ * @error: (out) (optional): place to store error (if any)
  *
  * Get the @size converted to @unit as a string representing a floating-point
  * number.
@@ -920,6 +930,7 @@ BSSize bs_size_grow_mul_int (BSSize size, uint64_t times) {
 
 /**
  * bs_size_mul_float_str:
+ * @error: (out) (optional): place to store error (if any)
  *
  * Multiply @size by the floating-point number @float_str represents.
  *
@@ -961,6 +972,7 @@ BSSize bs_size_mul_float_str (const BSSize size, const char *float_str, BSError 
 
 /**
  * bs_size_grow_mul_float_str:
+ * @error: (out) (optional): place to store error (if any)
  *
  * Grow @size by the floating-point number @float_str represents times. IOW,
  * multiply @size by @float_str in-place.
@@ -1001,7 +1013,8 @@ BSSize bs_size_grow_mul_float_str (BSSize size, const char *float_str, BSError *
 
 /**
  * bs_size_div:
- * @sgn: (allow-none) (out): sign of the result
+ * @sgn: (out) (optional): sign of the result
+ * @error: (out) (optional): place to store error (if any)
  *
  * Divide @size1 by @size2. Gives the answer to the question "How many times
  * does @size2 fit in @size1?".
@@ -1036,6 +1049,7 @@ uint64_t bs_size_div (const BSSize size1, const BSSize size2, int *sgn, BSError 
 
 /**
  * bs_size_div_int:
+ * @error: (out) (optional): place to store error (if any)
  *
  * Divide @size by @divisor. Gives the answer to the question "What is the size
  * of each chunk if @size is split into a @divisor number of pieces?"
@@ -1065,6 +1079,7 @@ BSSize bs_size_div_int (const BSSize size, uint64_t divisor, BSError **error) {
 
 /**
  * bs_size_shrink_div_int:
+ * @error: (out) (optional): place to store error (if any)
  *
  * Shrink @size by dividing by @divisor. IOW, divide @size by @divisor in-place.
  *
@@ -1092,6 +1107,7 @@ BSSize bs_size_shrink_div_int (BSSize size, uint64_t divisor, BSError **error) {
 
 /**
  * bs_size_true_div:
+ * @error: (out) (optional): place to store error (if any)
  *
  * Divides @size1 by @size2.
  *
@@ -1124,6 +1140,7 @@ char* bs_size_true_div (const BSSize size1, const BSSize size2, BSError **error)
 
 /**
  * bs_size_true_div_int:
+ * @error: (out) (optional): place to store error (if any)
  *
  * Divides @size by @divisor.
  *
@@ -1160,6 +1177,7 @@ char* bs_size_true_div_int (const BSSize size, uint64_t divisor, BSError **error
 
 /**
  * bs_size_mod:
+ * @error: (out) (optional): place to store error (if any)
  *
  * Gives @size1 modulo @size2 (i.e. the remainder of integer division @size1 /
  * @size2). Gives the answer to the question "If I split @size1 into chunks of
@@ -1196,6 +1214,7 @@ BSSize bs_size_mod (const BSSize size1, const BSSize size2, BSError **error) {
  * @dir: %BS_ROUND_DIR_UP to round up (to the nearest multiple of @round_to
  *       bigger than @size) or %BS_ROUND_DIR_DOWN to round down (to the
  *       nearest multiple of @round_to smaller than @size)
+ * @error: (out) (optional): place to store error (if any)
  *
  * Round @size to the nearest multiple of @round_to according to the direction
  * given by @dir.

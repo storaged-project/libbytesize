@@ -18,13 +18,6 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 config.guess config.sub \
 LIBDIRS = src/.libs
 PYTHONDIR = src/python
 
-TEST_PYTHON ?= $(PYTHON)
-
-TEST_DEPENDENCIES = $(shell rpm --specfile dist/libbytesize.spec --requires | cut -d' ' -f1 | grep -v ^libbytesize)
-TEST_DEPENDENCIES += gmp gmp-devel
-TEST_DEPENDENCIES += mpfr mpfr-devel
-TEST_DEPENDENCIES += pcre2 pcre2-devel
-
 # If translations are present, run tests on the .po files before tarring them
 # up to remove any .po files with errors. Use a weird looking loop since shell
 # doesn't have a good way to test for a wildcard.
@@ -47,14 +40,12 @@ install-requires:
 
 pylint:
 	@echo "*** Running pylint ***"
-	@if test `which pylint-3` ; then \
-		pylint='pylint-3' ; \
-	elif test `which pylint` ; then \
-		pylint='pylint' ; \
-	else \
-		echo "You need to install pylint to run this check."; exit 1; \
-	fi ; \
-	PYTHONPATH=src/python:$(PYTHONPATH) $$pylint -E tools/bs_calc.py.in
+	@python3 -m pylint --version >/dev/null 2>&1; \
+	if test $$? != 0 ; then \
+		echo "pylint not available, skipping" ; \
+	fi
+
+	PYTHONPATH=src/python:$(PYTHONPATH) $(PYTHON) -m pylint -E tools/bs_calc.py.in
 
 pep8:
 	@echo "*** Running pep8 compliance check ***"
