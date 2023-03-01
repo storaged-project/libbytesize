@@ -6,13 +6,13 @@
 
 /**
  * BSSize:
+ *
  * An opaque type representing a size in bytes.
  */
 typedef struct _BSSize * BSSize;
 
 /**
  * BSErrorCode:
- *
  * @BS_ERROR_INVALID_SPEC: invalid size or unit spec provided
  * @BS_ERROR_OVER: a value is over the limits imposed by a type
  * @BS_ERROR_ZERO_DIV: an attempt to do division by zero
@@ -29,9 +29,9 @@ typedef enum {
 
 /**
  * BSError:
- *
  * @code: error code
  * @msg: optional error message
+ *
  */
 typedef struct _BSError {
     BSErrorCode code;

@@ -353,6 +353,7 @@ static void mul_64bit (mpz_t rop, const mpz_t op1, uint64_t op2) {
  * *************/
 /**
  * bs_size_free:
+ * @size: (nullable): %BSSize to free
  *
  * Clears @size and frees the allocated resources.
  */
@@ -366,6 +367,7 @@ void bs_size_free (BSSize size) {
 
 /**
  * bs_clear_error:
+ * @error: (nullable): %BSError to clear
  *
  * Clears @error and frees the allocated resources.
  */
@@ -583,8 +585,8 @@ BSSize bs_size_new_from_size (const BSSize size) {
  *****************/
 /**
  * bs_size_get_bytes:
- * @sgn: (allow-none) (out): sign of the @size - -1, 0 or 1 for negative, zero or positive
- *                           size respectively
+ * @sgn: (out) (optional): sign of the @size - -1, 0 or 1 for negative, zero or positive
+ *                         size respectively
  * @error: (out) (optional): place to store error (if any)
  *
  * Get the number of bytes of the @size.
@@ -1011,7 +1013,7 @@ BSSize bs_size_grow_mul_float_str (BSSize size, const char *float_str, BSError *
 
 /**
  * bs_size_div:
- * @sgn: (allow-none) (out): sign of the result
+ * @sgn: (out) (optional): sign of the result
  * @error: (out) (optional): place to store error (if any)
  *
  * Divide @size1 by @size2. Gives the answer to the question "How many times
