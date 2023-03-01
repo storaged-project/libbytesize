@@ -40,14 +40,12 @@ install-requires:
 
 pylint:
 	@echo "*** Running pylint ***"
-	@if test `which pylint-3` ; then \
-		pylint='pylint-3' ; \
-	elif test `which pylint` ; then \
-		pylint='pylint' ; \
-	else \
-		echo "You need to install pylint to run this check."; exit 1; \
-	fi ; \
-	PYTHONPATH=src/python:$(PYTHONPATH) $$pylint -E tools/bs_calc.py.in
+	@python3 -m pylint --version >/dev/null 2>&1; \
+	if test $$? != 0 ; then \
+		echo "pylint not available, skipping" ; \
+	fi
+
+	PYTHONPATH=src/python:$(PYTHONPATH) $(PYTHON) -m pylint -E tools/bs_calc.py.in
 
 pep8:
 	@echo "*** Running pep8 compliance check ***"
