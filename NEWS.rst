@@ -1,3 +1,46 @@
+Libbytesize 2.8
+---------------
+
+Baurzhan Muftakhidinov (2):
+- Added translation using Weblate (Kazakh)
+- Translated using Weblate (Kazakh)
+
+Temuri Doghonadze (2):
+- Added translation using Weblate (Georgian)
+- Translated using Weblate (Georgian)
+
+Vojtech Trefny (24):
+- Sync spec with downstream
+- README: Remove the Travis CI badge
+- Add a GitHub action for running csmock static analysis
+- ci: Run rpmbuild tests in GitHub actions
+- ci: Update the csmock GitHub actions configuration
+- ci: Rename csmock.Dockerfile to ci.Dockerfile
+- ci: Update Fedora versions for RPM build tests
+- spec: Change license string to the SPDX format required by Fedora
+- misc: Remove "warn: false" from Ansible "command"
+- ci: Update chroots for RPM builds
+- configure.ac: Remove invalid email address for bug reports
+- ci: Add Packit configuration for RPM builds on pull requests
+- ci: Remove GitHub action for RPM builds
+- ci: Use Packit for daily builds in Copr
+- spec: Bump release to 21 for Packit daily builds
+- ci: Add Packit automation for downstream builds
+- spec: Fix source archive URL
+- Make use of error optional
+- Replace C++ style comments with C style
+- Various docstring fixes
+- docs: Remove information about Python 2 support
+- Remove unused test dependencies variables from Makefile
+- Do not hardcode pylint executable name in Makefile
+- ci: Do not use release descriptions for Packit builds
+
+Weblate (1):
+- Update translation files
+
+김인수 (1):
+- Translated using Weblate (Korean)
+
 Libbytesize 2.7
 ---------------
 
