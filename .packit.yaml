@@ -66,4 +66,3 @@ srpm_build_deps:
 
 downstream_package_name: libbytesize
 specfile_path: dist/libbytesize.spec
-copy_upstream_release_description: true
