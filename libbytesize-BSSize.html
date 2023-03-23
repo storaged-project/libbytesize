@@ -426,12 +426,19 @@ bs_size_new_from_str (<em class="parameter"><code>const <span class="type">char<
 <col class="parameters_description">
 <col width="200px" class="parameters_annotations">
 </colgroup>
-<tbody><tr>
+<tbody>
+<tr>
 <td class="parameter_name"><p>size_str</p></td>
 <td class="parameter_description"><p>string representing the size as a number and an optional unit
 (e.g. "1 GiB")</p></td>
 <td class="parameter_annotations"> </td>
-</tr></tbody>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr>
+</tbody>
 </table></div>
 </div>
 <div class="refsect3">
@@ -475,6 +482,21 @@ bs_size_new_from_size (<em class="parameter"><code>const <a class="link" href="l
 bs_size_free (<em class="parameter"><code><a class="link" href="libbytesize-BSSize.html#BSSize" title="BSSize"><span class="type">BSSize</span></a> size</code></em>);</pre>
 <p>Clears <em class="parameter"><code>size</code></em>
  and frees the allocated resources.</p>
+<div class="refsect3">
+<a name="bs-size-free.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>size</p></td>
+<td class="parameter_description"><p><a class="link" href="libbytesize-BSSize.html#BSSize" title="BSSize"><code class="literal">BSSize</code></a> to free. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="NULL may be passed as the value in, out, in-out; or as a return value."><span class="acronym">nullable</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
 </div>
 <hr>
 <div class="refsect2">
@@ -483,6 +505,21 @@ bs_size_free (<em class="parameter"><code><a class="link" href="libbytesize-BSSi
 bs_clear_error (<em class="parameter"><code><a class="link" href="libbytesize-BSSize.html#BSError" title="BSError"><span class="type">BSError</span></a> **error</code></em>);</pre>
 <p>Clears <em class="parameter"><code>error</code></em>
  and frees the allocated resources.</p>
+<div class="refsect3">
+<a name="bs-clear-error.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p><a class="link" href="libbytesize-BSSize.html#BSError" title="BSError"><code class="literal">BSError</code></a> to clear. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="NULL may be passed as the value in, out, in-out; or as a return value."><span class="acronym">nullable</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
 </div>
 <hr>
 <div class="refsect2">
@@ -501,13 +538,20 @@ bs_size_get_bytes (<em class="parameter"><code>const <a class="link" href="libby
 <col class="parameters_description">
 <col width="200px" class="parameters_annotations">
 </colgroup>
-<tbody><tr>
+<tbody>
+<tr>
 <td class="parameter_name"><p>sgn</p></td>
 <td class="parameter_description"><p>sign of the <em class="parameter"><code>size</code></em>
 - -1, 0 or 1 for negative, zero or positive
 size respectively. </p></td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>][<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span></td>
-</tr></tbody>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr>
+</tbody>
 </table></div>
 </div>
 <div class="refsect3">
@@ -562,12 +606,19 @@ number.</p>
 <col class="parameters_description">
 <col width="200px" class="parameters_annotations">
 </colgroup>
-<tbody><tr>
+<tbody>
+<tr>
 <td class="parameter_name"><p>unit</p></td>
 <td class="parameter_description"><p>the unit to convert <em class="parameter"><code>size</code></em>
 to</p></td>
 <td class="parameter_annotations"> </td>
-</tr></tbody>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr>
+</tbody>
 </table></div>
 </div>
 <div class="refsect3">
@@ -829,6 +880,21 @@ bs_size_mul_float_str (<em class="parameter"><code>const <a class="link" href="l
  by the floating-point number <em class="parameter"><code>float_str</code></em>
  represents.</p>
 <div class="refsect3">
+<a name="bs-size-mul-float-str.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
 <a name="bs-size-mul-float-str.returns"></a><h4>Returns</h4>
 <p>a new <a class="link" href="libbytesize-BSSize.html#BSSize" title="BSSize"><span class="type">BSSize</span></a> instance which equals to
 <em class="parameter"><code>size</code></em>
@@ -851,6 +917,21 @@ multiply <em class="parameter"><code>size</code></em>
  by <em class="parameter"><code>float_str</code></em>
  in-place.</p>
 <p>Basically an in-place variant of <a class="link" href="libbytesize-BSSize.html#bs-size-grow-mul-float-str" title="bs_size_grow_mul_float_str ()"><code class="function">bs_size_grow_mul_float_str()</code></a>.</p>
+<div class="refsect3">
+<a name="bs-size-grow-mul-float-str.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
 <div class="refsect3">
 <a name="bs-size-grow-mul-float-str.returns"></a><h4>Returns</h4>
 <p><em class="parameter"><code>size</code></em>
@@ -881,11 +962,18 @@ does <em class="parameter"><code>size2</code></em>
 <col class="parameters_description">
 <col width="200px" class="parameters_annotations">
 </colgroup>
-<tbody><tr>
+<tbody>
+<tr>
 <td class="parameter_name"><p>sgn</p></td>
 <td class="parameter_description"><p>sign of the result. </p></td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>][<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span></td>
-</tr></tbody>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr>
+</tbody>
 </table></div>
 </div>
 <div class="refsect3">
@@ -917,6 +1005,21 @@ of each chunk if <em class="parameter"><code>size</code></em>
  is ULONG_MAX (which can differ from UINT64_MAX). An error
 (BS_ERROR_OVER) is returned if overflow happens.</p>
 <div class="refsect3">
+<a name="bs-size-div-int.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
 <a name="bs-size-div-int.returns"></a><h4>Returns</h4>
 <p>a <a class="link" href="libbytesize-BSSize.html#BSSize" title="BSSize"><span class="type">BSSize</span></a> instance x so that x * <em class="parameter"><code>divisor</code></em>
 = <em class="parameter"><code>size</code></em>
@@ -943,6 +1046,21 @@ bs_size_shrink_div_int (<em class="parameter"><code><a class="link" href="libbyt
  is ULONG_MAX (which can differ from UINT64_MAX). An error
 (BS_ERROR_OVER) is returned if overflow happens.</p>
 <div class="refsect3">
+<a name="bs-size-shrink-div-int.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
 <a name="bs-size-shrink-div-int.returns"></a><h4>Returns</h4>
 <p><em class="parameter"><code>size</code></em>
 modified by division by <em class="parameter"><code>divisor</code></em>
@@ -960,6 +1078,21 @@ bs_size_true_div (<em class="parameter"><code>const <a class="link" href="libbyt
 <p>Divides <em class="parameter"><code>size1</code></em>
  by <em class="parameter"><code>size2</code></em>
 .</p>
+<div class="refsect3">
+<a name="bs-size-true-div.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
 <div class="refsect3">
 <a name="bs-size-true-div.returns"></a><h4>Returns</h4>
 <p>a string representing the floating-point number
@@ -983,6 +1116,21 @@ bs_size_true_div_int (<em class="parameter"><code>const <a class="link" href="li
 <em class="parameter"><code>divisor</code></em>
  is ULONG_MAX (which can differ from UINT64_MAX). An error
 (BS_ERROR_OVER) is returned if overflow happens.</p>
+<div class="refsect3">
+<a name="bs-size-true-div-int.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
 <div class="refsect3">
 <a name="bs-size-true-div-int.returns"></a><h4>Returns</h4>
 <p>a string representing the floating-point number
@@ -1009,6 +1157,21 @@ bs_size_mod (<em class="parameter"><code>const <a class="link" href="libbytesize
 size <em class="parameter"><code>size2</code></em>
 , what will be the remainder?"
 **This function ignores the signs of the sizes.**</p>
+<div class="refsect3">
+<a name="bs-size-mod.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
 <div class="refsect3">
 <a name="bs-size-mod.returns"></a><h4>Returns</h4>
 <p>a <a class="link" href="libbytesize-BSSize.html#BSSize" title="BSSize"><span class="type">BSSize</span></a> instance that is a remainder of
@@ -1055,6 +1218,11 @@ nearest multiple of <em class="parameter"><code>round_to</code></em>
 smaller than <em class="parameter"><code>size</code></em>
 )</p></td>
 <td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p>place to store error (if any). </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>][<acronym title="NULL may be passed instead of a pointer to a location."><span class="acronym">optional</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
@@ -1152,16 +1320,11 @@ is <a href="../glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">T
 <a name="BSSize"></a><h3>BSSize</h3>
 <pre class="programlisting">typedef struct _BSSize * BSSize;
 </pre>
+<p>An opaque type representing a size in bytes.</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="BSErrorCode"></a><h3>enum BSErrorCode</h3>
-<p><em class="parameter"><code>BS_ERROR_INVALID_SPEC</code></em>
-: invalid size or unit spec provided
-<em class="parameter"><code>BS_ERROR_OVER</code></em>
-: a value is over the limits imposed by a type
-<em class="parameter"><code>BS_ERROR_ZERO_DIV</code></em>
-: an attempt to do division by zero</p>
 <p>Error codes that identify various errors that can occur while working with
 <a class="link" href="libbytesize-BSSize.html#BSSize" title="BSSize"><span class="type">BSSize</span></a> instances.</p>
 <div class="refsect3">
@@ -1175,18 +1338,24 @@ is <a href="../glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">T
 <tbody>
 <tr>
 <td class="enum_member_name"><p><a name="BS-ERROR-INVALID-SPEC:CAPS"></a>BS_ERROR_INVALID_SPEC</p></td>
-<td> </td>
-<td> </td>
+<td class="enum_member_description">
+<p>invalid size or unit spec provided</p>
+</td>
+<td class="enum_member_annotations"> </td>
 </tr>
 <tr>
 <td class="enum_member_name"><p><a name="BS-ERROR-OVER:CAPS"></a>BS_ERROR_OVER</p></td>
-<td> </td>
-<td> </td>
+<td class="enum_member_description">
+<p>a value is over the limits imposed by a type</p>
+</td>
+<td class="enum_member_annotations"> </td>
 </tr>
 <tr>
 <td class="enum_member_name"><p><a name="BS-ERROR-ZERO-DIV:CAPS"></a>BS_ERROR_ZERO_DIV</p></td>
-<td> </td>
-<td> </td>
+<td class="enum_member_description">
+<p>an attempt to do division by zero</p>
+</td>
+<td class="enum_member_annotations"> </td>
 </tr>
 <tr>
 <td class="enum_member_name"><p><a name="BS-ERROR-FAIL:CAPS"></a>BS_ERROR_FAIL</p></td>
@@ -1205,10 +1374,28 @@ is <a href="../glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">T
     char *msg;
 } BSError;
 </pre>
-<p><em class="parameter"><code>code</code></em>
-: error code
-<em class="parameter"><code>msg</code></em>
-: optional error message</p>
+<div class="refsect3">
+<a name="BSError.members"></a><h4>Members</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="struct_members_name">
+<col class="struct_members_description">
+<col width="200px" class="struct_members_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="struct_member_name"><p><a class="link" href="libbytesize-BSSize.html#BSErrorCode" title="enum BSErrorCode"><span class="type">BSErrorCode</span></a> <em class="structfield"><code><a name="BSError.code"></a>code</code></em>;</p></td>
+<td class="struct_member_description"><p>error code</p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+<tr>
+<td class="struct_member_name"><p><span class="type">char</span> *<em class="structfield"><code><a name="BSError.msg"></a>msg</code></em>;</p></td>
+<td class="struct_member_description"><p>optional error message</p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
 </div>
 <hr>
 <div class="refsect2">

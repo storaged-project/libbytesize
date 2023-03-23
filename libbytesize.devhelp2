@@ -77,5 +77,7 @@
     <keyword type="constant" name="BS_ROUND_DIR_UP" link="libbytesize-BSSize.html#BS-ROUND-DIR-UP:CAPS"/>
     <keyword type="constant" name="BS_ROUND_DIR_DOWN" link="libbytesize-BSSize.html#BS-ROUND-DIR-DOWN:CAPS"/>
     <keyword type="constant" name="BS_ROUND_DIR_HALF_UP" link="libbytesize-BSSize.html#BS-ROUND-DIR-HALF-UP:CAPS"/>
+    <keyword type="member" name="BSError.code" link="libbytesize-BSSize.html#BSError.code"/>
+    <keyword type="member" name="BSError.msg" link="libbytesize-BSSize.html#BSError.msg"/>
   </functions>
 </book>
