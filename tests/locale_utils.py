@@ -1,11 +1,13 @@
 
 import subprocess
 
-"""Helper functions, decorators,... for working with locales"""
+"""Helper functions, decorators, ... for working with locales"""
 
 def get_avail_locales():
-    return {loc.decode(errors="replace").strip() for loc in subprocess.check_output(["locale", "-a"]).split()}
-
+    try:
+        return {loc.decode(errors="replace").strip() for loc in subprocess.check_output(["locale", "-a"]).split()}
+    except FileNotFoundError:
+        return {"C"}
 
 def missing_locales(required, available):
     canon_locales = {loc.replace("UTF-8", "utf8") for loc in required}
