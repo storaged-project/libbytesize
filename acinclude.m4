@@ -69,5 +69,5 @@ echo "*** Libbytesize encountered the following issues during configuration:"
 echo "$libbytesize_failure_messages"
 echo ""
 echo "*** Libbytesize will not successfully build without these missing dependencies"
-exit 1
+AS_EXIT(1)
 ])])dnl

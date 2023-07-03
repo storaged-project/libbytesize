@@ -98,6 +98,8 @@ AS_IF([test "x$with_tools" != "xno" && test "x$with_python3" != "xyes"],
       [LIBBYTESIZE_SOFT_FAILURE([Tools require Python3 bindings])],
       [])
 
+LIBBYTESIZE_FAILURES
+
 AC_OUTPUT
 
 dnl ==========================================================================
@@ -124,4 +126,3 @@ echo "
         tools:                      ${with_tools}
 "
 
-LIBBYTESIZE_FAILURES
