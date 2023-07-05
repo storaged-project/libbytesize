@@ -1,15 +1,41 @@
+Libbytesize 2.9
+---------------
+
+Tomas Bzatek (1):
+
+- build: Exit before AC_OUTPUT on error
+
+Vojtech Trefny (1):
+
+- ci: Manually prepare spec file for Packit
+
+Weblate (1):
+
+- Update translation files
+
+triallax (1):
+
+- tests: fix locale tests on musl
+
+김인수 (1):
+
+- Translated using Weblate (Korean)
+
 Libbytesize 2.8
 ---------------
 
 Baurzhan Muftakhidinov (2):
+
 - Added translation using Weblate (Kazakh)
 - Translated using Weblate (Kazakh)
 
 Temuri Doghonadze (2):
+
 - Added translation using Weblate (Georgian)
 - Translated using Weblate (Georgian)
 
 Vojtech Trefny (24):
+
 - Sync spec with downstream
 - README: Remove the Travis CI badge
 - Add a GitHub action for running csmock static analysis
@@ -36,9 +62,11 @@ Vojtech Trefny (24):
 - ci: Do not use release descriptions for Packit builds
 
 Weblate (1):
+
 - Update translation files
 
 김인수 (1):
+
 - Translated using Weblate (Korean)
 
 Libbytesize 2.7
