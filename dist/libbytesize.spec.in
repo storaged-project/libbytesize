@@ -54,7 +54,6 @@ with the libbytesize library.
 %package -n python3-%{realname}
 Summary: Python 3 bindings for libbytesize
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: python3-six
 
 %description -n python3-%{realname}
 This package contains Python 3 bindings for libbytesize making the use of
