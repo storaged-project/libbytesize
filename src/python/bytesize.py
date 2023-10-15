@@ -1,7 +1,6 @@
 import ctypes
 from ctypes import POINTER, byref
 
-import six
 from decimal import Decimal
 
 import locale
@@ -77,10 +76,7 @@ _error_code_clss = (InvalidSpecError, OverflowError, ZeroDivisionError)
 def get_error(err):
     if not err:
         return None
-    if six.PY3:
-        msg = str(err.contents.msg, "utf-8")
-    else:
-        msg = err.contents.msg
+    msg = str(err.contents.msg, "utf-8")
     ex = _error_code_clss[err.contents.code](msg)
     c_bytesize.bs_clear_error(byref(err))
     raise ex
@@ -97,8 +93,7 @@ class SizeStruct(ctypes.Structure):
     @classmethod
     def new_from_str(cls, s):
         err = POINTER(SizeErrorStruct)()
-        if six.PY3:
-            s = bytes(s, "utf-8")
+        s = bytes(s, "utf-8")
         ret = c_bytesize.bs_size_new_from_str(s, byref(err))
         get_error(err)
         return ret.contents
@@ -122,10 +117,7 @@ class SizeStruct(ctypes.Structure):
         return (ret, sgn.value)
 
     def get_bytes_str(self):
-        if six.PY3:
-            return str(c_bytesize.bs_size_get_bytes_str(self), "utf-8")
-        else:
-            return c_bytesize.bs_size_get_bytes_str(self)
+        return str(c_bytesize.bs_size_get_bytes_str(self), "utf-8")
 
     def add(self, sz):
         return c_bytesize.bs_size_add(self, sz).contents
@@ -165,8 +157,7 @@ class SizeStruct(ctypes.Structure):
         err = POINTER(SizeErrorStruct)()
         ret = c_bytesize.bs_size_convert_to(self, unit, byref(err))
         get_error(err)
-        if six.PY3:
-            ret = str(ret, "utf-8")
+        ret = str(ret, "utf-8")
         return ret
 
     def div(self, sz):
@@ -189,10 +180,7 @@ class SizeStruct(ctypes.Structure):
         return self
 
     def human_readable(self, min_unit, max_places, xlate):
-        if six.PY3:
-            return str(c_bytesize.bs_size_human_readable(self, min_unit, max_places, xlate), "utf-8")
-        else:
-            return c_bytesize.bs_size_human_readable(self, min_unit, max_places, xlate)
+        return str(c_bytesize.bs_size_human_readable(self, min_unit, max_places, xlate), "utf-8")
 
     def sgn(self):
         return c_bytesize.bs_size_sgn(self)
@@ -201,16 +189,14 @@ class SizeStruct(ctypes.Structure):
         err = POINTER(SizeErrorStruct)()
         ret = c_bytesize.bs_size_true_div(self, sz, byref(err))
         get_error(err)
-        if six.PY3:
-            ret = str(ret, "utf-8")
+        ret = str(ret, "utf-8")
         return ret
 
     def true_div_int(self, div):
         err = POINTER(SizeErrorStruct)()
         ret = c_bytesize.bs_size_true_div_int(self, div, byref(err))
         get_error(err)
-        if six.PY3:
-            ret = str(ret, "utf-8")
+        ret = str(ret, "utf-8")
         return ret
 
     def mod(self, sz):
@@ -221,16 +207,14 @@ class SizeStruct(ctypes.Structure):
 
     def mul_float_str(self, fl_str):
         err = POINTER(SizeErrorStruct)()
-        if six.PY3:
-            fl_str = bytes(fl_str, "utf-8")
+        fl_str = bytes(fl_str, "utf-8")
         ret = c_bytesize.bs_size_mul_float_str(self, fl_str, byref(err))
         get_error(err)
         return ret.contents
 
     def grow_mul_float_str(self, fl_str):
         err = POINTER(SizeErrorStruct)()
-        if six.PY3:
-            fl_str = bytes(fl_str, "utf-8")
+        fl_str = bytes(fl_str, "utf-8")
         c_bytesize.bs_size_grow_mul_float_str(self, fl_str, byref(err))
         get_error(err)
         return self
@@ -347,9 +331,9 @@ class Size(object):
     def __init__(self, spec=None):
         self._c_size = None
         try:
-            if isinstance(spec, six.string_types):
+            if isinstance(spec, str):
                 self._c_size = SizeStruct.new_from_str(spec)
-            elif isinstance(spec, six.integer_types):
+            elif isinstance(spec, int):
                 abs_val = abs(spec)
                 if abs_val == spec:
                     sgn = 1
@@ -382,7 +366,7 @@ class Size(object):
             return int(self._c_size.get_bytes_str())
 
     def convert_to(self, unit):
-        if isinstance(unit, six.string_types):
+        if isinstance(unit, str):
             real_unit = unit_strs.get(unit)
             if real_unit is None:
                 raise ValueError("Invalid unit specification: '%s'" % unit)
@@ -393,12 +377,12 @@ class Size(object):
         return _str_to_decimal(ret)
 
     def human_readable(self, min_unit=B, max_places=2, xlate=True):
-        if isinstance(min_unit, six.string_types):
+        if isinstance(min_unit, str):
             if min_unit in unit_strs.keys():
                 min_unit = unit_strs[min_unit]
             else:
                 raise ValueError("Invalid unit specification: '%s'" % min_unit)
-        if not isinstance(max_places, six.integer_types):
+        if not isinstance(max_places, int):
             raise ValueError("max_places has to be an integer number")
         return self._c_size.human_readable(min_unit, max_places, xlate)
 
@@ -418,7 +402,7 @@ class Size(object):
             raise ValueError("Invalid size specification: '%s'"  % round_to)
 
     def cmp(self, other, abs_vals=False):
-        if isinstance(other, six.integer_types):
+        if isinstance(other, int):
             if (other < 0 and abs_vals):
                 other = abs(other)
             if 0 <= other <= MAXUINT64:
@@ -467,7 +451,7 @@ class Size(object):
 
     @neutralize_none_operand
     def __add__(self, other):
-        if isinstance(other, six.integer_types):
+        if isinstance(other, int):
             if other <= MAXUINT64:
                 return Size(self._c_size.add_bytes(other))
             else:
@@ -483,7 +467,7 @@ class Size(object):
 
     @neutralize_none_operand
     def __sub__(self, other):
-        if isinstance(other, six.integer_types):
+        if isinstance(other, int):
             if other <= MAXUINT64:
                 return Size(self._c_size.sub_bytes(other))
             else:
@@ -503,7 +487,7 @@ class Size(object):
     def __mul__(self, other):
         if isinstance(other, (Size, SizeStruct)):
             raise ValueError("Cannot multiply Size by Size. It just doesn't make sense.")
-        elif isinstance(other, (Decimal, float)) or (isinstance(other, six.integer_types)
+        elif isinstance(other, (Decimal, float)) or (isinstance(other, int)
                                                      and other > MAXUINT64 or other < 0):
             return Size(self._c_size.mul_float_str(str(other)))
         else:
@@ -512,25 +496,8 @@ class Size(object):
     __rmul__ = __mul__
 
     @neutralize_none_operand
-    def __div__(self, other):
-        if not six.PY2:
-            raise AttributeError
-
-        if isinstance(other, six.integer_types):
-            if other <= MAXUINT64:
-                return Size(self._c_size.div_int(other))
-            else:
-                other = SizeStruct.new_from_str(str(other))
-                return Size(_str_to_decimal(self._c_size.true_div(other)))
-        elif isinstance(other, (Decimal, float)):
-            other = SizeStruct.new_from_str(str(other))
-            return Size(self._c_size.true_div(other))
-        else:
-            return _str_to_decimal(self._c_size.true_div(other._c_size))
-
-    @neutralize_none_operand
     def __truediv__(self, other):
-        if isinstance(other, six.integer_types):
+        if isinstance(other, int):
             if other <= MAXUINT64:
                 return Size(self._c_size.true_div_int(other))
             else:
@@ -558,7 +525,7 @@ class Size(object):
     def __floordiv__(self, other):
         if isinstance(other, (Decimal, float)):
             return Size(self._c_size.mul_float_str(str(Decimal(1)/Decimal(other))))
-        elif isinstance(other, six.integer_types):
+        elif isinstance(other, int):
             if other <= MAXUINT64:
                 return self._safe_floordiv_int(other)
             else:
