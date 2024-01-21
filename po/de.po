@@ -1,27 +1,28 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Red Hat, Inc.
 # This file is distributed under the same license as the libbytesize package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Robert Scheck <robert@fedoraproject.org>, 2017. #zanata
+# 김인수 <simmon@nplob.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: libbytesize 0.3\n"
 "Report-Msgid-Bugs-To: vtrefny@redhat.com\n"
 "POT-Creation-Date: 2023-10-18 12:43+0200\n"
-"PO-Revision-Date: 2017-04-11 06:50+0000\n"
-"Last-Translator: Robert Scheck <robert@fedoraproject.org>\n"
-"Language-Team: German\n"
+"PO-Revision-Date: 2024-01-21 07:36+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/blivet/"
+"libbytesize/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Zanata 4.6.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #. TRANSLATORS: 'B' for bytes
 #: src/bs_size.c:52 src/bs_size.c:73
 msgid "B"
-msgstr "Byte"
+msgstr "B"
 
 #. TRANSLATORS: abbreviation for kibibyte, 2**10 bytes
 #: src/bs_size.c:54
