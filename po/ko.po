@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: libbytesize 2.5\n"
 "Report-Msgid-Bugs-To: vtrefny@redhat.com\n"
 "POT-Creation-Date: 2023-10-18 12:43+0200\n"
-"PO-Revision-Date: 2024-01-24 04:36+0000\n"
+"PO-Revision-Date: 2024-02-29 05:35+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/blivet/"
 "libbytesize/ko/>\n"
@@ -17,89 +17,89 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #. TRANSLATORS: 'B' for bytes
 #: src/bs_size.c:52 src/bs_size.c:73
 msgid "B"
-msgstr "B"
+msgstr "바이트(B)"
 
 #. TRANSLATORS: abbreviation for kibibyte, 2**10 bytes
 #: src/bs_size.c:54
 msgid "KiB"
-msgstr "KiB"
+msgstr "키비바이트(KiB)"
 
 #. TRANSLATORS: abbreviation for mebibyte, 2**20 bytes
 #: src/bs_size.c:56
 msgid "MiB"
-msgstr "MiB"
+msgstr "메비바이트(MiB)"
 
 #. TRANSLATORS: abbreviation for gibibyte, 2**30 bytes
 #: src/bs_size.c:58
 msgid "GiB"
-msgstr "GiB"
+msgstr "기비바이트(GiB)"
 
 #. TRANSLATORS: abbreviation for tebibyte, 2**40 bytes
 #: src/bs_size.c:60
 msgid "TiB"
-msgstr "TiB"
+msgstr "테비바이트(TiB)"
 
 #. TRANSLATORS: abbreviation for pebibyte, 2**50 bytes
 #: src/bs_size.c:62
 msgid "PiB"
-msgstr "PiB"
+msgstr "페비바이트(PiB)"
 
 #. TRANSLATORS: abbreviation for exbibyte, 2**60 bytes
 #: src/bs_size.c:64
 msgid "EiB"
-msgstr "EiB"
+msgstr "엑스비바이트(EiB)"
 
 #. TRANSLATORS: abbreviation for zebibyte, 2**70 bytes
 #: src/bs_size.c:66
 msgid "ZiB"
-msgstr "ZiB"
+msgstr "제비바이트(ZiB)"
 
 #. TRANSLATORS: abbreviation for yobibyte, 2**80 bytes
 #: src/bs_size.c:68
 msgid "YiB"
-msgstr "YiB"
+msgstr "요비바이트(YiB)"
 
 #. TRANSLATORS: abbreviation for kilobyte, 10**3 bytes
 #: src/bs_size.c:75
 msgid "KB"
-msgstr "KB"
+msgstr "킬로바이트(KB)"
 
 #. TRANSLATORS: abbreviation for megabyte, 10**6 bytes
 #: src/bs_size.c:77
 msgid "MB"
-msgstr "MB"
+msgstr "메가바이트(MB)"
 
 #. TRANSLATORS: abbreviation for gigabyte, 10**9 bytes
 #: src/bs_size.c:79
 msgid "GB"
-msgstr "GB"
+msgstr "기가바이트(GB)"
 
 #. TRANSLATORS: abbreviation for terabyte, 10**12 bytes
 #: src/bs_size.c:81
 msgid "TB"
-msgstr "TB"
+msgstr "테라바이트(TB)"
 
 #. TRANSLATORS: abbreviation for petabyte, 10**15 bytes
 #: src/bs_size.c:83
 msgid "PB"
-msgstr "PB"
+msgstr "페타바이트(PB)"
 
 #. TRANSLATORS: abbreviation for exabyte, 10**18 bytes
 #: src/bs_size.c:85
 msgid "EB"
-msgstr "EB"
+msgstr "엑사바이트(EB)"
 
 #. TRANSLATORS: abbreviation for zettabyte, 10**21 bytes
 #: src/bs_size.c:87
 msgid "ZB"
-msgstr "ZB"
+msgstr "제타바이트(ZB)"
 
 #. TRANSLATORS: abbreviation for yottabyte, 10**24 bytes
 #: src/bs_size.c:89
 msgid "YB"
-msgstr "YB"
+msgstr "요타바이트(YB)"
