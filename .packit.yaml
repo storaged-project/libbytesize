@@ -1,5 +1,6 @@
 actions:
   post-upstream-clone:
+    - 'bash -c "sed -i -r \"s/Release:(\s*)\S+/Release:     99%{?dist}/\" dist/libbytesize.spec.in"'
     - 'cp dist/libbytesize.spec.in dist/libbytesize.spec'
     - 'sed -i -e "s/@WITH_PYTHON3@/1/g" -e "s/@WITH_GTK_DOC@/1/g" -e "s/@WITH_TOOLS@/1/g" dist/libbytesize.spec'
   create-archive:
