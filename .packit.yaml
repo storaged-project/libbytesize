@@ -17,12 +17,12 @@ jobs:
     - fedora-all-aarch64
     - fedora-all-ppc64le
     - fedora-all-x86_64
-    - epel-8-aarch64
-    - epel-8-ppc64le
-    - epel-8-x86_64
-    - epel-9-aarch64
-    - epel-9-ppc64le
-    - epel-9-x86_64
+    - centos-stream-10-aarch64
+    - centos-stream-10-ppc64le
+    - centos-stream-10-x86_64
+    - centos-stream-9-aarch64
+    - centos-stream-9-ppc64le
+    - centos-stream-9-x86_64
   trigger: pull_request
 
 - job: copr_build
