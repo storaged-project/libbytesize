@@ -1,5 +1,6 @@
 actions:
   post-upstream-clone:
+    - 'bash -c "sed -i -r \"s/Release:(\s*)\S+/Release:     99%{?dist}/\" dist/libbytesize.spec.in"'
     - 'cp dist/libbytesize.spec.in dist/libbytesize.spec'
     - 'sed -i -e "s/@WITH_PYTHON3@/1/g" -e "s/@WITH_GTK_DOC@/1/g" -e "s/@WITH_TOOLS@/1/g" dist/libbytesize.spec'
   create-archive:
@@ -16,12 +17,12 @@ jobs:
     - fedora-all-aarch64
     - fedora-all-ppc64le
     - fedora-all-x86_64
-    - epel-8-aarch64
-    - epel-8-ppc64le
-    - epel-8-x86_64
-    - epel-9-aarch64
-    - epel-9-ppc64le
-    - epel-9-x86_64
+    - centos-stream-10-aarch64
+    - centos-stream-10-ppc64le
+    - centos-stream-10-x86_64
+    - centos-stream-9-aarch64
+    - centos-stream-9-ppc64le
+    - centos-stream-9-x86_64
   trigger: pull_request
 
 - job: copr_build
