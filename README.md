@@ -1,4 +1,4 @@
-[![Translation](https://translate.fedoraproject.org/widgets/blivet/-/libbytesize/svg-badge.svg)](https://translate.fedoraproject.org/engage/blivet/)
+ [![Translation](https://translate.fedoraproject.org/widgets/blivet/-/libbytesize/svg-badge.svg)](https://translate.fedoraproject.org/engage/blivet/)
 ### CI status
 
 <img alt="CI status" src="https://fedorapeople.org/groups/storage_apis/statuses/libbytesize-master.svg" width="100%" height="400ex" />
