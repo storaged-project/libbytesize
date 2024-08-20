@@ -16,7 +16,7 @@
 %define configure_opts %{?python3_opts} %{?tools_opts}
 
 Name:        libbytesize
-Version:     2.10
+Version:     2.11
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPL-2.1-or-later
@@ -114,6 +114,19 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Tue Aug 20 2024 Vojtech Trefny <vtrefny@redhat.com> - 2.11-1
+- infra: bump actions/upload-artifact from 3 to 4 (49699333+dependabot[bot])
+- ci: Add dependabot to automatically update GH actions (vtrefny)
+- tests: remove unnecessary bash dependency (triallax)
+- ci: Update CentOS Stream repositories for Packit (vtrefny)
+- ci: Set custom release number for Packit (vtrefny)
+- Translated using Weblate (Korean) (simmon)
+- Translated using Weblate (Sinhala) (noreply-mt-weblate-translation-memory)
+- Translated using Weblate (Japanese) (simmon)
+- Added translation using Weblate (Japanese) (simmon)
+- Update translation files (noreply)
+- Translated using Weblate (Korean) (simmon)
+
 * Wed Oct 18 2023 Vojtech Trefny <vtrefny@redhat.com> - 2.10-1
 - Rename 'master' branch to 'main' (vtrefny)
 - remove dependency on python3-six and python2 crumbs (alexandre.detiste)
