@@ -41,7 +41,7 @@ class SizeTestCase(unittest.TestCase):
         expected = (0, 0)
         self.assertEqual(actual, expected)
 
-    @requires_locales({'cs_CZ.UTF-8', 'ps_AF.UTF-8', 'en_US.UTF-8'})
+    @requires_locales({'en_US.UTF-8'})
     def testNewFromStr(self):
         actual = SizeStruct.new_from_str('0 B').get_bytes()
         expected = (0, 0)
@@ -79,6 +79,8 @@ class SizeTestCase(unittest.TestCase):
         expected = (1610612736, 1)
         self.assertEqual(actual, expected)
 
+    @requires_locales({'cs_CZ.UTF-8'})
+    def testNewFromStrLocaleCsCZ(self):
         locale.setlocale(locale.LC_ALL,'cs_CZ.UTF-8')
 
         actual = SizeStruct.new_from_str('1,5 KiB').get_bytes()
@@ -105,6 +107,8 @@ class SizeTestCase(unittest.TestCase):
         expected = (100, -1)
         self.assertEqual(actual, expected)
 
+    @requires_locales({'ps_AF.UTF-8'})
+    def testNewFromStrLocalePsAF(self):
         # this persian locale uses a two-byte unicode character for the radix
         locale.setlocale(locale.LC_ALL, 'ps_AF.UTF-8')
 
@@ -123,8 +127,6 @@ class SizeTestCase(unittest.TestCase):
         actual = SizeStruct.new_from_str('-1.5 KiB').get_bytes()
         expected = (1536, -1)
         self.assertEqual(actual, expected)
-
-        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
 
     #enddef
 
@@ -376,18 +378,12 @@ class SizeTestCase(unittest.TestCase):
         self.assertEqual(strSizeStruct, "-1024")
     #enddef
 
-    @requires_locales({'cs_CZ.UTF-8'})
     def testHumanReadable(self):
         strSizeStruct = SizeStruct.new_from_str("12 KiB").human_readable(KiB, 2, False)
         self.assertEqual(strSizeStruct, "12 KiB")
 
         strSizeStruct = SizeStruct.new_from_str("1 KB").human_readable(KiB, 2, False)
         self.assertEqual(strSizeStruct, "0.98 KiB")
-
-        locale.setlocale(locale.LC_ALL, 'cs_CZ.UTF-8')
-        strSizeStruct = SizeStruct.new_from_str("1 KB").human_readable(KiB, 2, True)
-        self.assertEqual(strSizeStruct, "0,98 KiB")
-        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE);
 
         strSizeStruct = SizeStruct.new_from_str("100 GiB").human_readable(KiB, 2, False)
         self.assertEqual(strSizeStruct, "100 GiB")
@@ -406,6 +402,13 @@ class SizeTestCase(unittest.TestCase):
         strSizeStruct = SizeStruct.new_from_str("100 GiB").human_readable(GiB, 0, True)
         self.assertEqual(SizeStruct.new_from_str(strSizeStruct).get_bytes(), (100 * 1024**3, 1))
     #enddef
+
+    @requires_locales({'cs_CZ.UTF-8'})
+    def testHumanReadableLocale(self):
+        locale.setlocale(locale.LC_ALL, 'cs_CZ.UTF-8')
+        strSizeStruct = SizeStruct.new_from_str("1 KB").human_readable(KiB, 2, True)
+        self.assertEqual(strSizeStruct, "0,98 KiB")
+        locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE);
 
     def testSgn(self):
         sgn = SizeStruct.new_from_str("12 KiB").sgn()
