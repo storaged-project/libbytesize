@@ -100,4 +100,5 @@
   pip:
     name: ['pocketlint']
     executable: pip3
+    extra_args: --break-system-packages
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
