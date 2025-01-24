@@ -31,6 +31,38 @@
     - python3-pycodestyle
   when: ansible_distribution == 'Fedora'
 
+##### CentOS
+- name: Install basic build tools (CentOS)
+  package: name={{item}} state=present
+  with_items:
+    - gcc
+    - make
+    - libtool
+    - autoconf
+    - automake
+  when: ansible_distribution == 'CentOS'
+
+- name: Install dnf-plugins-core for dnf builddep (CentOS)
+  package: name=dnf-plugins-core state=present
+  when: ansible_distribution == 'CentOS'
+
+- name: Install build dependencies (CentOS)
+  command: "dnf -y builddep libbytesize --nogpgcheck"
+  when: ansible_distribution == 'CentOS'
+
+- name: Install test dependencies (CentOS)
+  package: name={{item}} state=present
+  with_items:
+    - glibc-all-langpacks
+    - python3-pip
+  when: ansible_distribution == 'CentOS'
+
+- name: Install pylint, polib, pycodestyle and pocketlint using pip (CentOS)
+  pip:
+    name: ['pylint', 'pycodestyle', 'polib', 'pocketlint']
+    executable: pip3
+  when: ansible_distribution == 'CentOS'
+
 ##### Debian/Ubuntu
 - name: Install basic build tools (Debian/Ubuntu)
   package: name={{item}} state=present
@@ -64,7 +96,7 @@
     - pylint
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-- name: Install pocketlint using pip on Debian/Ubuntu
+- name: Install pocketlint using pip (Debian/Ubuntu)
   pip:
     name: ['pocketlint']
     executable: pip3
