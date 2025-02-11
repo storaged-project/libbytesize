@@ -4,13 +4,14 @@
 ---
 ##### Fedora
 - name: Install basic build tools (Fedora)
-  package: name={{item}} state=present
-  with_items:
-    - gcc
-    - make
-    - libtool
-    - autoconf
-    - automake
+  package:
+    state: present
+    name:
+      - gcc
+      - make
+      - libtool
+      - autoconf
+      - automake
   when: ansible_distribution == 'Fedora'
 
 - name: Install dnf-plugins-core for dnf builddep (Fedora)
@@ -22,24 +23,26 @@
   when: ansible_distribution == 'Fedora'
 
 - name: Install test dependencies (Fedora)
-  package: name={{item}} state=present
-  with_items:
-    - glibc-all-langpacks
-    - python3-polib
-    - python3-pocketlint
-    - python3-pylint
-    - python3-pycodestyle
+  package:
+    state: present
+    name:
+      - glibc-all-langpacks
+      - python3-polib
+      - python3-pocketlint
+      - python3-pylint
+      - python3-pycodestyle
   when: ansible_distribution == 'Fedora'
 
 ##### CentOS
 - name: Install basic build tools (CentOS)
-  package: name={{item}} state=present
-  with_items:
-    - gcc
-    - make
-    - libtool
-    - autoconf
-    - automake
+  package:
+    state: present
+    name:
+      - gcc
+      - make
+      - libtool
+      - autoconf
+      - automake
   when: ansible_distribution == 'CentOS'
 
 - name: Install dnf-plugins-core for dnf builddep (CentOS)
@@ -51,10 +54,11 @@
   when: ansible_distribution == 'CentOS'
 
 - name: Install test dependencies (CentOS)
-  package: name={{item}} state=present
-  with_items:
-    - glibc-all-langpacks
-    - python3-pip
+  package:
+    state: present
+    name:
+      - glibc-all-langpacks
+      - python3-pip
   when: ansible_distribution == 'CentOS'
 
 - name: Install pylint, polib, pycodestyle and pocketlint using pip (CentOS)
@@ -65,10 +69,11 @@
 
 ##### Debian/Ubuntu
 - name: Install basic build tools (Debian/Ubuntu)
-  package: name={{item}} state=present
-  with_items:
-    - gcc
-    - make
+  package:
+    state: present
+    name:
+      - gcc
+      - make
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Add source repositories (Debian/Ubuntu)
@@ -87,13 +92,14 @@
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Install test dependencies (Debian/Ubuntu)
-  package: name={{item}} state=present
-  with_items:
-    - locales-all
-    - python3-polib
-    - python3-pip
-    - pycodestyle
-    - pylint
+  package:
+    state: present
+    name:
+      - locales-all
+      - python3-polib
+      - python3-pip
+      - pycodestyle
+      - pylint
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Install pocketlint using pip (Debian/Ubuntu)
