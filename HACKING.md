@@ -33,7 +33,7 @@ MAKING RELEASES
 
    - [ ] upload the tarball created above (``make release``) to the release.
 
- - [ ] Update the documentation by rsyncing the contents of the *docs/html*
-       folder elsewhere, switching to the *gh-pages* branch, rsyncing the
-       contents back and commiting it as an update of the docs for the new
-       release.
+ - [ ] Update the documentation by copying the contents of the *docs/html*
+       folder to the *libbytesize* directory in the
+       [Storaged project website repository](https://github.com/storaged-project/storaged-project.github.io)
+       and commit and push the changes
