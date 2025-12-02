@@ -173,7 +173,7 @@ static char *replace_char_with_str (const char *str, char orig, const char *new)
  * Replaces the first appearance of @orig in @str with @new.
  */
 static char *replace_str_with_str (const char *str, const char *orig, const char *new) {
-    char *pos = NULL;
+    const char *pos = NULL;
     int str_len = 0;
     int orig_len = 0;
     int new_len = 0;
