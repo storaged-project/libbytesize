@@ -1,6 +1,6 @@
 # configure.ac for libbytesize
 
-AC_INIT([libbytesize], [2.11], [], [], [https://github.com/storaged-project/libbytesize])
+AC_INIT([libbytesize], [2.12], [], [], [https://github.com/storaged-project/libbytesize])
 
 # Disable building static libraries.
 # This needs to be set before initializing automake

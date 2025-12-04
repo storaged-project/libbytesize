@@ -16,7 +16,7 @@
 %define configure_opts %{?python3_opts} %{?tools_opts}
 
 Name:        libbytesize
-Version:     2.11
+Version:     2.12
 Release:     1%{?dist}
 Summary:     A library for working with sizes in bytes
 License:     LGPL-2.1-or-later
@@ -114,6 +114,19 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %endif
 
 %changelog
+* Thu Dec 04 2025 Vojtech Trefny <vtrefny@redhat.com> - 2.12-1
+- Fix compilation with C23 (vtrefny)
+- HACKING: Update directions for updating documentation (vtrefny)
+- infra: bump actions/checkout from 5 to 6 (49699333+dependabot[bot])
+- infra: bump actions/upload-artifact from 4 to 5 (49699333+dependabot[bot])
+- infra: bump actions/checkout from 4 to 5 (49699333+dependabot[bot])
+- misc: Do not use "with_items" when installing packages (vtrefny)
+- misc: Use --break-system-packages for pip on Debian (vtrefny)
+- misc: Add build and test dependecies for CentOS (vtrefny)
+- misc: Separate Ansible tasks into a different file (vtrefny)
+- tests: Split locale tests into multiple test cases (vtrefny)
+- packit: Bump release only for daily Copr builds (vtrefny)
+
 * Tue Aug 20 2024 Vojtech Trefny <vtrefny@redhat.com> - 2.11-1
 - infra: bump actions/upload-artifact from 3 to 4 (49699333+dependabot[bot])
 - ci: Add dependabot to automatically update GH actions (vtrefny)
