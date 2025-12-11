@@ -26,7 +26,6 @@ Source0:     https://github.com/storaged-project/libbytesize/releases/download/%
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: gmp-devel
-BuildRequires: mpfr-devel
 BuildRequires: pcre2-devel
 BuildRequires: gettext-devel
 %if %{with_python3}

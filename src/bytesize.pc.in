@@ -9,4 +9,4 @@ URL: https://github.com/storaged-project/libbytesize
 Version: @VERSION@
 Cflags: -I${includedir}/bytesize
 Libs: -lbytesize
-Libs.private: -lgmp -lmpfr
+Libs.private: -lgmp
