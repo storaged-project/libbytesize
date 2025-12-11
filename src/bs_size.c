@@ -1,5 +1,4 @@
 #include <gmp.h>
-#include <mpfr.h>
 #include <langinfo.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -224,30 +223,66 @@ static void strstrip(char *str) {
     str[i-begin] = '\0';
 }
 
-static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
+/* Helper function to convert mpf_t to mpz_t with round-toward-zero (truncate decimal) */
+static void mpz_set_f_round_zero(mpz_t rop, const mpf_t op) {
+    char *str;
+    const char *radix_char;
+    char *dot;
+    char *exp;
+    
+    /* Convert to decimal string with enough precision */
+    gmp_asprintf(&str, "%.100Ff", op);
+    
+    /* Get the locale's decimal separator */
+    radix_char = nl_langinfo(RADIXCHAR);
+    
+    /* Find decimal point (using locale's separator) and truncate */
+    dot = strchr(str, radix_char[0]);
+    if (dot) {
+        *dot = '\0';
+    }
+    
+    /* Remove any exponent notation */
+    exp = strchr(str, 'e');
+    if (!exp) exp = strchr(str, 'E');
+    if (exp) *exp = '\0';
+    
+    mpz_set_str(rop, str, 10);
+    free(str);
+}
+
+static bool multiply_size_by_unit (mpf_t size, char *unit_str) {
     BSBunit bunit = BS_BUNIT_UNDEF;
     BSDunit dunit = BS_DUNIT_UNDEF;
     uint64_t pwr = 0;
-    mpfr_t dec_mul;
+    mpf_t dec_mul;
+    mpf_t base;
     size_t unit_str_len = 0;
+    uint64_t i;
 
     unit_str_len = strlen (unit_str);
 
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
         if (strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
             pwr = (uint64_t) bunit - BS_BUNIT_B;
-            mpfr_mul_2exp (size, size, 10 * pwr, MPFR_RNDN);
+            mpf_mul_2exp (size, size, 10 * pwr);
             return true;
         }
 
-    mpfr_init2 (dec_mul, BS_FLOAT_PREC_BITS);
-    mpfr_set_ui (dec_mul, 1000, MPFR_RNDN);
+    mpf_init2 (dec_mul, BS_FLOAT_PREC_BITS);
+    mpf_init2 (base, BS_FLOAT_PREC_BITS);
+    mpf_set_ui (base, 1000);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
         if (strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
             pwr = (uint64_t) (dunit - BS_DUNIT_B);
-            mpfr_pow_ui (dec_mul, dec_mul, pwr, MPFR_RNDN);
-            mpfr_mul (size, size, dec_mul, MPFR_RNDN);
-            mpfr_clear (dec_mul);
+            /* Compute 1000^pwr using repeated multiplication */
+            mpf_set_ui (dec_mul, 1);
+            for (i = 0; i < pwr; i++) {
+                mpf_mul (dec_mul, dec_mul, base);
+            }
+            mpf_mul (size, size, dec_mul);
+            mpf_clear (dec_mul);
+            mpf_clear (base);
             return true;
         }
 
@@ -256,21 +291,27 @@ static bool multiply_size_by_unit (mpfr_t size, char *unit_str) {
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
         if (strncasecmp (unit_str, _(b_units[bunit-BS_BUNIT_B]), unit_str_len) == 0) {
             pwr = (uint64_t) bunit - BS_BUNIT_B;
-            mpfr_mul_2exp (size, size, 10 * pwr, MPFR_RNDN);
+            mpf_mul_2exp (size, size, 10 * pwr);
             return true;
         }
 
-    mpfr_init2 (dec_mul, BS_FLOAT_PREC_BITS);
-    mpfr_set_ui (dec_mul, 1000, MPFR_RNDN);
+    mpf_set_ui (base, 1000);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
         if (strncasecmp (unit_str, _(d_units[dunit-BS_DUNIT_B]), unit_str_len) == 0) {
             pwr = (uint64_t) (dunit - BS_DUNIT_B);
-            mpfr_pow_ui (dec_mul, dec_mul, pwr, MPFR_RNDN);
-            mpfr_mul (size, size, dec_mul, MPFR_RNDN);
-            mpfr_clear (dec_mul);
+            /* Compute 1000^pwr using repeated multiplication */
+            mpf_set_ui (dec_mul, 1);
+            for (i = 0; i < pwr; i++) {
+                mpf_mul (dec_mul, dec_mul, base);
+            }
+            mpf_mul (size, size, dec_mul);
+            mpf_clear (dec_mul);
+            mpf_clear (base);
             return true;
         }
 
+    mpf_clear (dec_mul);
+    mpf_clear (base);
     return false;
 }
 
@@ -452,7 +493,7 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     const char *radix_char = NULL;
     char *loc_size_str = NULL;
     mpf_t parsed_size;
-    mpfr_t size;
+    mpf_t size;
     int status = 0;
     BSSize ret = NULL;
     PCRE2_UCHAR *substring = NULL;
@@ -518,8 +559,7 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
         return NULL;
     }
 
-    /* parse the number using GMP because it knows how to handle localization
-       much better than MPFR */
+    /* parse the number using GMP - it handles localization correctly */
     mpf_init2 (parsed_size, BS_FLOAT_PREC_BITS);
     status = mpf_set_str (parsed_size, *substring == '+' ? (const char *) substring+1 : (const char *) substring, 10);
     pcre2_substring_free (substring);
@@ -531,9 +571,9 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
         mpf_clear (parsed_size);
         return NULL;
     }
-    /* but use MPFR from now on because GMP thinks 0.1*1000 = 99 */
-    mpfr_init2 (size, BS_FLOAT_PREC_BITS);
-    mpfr_set_f (size, parsed_size, MPFR_RNDN);
+    /* Use GMP mpf_t directly - we'll handle rounding correctly when converting to integer */
+    mpf_init2 (size, BS_FLOAT_PREC_BITS);
+    mpf_set (size, parsed_size);
     mpf_clear (parsed_size);
 
     status = pcre2_substring_get_byname (match_data, (PCRE2_SPTR) "rest", &substring, &substring_len);
@@ -545,7 +585,7 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
             pcre2_match_data_free (match_data);
             pcre2_code_free (regex);
             free (loc_size_str);
-            mpfr_clear (size);
+            mpf_clear (size);
             return NULL;
         }
     }
@@ -554,10 +594,12 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     pcre2_code_free (regex);
 
     ret = bs_size_new ();
-    mpfr_get_z (ret->bytes, size, MPFR_RNDZ);
+    /* Convert from mpf_t to mpz_t with round-toward-zero using string conversion
+       to ensure correct decimal rounding (mpz_set_f truncates binary, giving wrong results) */
+    mpz_set_f_round_zero (ret->bytes, size);
 
     free (loc_size_str);
-    mpfr_clear (size);
+    mpf_clear (size);
 
     return ret;
 }
