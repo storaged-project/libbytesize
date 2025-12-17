@@ -3,7 +3,7 @@ LDADD = $(LIBINTL)
 
 lib_LTLIBRARIES = libbytesize.la
 libbytesize_la_CFLAGS = -Wall -Wextra -Werror -Wno-overflow -D_GNU_SOURCE
-libbytesize_la_LIBADD = -lgmp -lmpfr $(PCRE2_LIBS)
+libbytesize_la_LIBADD = -lgmp $(PCRE2_LIBS)
 libbytesize_la_LDFLAGS = -version-info 1:0:0
 libbytesize_la_SOURCES = bs_size.c bs_size.h gettext.h
 

@@ -46,7 +46,7 @@ LIBBYTESIZE_PKG_CHECK_MODULES([PCRE2], [libpcre2-8])
 
 AC_CHECK_LIB(gmp, __gmpz_init)
 
-AC_CHECK_HEADERS([langinfo.h gmp.h mpfr.h stdint.h stdbool.h stdarg.h string.h stdio.h ctype.h],
+AC_CHECK_HEADERS([langinfo.h gmp.h stdint.h stdbool.h stdarg.h string.h stdio.h ctype.h],
                  [],
                  [LIBBYTESIZE_SOFT_FAILURE([Header file $ac_header not found.])],
                  [])
