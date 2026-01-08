@@ -443,7 +443,7 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     char const * const pattern = "^\\s*         # white space \n" \
                                   "(?P<sign>(-|\\+)?)     # optional sign character \n" \
                                   "(?P<int_part>[0-9]*)   # integer part \n" \
-                                  "(?:%s(?P<frac_part>[0-9]+))?  # optional fractional part \n" \
+                                  "(?:%s(?P<frac_part>[0-9]*))?  # optional fractional part \n" \
                                   "(?:(?P<exp_sep>[eE])(?P<exp_sign>(-|\\+)?)(?P<exp_val>[0-9]+))? # optional exponent \n" \
                                   "\\s*               # white space \n" \
                                   "(?P<rest>[^\\s]*)\\s*$ # unit specification";
@@ -467,6 +467,8 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
     int exp_sign = 1;
     mpz_t numerator, denominator, int_part, frac_part, pow_10;
     size_t frac_digits = 0;
+    bool has_int_digits = false;
+    bool has_frac_digits = false;
 
     radix_char = nl_langinfo (RADIXCHAR);
     if (strncmp (radix_char, ".", 1) != 0)
@@ -533,6 +535,7 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
 
     status = pcre2_substring_get_byname (match_data, (PCRE2_SPTR) "int_part", &substring, &substring_len);
     if (status >= 0 && substring_len > 0) {
+        has_int_digits = true;
         status = mpz_set_str (int_part, (const char *) substring, 10);
         pcre2_substring_free (substring);
         if (status != 0) {
@@ -552,6 +555,7 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
 
     status = pcre2_substring_get_byname (match_data, (PCRE2_SPTR) "frac_part", &substring, &substring_len);
     if (status >= 0 && substring_len > 0) {
+        has_frac_digits = true;
         frac_digits = substring_len;
         status = mpz_set_str (frac_part, (const char *) substring, 10);
         pcre2_substring_free (substring);
@@ -569,6 +573,17 @@ BSSize bs_size_new_from_str (const char *size_str, BSError **error) {
         frac_digits = 0;
         if (status >= 0)
             pcre2_substring_free (substring);
+    }
+
+    /* Validate: we must have at least one digit in int_part or frac_part */
+    if (!has_int_digits && !has_frac_digits) {
+        set_error (error, BS_ERROR_INVALID_SPEC, strdup_printf ("Failed to parse size spec: %s", size_str));
+        mpz_clears (numerator, denominator, int_part, frac_part, pow_10, NULL);
+        mpq_clear (size);
+        pcre2_match_data_free (match_data);
+        pcre2_code_free (regex);
+        free (loc_size_str);
+        return NULL;
     }
 
     status = pcre2_substring_get_byname (match_data, (PCRE2_SPTR) "exp_val", &substring, &substring_len);
