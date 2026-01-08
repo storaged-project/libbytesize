@@ -8,7 +8,7 @@ import ctypes
 
 from locale_utils import get_avail_locales, missing_locales, requires_locales
 
-from bytesize import KiB, GiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError
+from bytesize import KiB, GiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError, InvalidSpecError
 
 # SizeStruct is part of the 'private' API and needs to be imported differently
 # when running from locally build tree and when using installed library
@@ -78,6 +78,18 @@ class SizeTestCase(unittest.TestCase):
         actual = SizeStruct.new_from_str('+1.5 GiB').get_bytes()
         expected = (1610612736, 1)
         self.assertEqual(actual, expected)
+
+        # Regression test: "1. KiB" should parse successfully (existing behavior)
+        # This is technically invalid (no digits after decimal point), but the
+        # existing implementation accepts it, so we maintain backward compatibility.
+        actual = SizeStruct.new_from_str('1. KiB').get_bytes()
+        expected = (1024, 1)
+        self.assertEqual(actual, expected)
+
+        # Regression test: "e+0" should raise InvalidSpecError (existing behavior)
+        # This should not be parsed as 0, but should fail with an error.
+        with self.assertRaises(InvalidSpecError):
+            SizeStruct.new_from_str('e+0')
 
     @requires_locales({'cs_CZ.UTF-8'})
     def testNewFromStrLocaleCsCZ(self):
