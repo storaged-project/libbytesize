@@ -436,12 +436,12 @@ class SizeTestCase(unittest.TestCase):
     def testTrueDiv(self):
         x = SizeStruct.new_from_str("1024 B")
         y = SizeStruct.new_from_str("-102.4 B") # rounds to whole bytes
-        divResult = float(x.true_div(y)[:15].replace(locale.nl_langinfo(locale.RADIXCHAR), ".")) # just some number to cover accurancy and not cross max float range
+        divResult = float(x.true_div(y)[:15].replace(locale.nl_langinfo(locale.RADIXCHAR), ".")) # just some number to cover accuracy and not cross max float range
         self.assertAlmostEqual(divResult, 1024.0/-102.0)
 
         x = SizeStruct.new_from_str("1 MiB")
         y = SizeStruct.new_from_str("1 KiB")
-        divResult = float(x.true_div(y)[:15].replace(locale.nl_langinfo(locale.RADIXCHAR), ".")) # just some number to cover accurancy and not cross max float range
+        divResult = float(x.true_div(y)[:15].replace(locale.nl_langinfo(locale.RADIXCHAR), ".")) # just some number to cover accuracy and not cross max float range
         self.assertAlmostEqual(divResult, 1024.0)
     #enddef
 
@@ -774,8 +774,8 @@ class SizeTestCase(unittest.TestCase):
     @requires_locales({'en_US.UTF-8'})
     def testPowerComputationRoundingIssues(self):
         """Test cases that expose rounding differences when using floating-point arithmetic.
-        
-        These test cases were discovered by fuzzing and demonstrate that both GMP and MPFR 
+
+        These test cases were discovered by fuzzing and demonstrate that both GMP and MPFR
         can produce incorrect results due to floating-point rounding errors: half of these
         fail using GMP floating-point arithmetic, and half fail using MPFR floating-point
         arithmetic. They all pass using rational arithmetic, so this can be considered a
@@ -794,7 +794,7 @@ class SizeTestCase(unittest.TestCase):
             ('0.0042875429 EB', 4287542900000000),
             ('0.0324645967 YB', 32464596700000000000000),
             ('0.1417885628 ZB', 141788562800000000000),
-            
+
             # Medium values
             ('1.2558302853 TB', 1255830285300),
             ('1.2808632839 TB', 1280863283900),
@@ -857,7 +857,7 @@ class SizeTestCase(unittest.TestCase):
             ('128.1037376252 PB', 128103737625200000),
             ('130.4743561323 ZB', 130474356132300000000000),
             ('138.2867513494 YB', 138286751349400000000000000),
-            
+
             # Large values
             ('18258.0630890156 PB', 18258063089015600000),
             ('18800.1176214700 EB', 18800117621470000000000),
@@ -865,7 +865,7 @@ class SizeTestCase(unittest.TestCase):
             ('276686.6833125990 YB', 276686683312599000000000000000),
             ('535817.4105711933 EB', 535817410571193300000000),
         ]
-        
+
         for test_str, expected_bytes in test_cases:
             with self.subTest(test_str=test_str):
                 size = SizeStruct.new_from_str(test_str)
@@ -891,7 +891,7 @@ class SizeTestCase(unittest.TestCase):
 if __name__=='__main__':
     if len(sys.argv) > 1:
         DEFAULT_LOCALE = sys.argv[1]
-        # the unittest module would try to intepret the argument too, let's
+        # the unittest module would try to interpret the argument too, let's
         # remove it
         sys.argv = [sys.argv[0]]
     unittest.main()
