@@ -701,6 +701,7 @@ uint64_t bs_size_get_bytes (const BSSize size, int *sgn, BSError **error) {
     mpz_set_str (max, num_str, 10);
     free (num_str);
     if (mpz_cmp (size->bytes, max) > 0) {
+        mpz_clear (max);
         set_error (error, BS_ERROR_OVER, strdup("The size is too big, cannot be returned as a 64bit number of bytes"));
         return 0;
     }
