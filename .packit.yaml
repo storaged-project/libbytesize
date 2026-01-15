@@ -77,6 +77,34 @@ jobs:
   dist_git_branches:
     - fedora-branched
 
+- job: tests
+  trigger: pull_request
+  targets:
+    - fedora-latest-x86_64
+    - fedora-latest-aarch64
+    - fedora-latest-stable-x86_64
+    - fedora-latest-stable-aarch64
+  branch: main
+
+# run tests for libbytesize consumers, see plans/ with `revdeps_blivet == yes`
+- job: tests
+  identifier: revdeps_blivet
+  trigger: pull_request
+  notifications:
+    failure_comment:
+      message: "Blivet tests failed for commit {commit_sha}. @vojtechtrefny please check."
+  targets:
+    - fedora-latest-stable
+  branch: main
+  tf_extra_params:
+    environments:
+      - artifacts:
+        - type: repository-file
+          id: https://copr.fedorainfracloud.org/coprs/g/storage/blivet-daily/repo/fedora-$releasever/group_storage-blivet-daily-fedora-$releasever.repo
+        tmt:
+          context:
+            revdeps_blivet: "yes"
+
 srpm_build_deps:
  - make
  - gcc
