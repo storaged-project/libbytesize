@@ -112,7 +112,6 @@ srpm_build_deps:
  - autoconf
  - automake
  - gmp-devel
- - mpfr-devel
  - pcre2-devel
  - gettext-devel
  - python3-devel
