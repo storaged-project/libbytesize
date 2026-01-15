@@ -7,6 +7,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
+#include <assert.h>
 
 /* set code unit width to 8 so we can use generic macros like 'pcre2_compile'
  * instead of 'pcre2_compile_8'
@@ -398,6 +399,7 @@ void bs_clear_error (BSError **error) {
  */
 BSSize bs_size_new (void) {
     BSSize ret = (BSSize) malloc (sizeof(struct _BSSize));
+    assert (ret);
     bs_size_init (ret);
     return ret;
 }
