@@ -1213,7 +1213,7 @@ char* bs_size_true_div (const BSSize size1, const BSSize size2, BSError **error)
 
     if (mpz_cmp_ui (size2->bytes, 0) == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf("Division by zero"));
-        return 0;
+        return NULL;
     }
 
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
@@ -1249,7 +1249,7 @@ char* bs_size_true_div_int (const BSSize size, uint64_t divisor, BSError **error
 
     if (divisor == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
-        return 0;
+        return NULL;
     } else if (divisor > ULONG_MAX) {
         set_error (error, BS_ERROR_OVER, strdup_printf ("Divisor too big, must be less or equal to %lu", ULONG_MAX));
         return NULL;
