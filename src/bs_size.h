@@ -16,6 +16,7 @@ typedef struct _BSSize * BSSize;
  * @BS_ERROR_INVALID_SPEC: invalid size or unit spec provided
  * @BS_ERROR_OVER: a value is over the limits imposed by a type
  * @BS_ERROR_ZERO_DIV: an attempt to do division by zero
+ * @BS_ERROR_FAIL: generic failure error code
  *
  * Error codes that identify various errors that can occur while working with
  * #BSSize instances.
@@ -74,14 +75,14 @@ typedef enum {
  * @bunit: a binary unit
  * @dunit: a decimal unit
  *
- * Generic unit fo size in bytes.
+ * Generic unit for size in bytes.
  */
 typedef union {
     BSBunit bunit;
     BSDunit dunit;
 } BSUnit;
 
-/* use 256 bits of precision for floating point numbets, that should be more
+/* use 256 bits of precision for floating point numbers, that should be more
    than enough */
 /**
  * BS_FLOAT_PREC_BITS:

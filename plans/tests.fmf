@@ -1,0 +1,14 @@
+summary: Run tests
+
+adjust+:
+  - when: revdeps_blivet == yes
+    enabled: false
+
+prepare:
+  - name: ansible
+    how: ansible
+    playbook: misc/install-test-dependencies.yml
+
+execute:
+    how: tmt
+    script: ./autogen.sh && ./configure && make -j && make ci

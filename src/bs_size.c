@@ -7,6 +7,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
+#include <assert.h>
 
 /* set code unit width to 8 so we can use generic macros like 'pcre2_compile'
  * instead of 'pcre2_compile_8'
@@ -398,6 +399,7 @@ void bs_clear_error (BSError **error) {
  */
 BSSize bs_size_new (void) {
     BSSize ret = (BSSize) malloc (sizeof(struct _BSSize));
+    assert (ret);
     bs_size_init (ret);
     return ret;
 }
@@ -701,6 +703,7 @@ uint64_t bs_size_get_bytes (const BSSize size, int *sgn, BSError **error) {
     mpz_set_str (max, num_str, 10);
     free (num_str);
     if (mpz_cmp (size->bytes, max) > 0) {
+        mpz_clear (max);
         set_error (error, BS_ERROR_OVER, strdup("The size is too big, cannot be returned as a 64bit number of bytes"));
         return 0;
     }
@@ -1212,7 +1215,7 @@ char* bs_size_true_div (const BSSize size1, const BSSize size2, BSError **error)
 
     if (mpz_cmp_ui (size2->bytes, 0) == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf("Division by zero"));
-        return 0;
+        return NULL;
     }
 
     mpf_init2 (op1, BS_FLOAT_PREC_BITS);
@@ -1248,7 +1251,7 @@ char* bs_size_true_div_int (const BSSize size, uint64_t divisor, BSError **error
 
     if (divisor == 0) {
         set_error (error, BS_ERROR_ZERO_DIV, strdup_printf ("Division by zero"));
-        return 0;
+        return NULL;
     } else if (divisor > ULONG_MAX) {
         set_error (error, BS_ERROR_OVER, strdup_printf ("Divisor too big, must be less or equal to %lu", ULONG_MAX));
         return NULL;
