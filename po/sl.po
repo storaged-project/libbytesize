@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: libbytesize 2.12\n"
 "Report-Msgid-Bugs-To: vtrefny@redhat.com\n"
 "POT-Creation-Date: 2026-01-08 06:02-0800\n"
-"PO-Revision-Date: 2026-03-05 10:58+0000\n"
+"PO-Revision-Date: 2026-05-02 12:59+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <https://translate.fedoraproject.org/projects/"
 "blivet/libbytesize/sl/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
 "n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #. TRANSLATORS: 'B' for bytes
 #: src/bs_size.c:52 src/bs_size.c:73
@@ -73,7 +73,7 @@ msgstr ""
 #. TRANSLATORS: abbreviation for megabyte, 10**6 bytes
 #: src/bs_size.c:77
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #. TRANSLATORS: abbreviation for gigabyte, 10**9 bytes
 #: src/bs_size.c:79
