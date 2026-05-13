@@ -140,6 +140,33 @@ class SizeTestCase(unittest.TestCase):
         expected = (1536, -1)
         self.assertEqual(actual, expected)
 
+    @requires_locales({'ru_RU.UTF-8'})
+    def testNewFromStrLocaleRuRU(self):
+        locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+
+        # uppercase Cyrillic unit (canonical translation)
+        actual = SizeStruct.new_from_str('1 МиБ').get_bytes()
+        expected = (1048576, 1)
+        self.assertEqual(actual, expected)
+
+        # lowercase Cyrillic unit -- case-insensitive matching for non-ASCII
+        actual = SizeStruct.new_from_str('1 миб').get_bytes()
+        expected = (1048576, 1)
+        self.assertEqual(actual, expected)
+
+        actual = SizeStruct.new_from_str('2 гиб').get_bytes()
+        expected = (2147483648, 1)
+        self.assertEqual(actual, expected)
+
+        # ASCII units should still work under Russian locale
+        actual = SizeStruct.new_from_str('1 MiB').get_bytes()
+        expected = (1048576, 1)
+        self.assertEqual(actual, expected)
+
+        actual = SizeStruct.new_from_str('1 mib').get_bytes()
+        expected = (1048576, 1)
+        self.assertEqual(actual, expected)
+
     #enddef
 
     def testNewFromBytes(self):
