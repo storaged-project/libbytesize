@@ -17,7 +17,7 @@ try:
 except ImportError:
     from bytesize.bytesize import SizeStruct
 
-DEFAULT_LOCALE = "en_US.utf8"
+DEFAULT_LOCALE = "C"
 
 class SizeTestCase(unittest.TestCase):
 

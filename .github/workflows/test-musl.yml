@@ -1,0 +1,38 @@
+name: Run tests with musl libc (Alpine Linux)
+
+on:
+  pull_request:
+    branches:
+     - main
+
+jobs:
+  build:
+    name: musl libc test
+    runs-on: ubuntu-latest
+    env:
+      CI_CONTAINER: libbytesize-ci-alpine
+
+    steps:
+      - name: Checkout libbytesize repository
+        uses: actions/checkout@v6
+
+      - name: Install podman
+        run: |
+          sudo apt -qq update
+          sudo apt -y -qq install podman
+
+      - name: Build the container
+        run: |
+          podman build --no-cache -t ${{ env.CI_CONTAINER }} -f misc/alpine.Dockerfile .
+
+      - name: Start the container
+        run: |
+          podman run -d -t --name ${{ env.CI_CONTAINER }} --volume "$(pwd):/app" --workdir "/app" ${{ env.CI_CONTAINER }}
+
+      - name: Build in the container
+        run: |
+          podman exec -it ${{ env.CI_CONTAINER }} bash -c "./autogen.sh && LIBS='-lintl' ./configure --with-python3 --without-gtk-doc --without-tools && make"
+
+      - name: Run tests in the container
+        run: |
+          podman exec -it ${{ env.CI_CONTAINER }} bash -c "top_srcdir=/app top_builddir=/app source tests/testenv.sh && python3 tests/libbytesize_unittest.py"
