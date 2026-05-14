@@ -5,6 +5,7 @@ import locale
 import unittest
 import sys
 import ctypes
+import os
 
 from locale_utils import get_avail_locales, missing_locales, requires_locales
 
@@ -32,6 +33,7 @@ class SizeTestCase(unittest.TestCase):
             self.skipTest("requires missing locales: %s" % missing)
         locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
         self.addCleanup(self._clean_up)
+        os.environ["LANGUAGE"] = ""
 
     def _clean_up(self):
         locale.setlocale(locale.LC_ALL, DEFAULT_LOCALE)
