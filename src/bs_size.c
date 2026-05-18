@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include <limits.h>
 #include <assert.h>
+#include <wchar.h>
 
 /* set code unit width to 8 so we can use generic macros like 'pcre2_compile'
  * instead of 'pcre2_compile_8'
@@ -225,6 +226,36 @@ static void strstrip(char *str) {
     str[i-begin] = '\0';
 }
 
+/* Case-insensitive comparison that handles multibyte UTF-8 (e.g. Cyrillic) */
+static int u8_casecmp (const char *s1, const char *s2, size_t n1) {
+    wchar_t *w1 = NULL;
+    wchar_t *w2 = NULL;
+    size_t wlen1, wlen2;
+    int ret;
+
+    wlen1 = mbstowcs (NULL, s1, 0);
+    wlen2 = mbstowcs (NULL, s2, 0);
+    if (wlen1 == (size_t) -1 || wlen2 == (size_t) -1)
+        return strncasecmp (s1, s2, n1);
+
+    w1 = malloc ((wlen1 + 1) * sizeof (wchar_t));
+    w2 = malloc ((wlen2 + 1) * sizeof (wchar_t));
+    if (!w1 || !w2) {
+        free (w1);
+        free (w2);
+        return strncasecmp (s1, s2, n1);
+    }
+
+    mbstowcs (w1, s1, wlen1 + 1);
+    mbstowcs (w2, s2, wlen2 + 1);
+
+    ret = wcsncasecmp (w1, w2, wlen1);
+
+    free (w1);
+    free (w2);
+    return ret;
+}
+
 static bool multiply_size_by_unit (mpq_t size, char *unit_str) {
     BSBunit bunit = BS_BUNIT_UNDEF;
     BSDunit dunit = BS_DUNIT_UNDEF;
@@ -236,7 +267,7 @@ static bool multiply_size_by_unit (mpq_t size, char *unit_str) {
     unit_str_len = strlen (unit_str);
 
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
-        if (strncasecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
+        if (u8_casecmp (unit_str, b_units[bunit-BS_BUNIT_B], unit_str_len) == 0) {
             pwr = (uint64_t) bunit - BS_BUNIT_B;
             mpz_mul_2exp (mpq_numref (size), mpq_numref (size), 10 * pwr);
             return true;
@@ -245,7 +276,7 @@ static bool multiply_size_by_unit (mpq_t size, char *unit_str) {
     mpq_init (dec_mul);
     mpz_init (pow_1000);
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
-        if (strncasecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
+        if (u8_casecmp (unit_str, d_units[dunit-BS_DUNIT_B], unit_str_len) == 0) {
             pwr = (uint64_t) (dunit - BS_DUNIT_B);
             mpz_ui_pow_ui (pow_1000, 1000, pwr);
             mpq_set_z (dec_mul, pow_1000);
@@ -256,7 +287,7 @@ static bool multiply_size_by_unit (mpq_t size, char *unit_str) {
         }
 
     for (bunit=BS_BUNIT_B; bunit < BS_BUNIT_UNDEF; bunit++)
-        if (strncasecmp (unit_str, _(b_units[bunit-BS_BUNIT_B]), unit_str_len) == 0) {
+        if (u8_casecmp (unit_str, _(b_units[bunit-BS_BUNIT_B]), unit_str_len) == 0) {
             pwr = (uint64_t) bunit - BS_BUNIT_B;
             mpz_mul_2exp (mpq_numref (size), mpq_numref (size), 10 * pwr);
             mpz_clear (pow_1000);
@@ -265,7 +296,7 @@ static bool multiply_size_by_unit (mpq_t size, char *unit_str) {
         }
 
     for (dunit=BS_DUNIT_B; dunit < BS_DUNIT_UNDEF; dunit++)
-        if (strncasecmp (unit_str, _(d_units[dunit-BS_DUNIT_B]), unit_str_len) == 0) {
+        if (u8_casecmp (unit_str, _(d_units[dunit-BS_DUNIT_B]), unit_str_len) == 0) {
             pwr = (uint64_t) (dunit - BS_DUNIT_B);
             mpz_ui_pow_ui (pow_1000, 1000, pwr);
             mpq_set_z (dec_mul, pow_1000);
