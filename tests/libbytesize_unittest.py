@@ -365,8 +365,8 @@ class SizeTestCase(unittest.TestCase):
     #enddef
 
     def testConvertTo(self):
-        x = SizeStruct.new_from_str("1 KiB")
-        x.convert_to(KiB)
+        x = SizeStruct.new_from_str("1 MiB")
+        self.assertEqual(x.convert_to(KiB), "1024")
     #enddef
 
     def testDiv(self):

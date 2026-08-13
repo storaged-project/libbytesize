@@ -81,6 +81,12 @@ def get_error(err):
     c_bytesize.bs_clear_error(byref(err))
     raise ex
 
+class SizeUnit(ctypes.Union):
+    _fields_ = [
+        ("bunit", ctypes.c_int),
+        ("dunit", ctypes.c_int),
+    ]
+
 class SizeStruct(ctypes.Structure):
     @classmethod
     def new(cls):
@@ -155,7 +161,9 @@ class SizeStruct(ctypes.Structure):
 
     def convert_to(self, unit):
         err = POINTER(SizeErrorStruct)()
-        ret = c_bytesize.bs_size_convert_to(self, unit, byref(err))
+        u = SizeUnit()
+        u.bunit = unit
+        ret = c_bytesize.bs_size_convert_to(self, u, byref(err))
         get_error(err)
         ret = str(ret, "utf-8")
         return ret
@@ -264,7 +272,7 @@ c_bytesize.bs_size_sgn.argtypes = [POINTER(SizeStruct)]
 c_bytesize.bs_size_get_bytes_str.restype = ctypes.c_char_p
 c_bytesize.bs_size_get_bytes_str.argtypes = [POINTER(SizeStruct)]
 c_bytesize.bs_size_convert_to.restype = ctypes.c_char_p
-c_bytesize.bs_size_convert_to.argtypes = [POINTER(SizeStruct), ctypes.c_int, POINTER(POINTER(SizeErrorStruct))]
+c_bytesize.bs_size_convert_to.argtypes = [POINTER(SizeStruct), SizeUnit, POINTER(POINTER(SizeErrorStruct))]
 c_bytesize.bs_size_human_readable.restype = ctypes.c_char_p
 c_bytesize.bs_size_human_readable.argtypes = [POINTER(SizeStruct), ctypes.c_int, ctypes.c_int, ctypes.c_bool]
 
