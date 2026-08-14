@@ -162,7 +162,10 @@ class SizeStruct(ctypes.Structure):
     def convert_to(self, unit):
         err = POINTER(SizeErrorStruct)()
         u = SizeUnit()
-        u.bunit = unit
+        if unit >= KB:
+            u.dunit = unit
+        else:
+            u.bunit = unit
         ret = c_bytesize.bs_size_convert_to(self, u, byref(err))
         get_error(err)
         ret = str(ret, "utf-8")

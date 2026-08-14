@@ -9,7 +9,7 @@ import os
 
 from locale_utils import get_avail_locales, missing_locales, requires_locales
 
-from bytesize import KiB, GiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError, InvalidSpecError
+from bytesize import KiB, MB, GiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError, InvalidSpecError
 
 # SizeStruct is part of the 'private' API and needs to be imported differently
 # when running from locally build tree and when using installed library
@@ -367,6 +367,9 @@ class SizeTestCase(unittest.TestCase):
     def testConvertTo(self):
         x = SizeStruct.new_from_str("1 MiB")
         self.assertEqual(x.convert_to(KiB), "1024")
+
+        x = SizeStruct.new_from_str("1 GB")
+        self.assertEqual(x.convert_to(MB), "1000")
     #enddef
 
     def testDiv(self):
