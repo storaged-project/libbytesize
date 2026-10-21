@@ -9,7 +9,7 @@ import os
 
 from locale_utils import get_avail_locales, missing_locales, requires_locales
 
-from bytesize import KiB, MB, GiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError, InvalidSpecError
+from bytesize import B, KiB, MB, GiB, YiB, ROUND_UP, ROUND_DOWN, ROUND_HALF_UP, OverflowError, InvalidSpecError
 
 # SizeStruct is part of the 'private' API and needs to be imported differently
 # when running from locally build tree and when using installed library
@@ -423,6 +423,12 @@ class SizeTestCase(unittest.TestCase):
     #enddef
 
     def testHumanReadable(self):
+        strSizeStruct = SizeStruct.new_from_str("1.5 KiB").human_readable(B, 2, False)
+        self.assertEqual(strSizeStruct, "1.5 KiB")
+
+        strSizeStruct = SizeStruct.new_from_str("1.5 YiB").human_readable(YiB, 2, False)
+        self.assertEqual(strSizeStruct, "1.5 YiB")
+
         strSizeStruct = SizeStruct.new_from_str("12 KiB").human_readable(KiB, 2, False)
         self.assertEqual(strSizeStruct, "12 KiB")
 
@@ -446,6 +452,15 @@ class SizeTestCase(unittest.TestCase):
         strSizeStruct = SizeStruct.new_from_str("100 GiB").human_readable(GiB, 0, True)
         self.assertEqual(SizeStruct.new_from_str(strSizeStruct).get_bytes(), (100 * 1024**3, 1))
     #enddef
+
+    def testHumanReadableInvalidMinUnit(self):
+        for spec in ("0 B", "1.5 KiB", "-1.5 KiB"):
+            size = SizeStruct.new_from_str(spec)
+            for xlate in (False, True):
+                expected = size.human_readable(B, 2, xlate)
+                for min_unit in (9, -1, 10, 21, 100):
+                    with self.subTest(spec=spec, min_unit=min_unit, xlate=xlate):
+                        self.assertEqual(size.human_readable(min_unit, 2, xlate), expected)
 
     @requires_locales({'cs_CZ.UTF-8'})
     def testHumanReadableLocale(self):

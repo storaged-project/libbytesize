@@ -305,6 +305,15 @@ class SizeTestCase(unittest.TestCase):
 
         locale.setlocale(locale.LC_ALL,'en_US.UTF-8')
 
+    def testHumanReadableDecimalMinUnit(self):
+        for spec in ("0 B", "1.5 KiB", "-1.5 KiB"):
+            size = Size(spec)
+            for xlate in (False, True):
+                expected = size.human_readable(xlate=xlate)
+                for min_unit in ("KB", "MB"):
+                    with self.subTest(spec=spec, min_unit=min_unit, xlate=xlate):
+                        self.assertEqual(size.human_readable(min_unit, xlate=xlate), expected)
+
     def testRoundToNearest(self):
         size = Size("1.5 KiB")
         conv = size.round_to_nearest(Size("1 KiB"), rounding=ROUND_UP)
