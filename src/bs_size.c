@@ -829,7 +829,8 @@ char* bs_size_convert_to (const BSSize size, BSUnit unit, BSError **error) {
 
 /**
  * bs_size_human_readable:
- * @min_unit: the smallest unit the returned representation should use
+ * @min_unit: the smallest unit the returned representation should use.
+ *            Values outside the binary unit range are treated as #BS_BUNIT_B.
  * @max_places: maximum number of decimal places the representation should use
  * @xlate: whether to try to translate the representation or not
  *
@@ -853,7 +854,7 @@ char* bs_size_human_readable (const BSSize size, BSBunit min_unit, int max_place
     mpf_init2 (cur_val, BS_FLOAT_PREC_BITS);
     mpf_set_z (cur_val, size->bytes);
 
-    if (min_unit == BS_BUNIT_UNDEF)
+    if (min_unit < BS_BUNIT_B || min_unit > BS_BUNIT_YiB)
         min_unit = BS_BUNIT_B;
 
     sign = mpf_sgn (cur_val);
