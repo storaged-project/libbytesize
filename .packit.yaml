@@ -80,10 +80,16 @@ jobs:
 - job: tests
   trigger: pull_request
   targets:
+    - fedora-rawhide-x86_64
+    - fedora-rawhide-aarch64
     - fedora-latest-x86_64
     - fedora-latest-aarch64
     - fedora-latest-stable-x86_64
     - fedora-latest-stable-aarch64
+    - centos-stream-9-x86_64
+    - centos-stream-9-aarch64
+    - centos-stream-10-x86_64
+    - centos-stream-10-aarch64
   branch: main
 
 # run tests for libbytesize consumers, see plans/ with `revdeps_blivet == yes`
